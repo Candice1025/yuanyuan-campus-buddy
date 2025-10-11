@@ -10,7 +10,6 @@ import TreeHole from "./pages/TreeHole";
 import Profile from "./pages/Profile";
 import MBTITest from "./pages/MBTITest";
 import Mood from "./pages/Mood";
-import Entertainment from "./pages/Entertainment";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,7 +28,6 @@ const App = () => (
           <Route path="/tree-hole" element={<TreeHole />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/mood" element={<Mood />} />
-          <Route path="/entertainment" element={<Entertainment />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
