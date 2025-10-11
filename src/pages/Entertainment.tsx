@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft, Music, Laugh, Coffee, CloudRain, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
 
 const entertainmentItems = [
   {
@@ -36,6 +37,35 @@ const entertainmentItems = [
 
 const Entertainment = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleItemClick = (item: typeof entertainmentItems[0]) => {
+    if (item.coming) {
+      toast({
+        title: "即将推出",
+        description: `${item.title}功能正在开发中，敬请期待！`,
+      });
+      return;
+    }
+
+    // 根据不同的功能进行导航或操作
+    switch (item.title) {
+      case "白噪音学习":
+        toast({
+          title: "白噪音播放",
+          description: "功能开发中，即将上线 🎵",
+        });
+        break;
+      case "冷笑话专区":
+        toast({
+          title: "冷笑话",
+          description: "为什么程序员喜欢黑夜？因为黑夜好debug（调试）😄",
+        });
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -62,7 +92,8 @@ const Entertainment = () => {
             return (
               <Card
                 key={item.title}
-                className="p-6 hover:shadow-lg transition-shadow cursor-pointer relative overflow-hidden"
+                className="p-6 hover:shadow-lg transition-all hover:scale-105 cursor-pointer relative overflow-hidden"
+                onClick={() => handleItemClick(item)}
               >
                 {item.coming && (
                   <div className="absolute top-4 right-4 bg-accent text-accent-foreground text-xs px-2 py-1 rounded-full">
