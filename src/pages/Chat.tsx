@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft, Send, Sparkles, Book, Heart, Lightbulb } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
 import chatIcon from "@/assets/chat-icon.png";
 
 interface Message {
@@ -15,6 +16,7 @@ interface Message {
 
 const Chat = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -42,7 +44,7 @@ const Chat = () => {
   ];
 
   const handleSend = async () => {
-    if (!input.trim()) return;
+    if (!input.trim() || isTyping) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -55,17 +57,113 @@ const Chat = () => {
     setInput("");
     setIsTyping(true);
 
-    // 模拟AI回复
-    setTimeout(() => {
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        content: "我理解你的想法。让我们一起思考一下这个问题...\n\n作为学习小帮手，我会引导你找到答案，而不是直接告诉你。你觉得可以从哪个角度入手呢？",
-        sender: "assistant",
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, assistantMessage]);
+    try {
+      const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
+      
+      const chatMessages = [...messages, userMessage].map(msg => ({
+        role: msg.sender === "user" ? "user" : "assistant",
+        content: msg.content
+      }));
+
+      const response = await fetch(CHAT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({ messages: chatMessages }),
+      });
+
+      if (!response.ok) {
+        if (response.status === 429) {
+          toast({
+            title: "请求过于频繁",
+            description: "请稍后再试",
+            variant: "destructive",
+          });
+          setIsTyping(false);
+          return;
+        }
+        if (response.status === 402) {
+          toast({
+            title: "服务暂时不可用",
+            description: "AI服务额度不足",
+            variant: "destructive",
+          });
+          setIsTyping(false);
+          return;
+        }
+        throw new Error("Failed to get response");
+      }
+
+      const reader = response.body?.getReader();
+      if (!reader) throw new Error("No response body");
+
+      const decoder = new TextDecoder();
+      let assistantContent = "";
+      let assistantMessageId = (Date.now() + 1).toString();
+      let textBuffer = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        
+        textBuffer += decoder.decode(value, { stream: true });
+
+        let newlineIndex: number;
+        while ((newlineIndex = textBuffer.indexOf("\n")) !== -1) {
+          let line = textBuffer.slice(0, newlineIndex);
+          textBuffer = textBuffer.slice(newlineIndex + 1);
+
+          if (line.endsWith("\r")) line = line.slice(0, -1);
+          if (line.startsWith(":") || line.trim() === "") continue;
+          if (!line.startsWith("data: ")) continue;
+
+          const jsonStr = line.slice(6).trim();
+          if (jsonStr === "[DONE]") break;
+
+          try {
+            const parsed = JSON.parse(jsonStr);
+            const content = parsed.choices?.[0]?.delta?.content as string | undefined;
+            if (content) {
+              assistantContent += content;
+              setMessages(prev => {
+                const last = prev[prev.length - 1];
+                if (last?.sender === "assistant" && last?.id === assistantMessageId) {
+                  return prev.map((m) =>
+                    m.id === assistantMessageId
+                      ? { ...m, content: assistantContent }
+                      : m
+                  );
+                }
+                return [
+                  ...prev,
+                  {
+                    id: assistantMessageId,
+                    content: assistantContent,
+                    sender: "assistant",
+                    timestamp: new Date(),
+                  },
+                ];
+              });
+            }
+          } catch {
+            textBuffer = line + "\n" + textBuffer;
+            break;
+          }
+        }
+      }
+
       setIsTyping(false);
-    }, 1500);
+    } catch (error) {
+      console.error("Chat error:", error);
+      toast({
+        title: "发送失败",
+        description: "请检查网络连接后重试",
+        variant: "destructive",
+      });
+      setIsTyping(false);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
