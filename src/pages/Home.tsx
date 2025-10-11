@@ -38,10 +38,10 @@ const Home = () => {
     },
     {
       icon: Sparkles,
-      title: "娱乐中心",
-      description: "放松心情，快乐学习",
+      title: "心灵沙盘",
+      description: "互动沙盘，探索内心世界",
       color: "bg-gradient-warm",
-      path: "/entertainment"
+      path: "/sandtray"
     },
     {
       icon: User,

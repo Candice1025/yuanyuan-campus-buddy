@@ -1,1 +1,7 @@
 project_id = "kkjamjvtgwpucghixpsv"
+
+[functions.chat]
+verify_jwt = false
+
+[functions.sandtray-analysis]
+verify_jwt = false
