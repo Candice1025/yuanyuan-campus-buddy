@@ -88,6 +88,8 @@ const SandTray = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [draggedItem, setDraggedItem] = useState<{ category: string; item: { name: string; emoji: string } } | null>(null);
   const sandTrayRef = useRef<HTMLDivElement>(null);
+  const [avatarImage, setAvatarImage] = useState<string>("");
+  const [isGeneratingAvatar, setIsGeneratingAvatar] = useState(false);
 
   const handleDragStart = (category: string, item: { name: string; emoji: string }) => {
     setDraggedItem({ category, item });
@@ -165,11 +167,51 @@ const SandTray = () => {
     }
   };
 
+  const handleGenerateAvatar = async () => {
+    setIsGeneratingAvatar(true);
+
+    try {
+      const AVATAR_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-avatar`;
+      
+      const response = await fetch(AVATAR_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({ items: selectedItems, analysis }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "生成失败");
+      }
+
+      const data = await response.json();
+      setAvatarImage(data.imageUrl);
+      
+      toast({
+        title: "3D形象生成成功",
+        description: "已为你创建独特的心灵形象",
+      });
+    } catch (error) {
+      console.error("Avatar generation error:", error);
+      toast({
+        title: "生成失败",
+        description: error instanceof Error ? error.message : "请稍后重试",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGeneratingAvatar(false);
+    }
+  };
+
   const handleRestart = () => {
     setSelectedItems([]);
     setStage("intro");
     setShowResult(false);
     setAnalysis("");
+    setAvatarImage("");
   };
 
   return (
@@ -332,17 +374,41 @@ const SandTray = () => {
                 {analysis}
               </div>
             </div>
-            <div className="flex gap-4 pt-4">
-              <Button onClick={handleRestart} className="flex-1">
-                重新开始
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => navigate("/")}
-                className="flex-1"
-              >
-                返回首页
-              </Button>
+            
+            {avatarImage && (
+              <div className="mt-6">
+                <h3 className="text-lg font-semibold text-foreground mb-3">你的心灵形象</h3>
+                <img 
+                  src={avatarImage} 
+                  alt="心灵3D形象" 
+                  className="w-full rounded-lg shadow-lg"
+                />
+              </div>
+            )}
+            
+            <div className="flex flex-col gap-3 pt-4">
+              {!avatarImage && (
+                <Button 
+                  onClick={handleGenerateAvatar}
+                  disabled={isGeneratingAvatar}
+                  className="w-full bg-gradient-primary hover:opacity-90"
+                >
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  {isGeneratingAvatar ? "正在生成3D形象..." : "生成我的3D心灵形象"}
+                </Button>
+              )}
+              <div className="flex gap-4">
+                <Button onClick={handleRestart} className="flex-1">
+                  重新开始
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => navigate("/")}
+                  className="flex-1"
+                >
+                  返回首页
+                </Button>
+              </div>
             </div>
           </div>
         </DialogContent>
