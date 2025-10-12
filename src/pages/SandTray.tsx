@@ -87,12 +87,19 @@ const SandTray = () => {
   const [analysis, setAnalysis] = useState<string>("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [draggedItem, setDraggedItem] = useState<{ category: string; item: { name: string; emoji: string } } | null>(null);
+  const [draggedPlacedItem, setDraggedPlacedItem] = useState<SandItem | null>(null);
   const sandTrayRef = useRef<HTMLDivElement>(null);
   const [avatarImage, setAvatarImage] = useState<string>("");
   const [isGeneratingAvatar, setIsGeneratingAvatar] = useState(false);
 
   const handleDragStart = (category: string, item: { name: string; emoji: string }) => {
     setDraggedItem({ category, item });
+    setDraggedPlacedItem(null);
+  };
+
+  const handlePlacedItemDragStart = (item: SandItem) => {
+    setDraggedPlacedItem(item);
+    setDraggedItem(null);
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -101,22 +108,38 @@ const SandTray = () => {
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
-    if (!draggedItem || !sandTrayRef.current) return;
+    if (!sandTrayRef.current) return;
 
     const rect = sandTrayRef.current.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
 
-    const newItem: SandItem = {
-      id: `${Date.now()}-${Math.random()}`,
-      category: draggedItem.category,
-      name: draggedItem.item.name,
-      emoji: draggedItem.item.emoji,
-      position: { x, y },
-    };
+    // 如果是移动已有物件
+    if (draggedPlacedItem) {
+      setSelectedItems(
+        selectedItems.map((item) =>
+          item.id === draggedPlacedItem.id
+            ? { ...item, position: { x, y } }
+            : item
+        )
+      );
+      setDraggedPlacedItem(null);
+      return;
+    }
 
-    setSelectedItems([...selectedItems, newItem]);
-    setDraggedItem(null);
+    // 如果是添加新物件
+    if (draggedItem) {
+      const newItem: SandItem = {
+        id: `${Date.now()}-${Math.random()}`,
+        category: draggedItem.category,
+        name: draggedItem.item.name,
+        emoji: draggedItem.item.emoji,
+        position: { x, y },
+      };
+
+      setSelectedItems([...selectedItems, newItem]);
+      setDraggedItem(null);
+    }
   };
 
   const handleRemoveItem = (id: string) => {
@@ -318,14 +341,16 @@ const SandTray = () => {
                     selectedItems.map((item) => (
                       <div
                         key={item.id}
-                        className="absolute cursor-pointer hover:scale-125 transition-transform hover:z-10"
+                        draggable
+                        onDragStart={() => handlePlacedItemDragStart(item)}
+                        onDoubleClick={() => handleRemoveItem(item.id)}
+                        className="absolute cursor-move hover:scale-125 transition-transform hover:z-10"
                         style={{
                           left: `${item.position?.x}%`,
                           top: `${item.position?.y}%`,
                           transform: "translate(-50%, -50%)",
                         }}
-                        onClick={() => handleRemoveItem(item.id)}
-                        title="点击移除"
+                        title="拖动移动位置 | 双击移除"
                       >
                         <div className="text-4xl drop-shadow-lg">{item.emoji}</div>
                       </div>
@@ -333,7 +358,7 @@ const SandTray = () => {
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground mt-2 text-center">
-                  💡 拖拽物件到沙盘 | 点击沙盘中的物件可移除
+                  💡 拖拽物件到沙盘 | 拖动已放置的物件可移动位置 | 双击可移除
                 </p>
               </Card>
 
