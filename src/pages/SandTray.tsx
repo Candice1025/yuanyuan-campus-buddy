@@ -11,71 +11,70 @@ interface SandItem {
   category: string;
   name: string;
   emoji: string;
-  size: "small" | "medium" | "large" | "xlarge";
   position?: { x: number; y: number };
 }
 
 const itemCategories = {
   人物: [
-    { name: "婴儿", emoji: "👶", size: "small" as const }, { name: "儿童", emoji: "🧒", size: "small" as const }, { name: "少年", emoji: "👦", size: "medium" as const },
-    { name: "少女", emoji: "👧", size: "medium" as const }, { name: "青年男", emoji: "👨", size: "medium" as const }, { name: "青年女", emoji: "👩", size: "medium" as const },
-    { name: "老人", emoji: "👴", size: "medium" as const }, { name: "老妇", emoji: "👵", size: "medium" as const }, { name: "情侣", emoji: "💑", size: "medium" as const },
-    { name: "家庭", emoji: "👨‍👩‍👧", size: "large" as const }, { name: "母子", emoji: "👩‍👦", size: "medium" as const }, { name: "父女", emoji: "👨‍👧", size: "medium" as const },
-    { name: "独行者", emoji: "🚶", size: "medium" as const }, { name: "跑步者", emoji: "🏃", size: "medium" as const }, { name: "舞者", emoji: "💃", size: "medium" as const },
-    { name: "思考者", emoji: "🤔", size: "medium" as const }, { name: "哭泣者", emoji: "😢", size: "medium" as const }, { name: "微笑者", emoji: "😊", size: "medium" as const },
-    { name: "王子", emoji: "🤴", size: "medium" as const }, { name: "公主", emoji: "👸", size: "medium" as const }, { name: "国王", emoji: "👑", size: "medium" as const },
+    { name: "婴儿", emoji: "👶" }, { name: "儿童", emoji: "🧒" }, { name: "少年", emoji: "👦" },
+    { name: "少女", emoji: "👧" }, { name: "青年男", emoji: "👨" }, { name: "青年女", emoji: "👩" },
+    { name: "老人", emoji: "👴" }, { name: "老妇", emoji: "👵" }, { name: "情侣", emoji: "💑" },
+    { name: "家庭", emoji: "👨‍👩‍👧" }, { name: "母子", emoji: "👩‍👦" }, { name: "父女", emoji: "👨‍👧" },
+    { name: "独行者", emoji: "🚶" }, { name: "跑步者", emoji: "🏃" }, { name: "舞者", emoji: "💃" },
+    { name: "思考者", emoji: "🤔" }, { name: "哭泣者", emoji: "😢" }, { name: "微笑者", emoji: "😊" },
+    { name: "王子", emoji: "🤴" }, { name: "公主", emoji: "👸" }, { name: "国王", emoji: "👑" },
   ],
   动物: [
-    { name: "狗", emoji: "🐕", size: "medium" as const }, { name: "猫", emoji: "🐈", size: "small" as const }, { name: "兔子", emoji: "🐰", size: "small" as const },
-    { name: "马", emoji: "🐎", size: "large" as const }, { name: "狮子", emoji: "🦁", size: "large" as const }, { name: "老虎", emoji: "🐯", size: "large" as const },
-    { name: "熊", emoji: "🐻", size: "large" as const }, { name: "熊猫", emoji: "🐼", size: "large" as const }, { name: "狼", emoji: "🐺", size: "medium" as const },
-    { name: "狐狸", emoji: "🦊", size: "small" as const }, { name: "鹿", emoji: "🦌", size: "large" as const }, { name: "蛇", emoji: "🐍", size: "medium" as const },
-    { name: "龙", emoji: "🐉", size: "xlarge" as const }, { name: "鸟", emoji: "🦅", size: "medium" as const }, { name: "天鹅", emoji: "🦢", size: "medium" as const },
-    { name: "企鹅", emoji: "🐧", size: "small" as const }, { name: "猫头鹰", emoji: "🦉", size: "small" as const }, { name: "蝴蝶", emoji: "🦋", size: "small" as const },
-    { name: "鱼", emoji: "🐟", size: "small" as const }, { name: "海豚", emoji: "🐬", size: "large" as const }, { name: "鲸鱼", emoji: "🐋", size: "xlarge" as const },
-    { name: "乌龟", emoji: "🐢", size: "small" as const }, { name: "章鱼", emoji: "🐙", size: "medium" as const }, { name: "螃蟹", emoji: "🦀", size: "small" as const },
+    { name: "狗", emoji: "🐕" }, { name: "猫", emoji: "🐈" }, { name: "兔子", emoji: "🐰" },
+    { name: "马", emoji: "🐎" }, { name: "狮子", emoji: "🦁" }, { name: "老虎", emoji: "🐯" },
+    { name: "熊", emoji: "🐻" }, { name: "熊猫", emoji: "🐼" }, { name: "狼", emoji: "🐺" },
+    { name: "狐狸", emoji: "🦊" }, { name: "鹿", emoji: "🦌" }, { name: "蛇", emoji: "🐍" },
+    { name: "龙", emoji: "🐉" }, { name: "鸟", emoji: "🦅" }, { name: "天鹅", emoji: "🦢" },
+    { name: "企鹅", emoji: "🐧" }, { name: "猫头鹰", emoji: "🦉" }, { name: "蝴蝶", emoji: "🦋" },
+    { name: "鱼", emoji: "🐟" }, { name: "海豚", emoji: "🐬" }, { name: "鲸鱼", emoji: "🐋" },
+    { name: "乌龟", emoji: "🐢" }, { name: "章鱼", emoji: "🐙" }, { name: "螃蟹", emoji: "🦀" },
   ],
   自然: [
-    { name: "树", emoji: "🌳", size: "large" as const }, { name: "松树", emoji: "🌲", size: "large" as const }, { name: "棕榈树", emoji: "🌴", size: "large" as const },
-    { name: "枯树", emoji: "🌿", size: "medium" as const }, { name: "花", emoji: "🌸", size: "small" as const }, { name: "玫瑰", emoji: "🌹", size: "small" as const },
-    { name: "向日葵", emoji: "🌻", size: "medium" as const }, { name: "郁金香", emoji: "🌷", size: "small" as const }, { name: "莲花", emoji: "🪷", size: "small" as const },
-    { name: "草", emoji: "🌱", size: "small" as const }, { name: "叶子", emoji: "🍃", size: "small" as const }, { name: "枫叶", emoji: "🍁", size: "small" as const },
-    { name: "山", emoji: "⛰️", size: "xlarge" as const }, { name: "火山", emoji: "🌋", size: "xlarge" as const }, { name: "岛", emoji: "🏝️", size: "large" as const },
-    { name: "河", emoji: "〰️", size: "large" as const }, { name: "瀑布", emoji: "💧", size: "medium" as const }, { name: "海浪", emoji: "🌊", size: "large" as const },
-    { name: "火", emoji: "🔥", size: "medium" as const }, { name: "闪电", emoji: "⚡", size: "medium" as const }, { name: "彩虹", emoji: "🌈", size: "xlarge" as const },
-    { name: "太阳", emoji: "☀️", size: "xlarge" as const }, { name: "月亮", emoji: "🌙", size: "large" as const }, { name: "星星", emoji: "⭐", size: "small" as const },
-    { name: "云", emoji: "☁️", size: "large" as const }, { name: "雨", emoji: "🌧️", size: "medium" as const }, { name: "雪花", emoji: "❄️", size: "small" as const },
+    { name: "树", emoji: "🌳" }, { name: "松树", emoji: "🌲" }, { name: "棕榈树", emoji: "🌴" },
+    { name: "枯树", emoji: "🌿" }, { name: "花", emoji: "🌸" }, { name: "玫瑰", emoji: "🌹" },
+    { name: "向日葵", emoji: "🌻" }, { name: "郁金香", emoji: "🌷" }, { name: "莲花", emoji: "🪷" },
+    { name: "草", emoji: "🌱" }, { name: "叶子", emoji: "🍃" }, { name: "枫叶", emoji: "🍁" },
+    { name: "山", emoji: "⛰️" }, { name: "火山", emoji: "🌋" }, { name: "岛", emoji: "🏝️" },
+    { name: "河", emoji: "〰️" }, { name: "瀑布", emoji: "💧" }, { name: "海浪", emoji: "🌊" },
+    { name: "火", emoji: "🔥" }, { name: "闪电", emoji: "⚡" }, { name: "彩虹", emoji: "🌈" },
+    { name: "太阳", emoji: "☀️" }, { name: "月亮", emoji: "🌙" }, { name: "星星", emoji: "⭐" },
+    { name: "云", emoji: "☁️" }, { name: "雨", emoji: "🌧️" }, { name: "雪花", emoji: "❄️" },
   ],
   建筑: [
-    { name: "房子", emoji: "🏠", size: "large" as const }, { name: "小屋", emoji: "🛖", size: "medium" as const }, { name: "城堡", emoji: "🏰", size: "xlarge" as const },
-    { name: "宫殿", emoji: "🏛️", size: "xlarge" as const }, { name: "塔", emoji: "🗼", size: "xlarge" as const }, { name: "桥", emoji: "🌉", size: "large" as const },
-    { name: "门", emoji: "🚪", size: "medium" as const }, { name: "窗", emoji: "🪟", size: "medium" as const }, { name: "墙", emoji: "🧱", size: "large" as const },
-    { name: "栅栏", emoji: "🚧", size: "medium" as const }, { name: "楼梯", emoji: "🪜", size: "medium" as const }, { name: "灯塔", emoji: "🗼", size: "xlarge" as const },
-    { name: "教堂", emoji: "⛪", size: "xlarge" as const }, { name: "神庙", emoji: "🛕", size: "xlarge" as const }, { name: "摩天轮", emoji: "🎡", size: "xlarge" as const },
-    { name: "学校", emoji: "🏫", size: "large" as const }, { name: "医院", emoji: "🏥", size: "large" as const }, { name: "图书馆", emoji: "📚", size: "large" as const },
+    { name: "房子", emoji: "🏠" }, { name: "小屋", emoji: "🛖" }, { name: "城堡", emoji: "🏰" },
+    { name: "宫殿", emoji: "🏛️" }, { name: "塔", emoji: "🗼" }, { name: "桥", emoji: "🌉" },
+    { name: "门", emoji: "🚪" }, { name: "窗", emoji: "🪟" }, { name: "墙", emoji: "🧱" },
+    { name: "栅栏", emoji: "🚧" }, { name: "楼梯", emoji: "🪜" }, { name: "灯塔", emoji: "🗼" },
+    { name: "教堂", emoji: "⛪" }, { name: "神庙", emoji: "🛕" }, { name: "摩天轮", emoji: "🎡" },
+    { name: "学校", emoji: "🏫" }, { name: "医院", emoji: "🏥" }, { name: "图书馆", emoji: "📚" },
   ],
   物品: [
-    { name: "钥匙", emoji: "🔑", size: "small" as const }, { name: "锁", emoji: "🔒", size: "small" as const }, { name: "宝箱", emoji: "💎", size: "medium" as const },
-    { name: "皇冠", emoji: "👑", size: "small" as const }, { name: "戒指", emoji: "💍", size: "small" as const }, { name: "项链", emoji: "📿", size: "small" as const },
-    { name: "剑", emoji: "⚔️", size: "medium" as const }, { name: "盾牌", emoji: "🛡️", size: "medium" as const }, { name: "弓箭", emoji: "🏹", size: "medium" as const },
-    { name: "书", emoji: "📖", size: "small" as const }, { name: "信", emoji: "✉️", size: "small" as const }, { name: "笔", emoji: "✒️", size: "small" as const },
-    { name: "蜡烛", emoji: "🕯️", size: "small" as const }, { name: "灯笼", emoji: "🏮", size: "small" as const }, { name: "钟表", emoji: "⏰", size: "small" as const },
-    { name: "沙漏", emoji: "⏳", size: "small" as const }, { name: "镜子", emoji: "🪞", size: "medium" as const }, { name: "气球", emoji: "🎈", size: "medium" as const },
-    { name: "礼物", emoji: "🎁", size: "medium" as const }, { name: "花束", emoji: "💐", size: "small" as const }, { name: "信箱", emoji: "📮", size: "medium" as const },
+    { name: "钥匙", emoji: "🔑" }, { name: "锁", emoji: "🔒" }, { name: "宝箱", emoji: "💎" },
+    { name: "皇冠", emoji: "👑" }, { name: "戒指", emoji: "💍" }, { name: "项链", emoji: "📿" },
+    { name: "剑", emoji: "⚔️" }, { name: "盾牌", emoji: "🛡️" }, { name: "弓箭", emoji: "🏹" },
+    { name: "书", emoji: "📖" }, { name: "信", emoji: "✉️" }, { name: "笔", emoji: "✒️" },
+    { name: "蜡烛", emoji: "🕯️" }, { name: "灯笼", emoji: "🏮" }, { name: "钟表", emoji: "⏰" },
+    { name: "沙漏", emoji: "⏳" }, { name: "镜子", emoji: "🪞" }, { name: "气球", emoji: "🎈" },
+    { name: "礼物", emoji: "🎁" }, { name: "花束", emoji: "💐" }, { name: "信箱", emoji: "📮" },
   ],
   奇幻: [
-    { name: "天使", emoji: "👼", size: "medium" as const }, { name: "恶魔", emoji: "👿", size: "medium" as const }, { name: "幽灵", emoji: "👻", size: "medium" as const },
-    { name: "巫师", emoji: "🧙", size: "medium" as const }, { name: "仙女", emoji: "🧚", size: "small" as const }, { name: "精灵", emoji: "🧝", size: "small" as const },
-    { name: "独角兽", emoji: "🦄", size: "large" as const }, { name: "凤凰", emoji: "🔥", size: "large" as const }, { name: "美人鱼", emoji: "🧜", size: "medium" as const },
-    { name: "水晶球", emoji: "🔮", size: "small" as const }, { name: "魔杖", emoji: "🪄", size: "small" as const }, { name: "魔法书", emoji: "📜", size: "small" as const },
-    { name: "羽毛", emoji: "🪶", size: "small" as const }, { name: "翅膀", emoji: "🕊️", size: "medium" as const }, { name: "光环", emoji: "✨", size: "small" as const },
-    { name: "宝石", emoji: "💎", size: "small" as const }, { name: "星尘", emoji: "✨", size: "small" as const }, { name: "月光", emoji: "🌙", size: "medium" as const },
+    { name: "天使", emoji: "👼" }, { name: "恶魔", emoji: "👿" }, { name: "幽灵", emoji: "👻" },
+    { name: "巫师", emoji: "🧙" }, { name: "仙女", emoji: "🧚" }, { name: "精灵", emoji: "🧝" },
+    { name: "独角兽", emoji: "🦄" }, { name: "凤凰", emoji: "🔥" }, { name: "美人鱼", emoji: "🧜" },
+    { name: "水晶球", emoji: "🔮" }, { name: "魔杖", emoji: "🪄" }, { name: "魔法书", emoji: "📜" },
+    { name: "羽毛", emoji: "🪶" }, { name: "翅膀", emoji: "🕊️" }, { name: "光环", emoji: "✨" },
+    { name: "宝石", emoji: "💎" }, { name: "星尘", emoji: "✨" }, { name: "月光", emoji: "🌙" },
   ],
   情感: [
-    { name: "心", emoji: "❤️", size: "medium" as const }, { name: "破碎心", emoji: "💔", size: "medium" as const }, { name: "心锁", emoji: "🔐", size: "small" as const },
-    { name: "笑脸", emoji: "😊", size: "medium" as const }, { name: "哭脸", emoji: "😢", size: "medium" as const }, { name: "愤怒", emoji: "😡", size: "medium" as const },
-    { name: "恐惧", emoji: "😨", size: "medium" as const }, { name: "惊讶", emoji: "😲", size: "medium" as const }, { name: "疑惑", emoji: "🤔", size: "medium" as const },
-    { name: "拥抱", emoji: "🤗", size: "medium" as const }, { name: "祈祷", emoji: "🙏", size: "medium" as const }, { name: "安静", emoji: "🤫", size: "medium" as const },
+    { name: "心", emoji: "❤️" }, { name: "破碎心", emoji: "💔" }, { name: "心锁", emoji: "🔐" },
+    { name: "笑脸", emoji: "😊" }, { name: "哭脸", emoji: "😢" }, { name: "愤怒", emoji: "😡" },
+    { name: "恐惧", emoji: "😨" }, { name: "惊讶", emoji: "😲" }, { name: "疑惑", emoji: "🤔" },
+    { name: "拥抱", emoji: "🤗" }, { name: "祈祷", emoji: "🙏" }, { name: "安静", emoji: "🤫" },
   ],
 };
 
@@ -87,20 +86,13 @@ const SandTray = () => {
   const [showResult, setShowResult] = useState(false);
   const [analysis, setAnalysis] = useState<string>("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [draggedItem, setDraggedItem] = useState<{ category: string; item: { name: string; emoji: string; size: "small" | "medium" | "large" | "xlarge" } } | null>(null);
-  const [draggedPlacedItem, setDraggedPlacedItem] = useState<SandItem | null>(null);
+  const [draggedItem, setDraggedItem] = useState<{ category: string; item: { name: string; emoji: string } } | null>(null);
   const sandTrayRef = useRef<HTMLDivElement>(null);
   const [avatarImage, setAvatarImage] = useState<string>("");
   const [isGeneratingAvatar, setIsGeneratingAvatar] = useState(false);
 
-  const handleDragStart = (category: string, item: { name: string; emoji: string; size: "small" | "medium" | "large" | "xlarge" }) => {
+  const handleDragStart = (category: string, item: { name: string; emoji: string }) => {
     setDraggedItem({ category, item });
-    setDraggedPlacedItem(null);
-  };
-
-  const handlePlacedItemDragStart = (item: SandItem) => {
-    setDraggedPlacedItem(item);
-    setDraggedItem(null);
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -109,39 +101,22 @@ const SandTray = () => {
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
-    if (!sandTrayRef.current) return;
+    if (!draggedItem || !sandTrayRef.current) return;
 
     const rect = sandTrayRef.current.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
 
-    // 如果是移动已有物件
-    if (draggedPlacedItem) {
-      setSelectedItems(
-        selectedItems.map((item) =>
-          item.id === draggedPlacedItem.id
-            ? { ...item, position: { x, y } }
-            : item
-        )
-      );
-      setDraggedPlacedItem(null);
-      return;
-    }
+    const newItem: SandItem = {
+      id: `${Date.now()}-${Math.random()}`,
+      category: draggedItem.category,
+      name: draggedItem.item.name,
+      emoji: draggedItem.item.emoji,
+      position: { x, y },
+    };
 
-    // 如果是添加新物件
-    if (draggedItem) {
-      const newItem: SandItem = {
-        id: `${Date.now()}-${Math.random()}`,
-        category: draggedItem.category,
-        name: draggedItem.item.name,
-        emoji: draggedItem.item.emoji,
-        size: draggedItem.item.size,
-        position: { x, y },
-      };
-
-      setSelectedItems([...selectedItems, newItem]);
-      setDraggedItem(null);
-    }
+    setSelectedItems([...selectedItems, newItem]);
+    setDraggedItem(null);
   };
 
   const handleRemoveItem = (id: string) => {
@@ -340,35 +315,25 @@ const SandTray = () => {
                       </p>
                     </div>
                   ) : (
-                    selectedItems.map((item) => {
-                      const sizeClasses = {
-                        small: "text-2xl",
-                        medium: "text-4xl",
-                        large: "text-6xl",
-                        xlarge: "text-8xl"
-                      };
-                      return (
-                        <div
-                          key={item.id}
-                          draggable
-                          onDragStart={() => handlePlacedItemDragStart(item)}
-                          onDoubleClick={() => handleRemoveItem(item.id)}
-                          className="absolute cursor-move hover:scale-110 transition-transform hover:z-10"
-                          style={{
-                            left: `${item.position?.x}%`,
-                            top: `${item.position?.y}%`,
-                            transform: "translate(-50%, -50%)",
-                          }}
-                          title="拖动移动位置 | 双击移除"
-                        >
-                          <div className={`${sizeClasses[item.size]} drop-shadow-lg`}>{item.emoji}</div>
-                        </div>
-                      );
-                    })
+                    selectedItems.map((item) => (
+                      <div
+                        key={item.id}
+                        className="absolute cursor-pointer hover:scale-125 transition-transform hover:z-10"
+                        style={{
+                          left: `${item.position?.x}%`,
+                          top: `${item.position?.y}%`,
+                          transform: "translate(-50%, -50%)",
+                        }}
+                        onClick={() => handleRemoveItem(item.id)}
+                        title="点击移除"
+                      >
+                        <div className="text-4xl drop-shadow-lg">{item.emoji}</div>
+                      </div>
+                    ))
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground mt-2 text-center">
-                  💡 拖拽物件到沙盘 | 拖动已放置的物件可移动位置 | 双击可移除
+                  💡 拖拽物件到沙盘 | 点击沙盘中的物件可移除
                 </p>
               </Card>
 
