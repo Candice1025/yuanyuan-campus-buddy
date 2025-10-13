@@ -9,6 +9,7 @@ import Chat from "./pages/Chat";
 import TreeHole from "./pages/TreeHole";
 import Profile from "./pages/Profile";
 import MBTITest from "./pages/MBTITest";
+import LearningTest from "./pages/LearningTest";
 import Mood from "./pages/Mood";
 import SandTray from "./pages/SandTray";
 import NotFound from "./pages/NotFound";
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/" element={<Home />} />
           <Route path="/tests" element={<Tests />} />
           <Route path="/test/mbti" element={<MBTITest />} />
+          <Route path="/test/learning" element={<LearningTest />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/tree-hole" element={<TreeHole />} />
           <Route path="/profile" element={<Profile />} />
