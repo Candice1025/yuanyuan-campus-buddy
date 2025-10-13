@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { Brain, MessageCircle, TreePine, Heart, Sparkles, User } from "lucide-react";
-import heroImage from "@/assets/yuanyuan-avatar.png";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -57,7 +56,7 @@ const Home = () => {
       {/* Hero Section */}
       <section className="relative overflow-hidden px-4 pt-12 pb-20">
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div className="max-w-3xl mx-auto text-center">
             <div className="space-y-6 animate-fade-in">
               <div className="inline-block">
                 <span className="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">
@@ -71,7 +70,7 @@ const Home = () => {
               <p className="text-lg text-muted-foreground leading-relaxed">
                 陪伴你成长的每一步，了解自己、管理情绪、快乐学习
               </p>
-              <div className="flex gap-4">
+              <div className="flex gap-4 justify-center">
                 <Button 
                   size="lg" 
                   className="bg-gradient-primary hover:opacity-90 shadow-soft"
@@ -87,13 +86,6 @@ const Home = () => {
                   心理测试
                 </Button>
               </div>
-            </div>
-            <div className="relative animate-float">
-              <img 
-                src={heroImage} 
-                alt="元元助手" 
-                className="w-full h-auto rounded-3xl shadow-float"
-              />
             </div>
           </div>
         </div>
