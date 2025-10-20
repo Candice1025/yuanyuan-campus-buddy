@@ -10,7 +10,9 @@ import { toast } from "sonner";
 
 const Auth = () => {
   const navigate = useNavigate();
+  const [loginMethod, setLoginMethod] = useState<"phone" | "email">("phone");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -37,10 +39,11 @@ const Auth = () => {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signUp({
-        phone,
-        password,
-      });
+      const { error } = await supabase.auth.signUp(
+        loginMethod === "phone"
+          ? { phone, password }
+          : { email, password, options: { emailRedirectTo: `${window.location.origin}/` } }
+      );
 
       if (error) throw error;
       toast.success("注册成功！正在登录...");
@@ -56,10 +59,9 @@ const Auth = () => {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        phone,
-        password,
-      });
+      const { error } = await supabase.auth.signInWithPassword(
+        loginMethod === "phone" ? { phone, password } : { email, password }
+      );
 
       if (error) throw error;
       toast.success("登录成功！");
@@ -89,16 +91,39 @@ const Auth = () => {
             <TabsContent value="signin">
               <form onSubmit={handleSignIn} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signin-phone">手机号</Label>
-                  <Input
-                    id="signin-phone"
-                    type="tel"
-                    placeholder="+86 138 0000 0000"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    required
-                  />
+                  <Label>登录方式</Label>
+                  <Tabs value={loginMethod} onValueChange={(v) => setLoginMethod(v as "phone" | "email")} className="w-full">
+                    <TabsList className="grid w-full grid-cols-2">
+                      <TabsTrigger value="phone">手机号</TabsTrigger>
+                      <TabsTrigger value="email">邮箱</TabsTrigger>
+                    </TabsList>
+                  </Tabs>
                 </div>
+                {loginMethod === "phone" ? (
+                  <div className="space-y-2">
+                    <Label htmlFor="signin-phone">手机号</Label>
+                    <Input
+                      id="signin-phone"
+                      type="tel"
+                      placeholder="+86 138 0000 0000"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      required
+                    />
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <Label htmlFor="signin-email">邮箱</Label>
+                    <Input
+                      id="signin-email"
+                      type="email"
+                      placeholder="your@email.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+                )}
                 <div className="space-y-2">
                   <Label htmlFor="signin-password">密码</Label>
                   <Input
@@ -119,16 +144,39 @@ const Auth = () => {
             <TabsContent value="signup">
               <form onSubmit={handleSignUp} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signup-phone">手机号</Label>
-                  <Input
-                    id="signup-phone"
-                    type="tel"
-                    placeholder="+86 138 0000 0000"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    required
-                  />
+                  <Label>注册方式</Label>
+                  <Tabs value={loginMethod} onValueChange={(v) => setLoginMethod(v as "phone" | "email")} className="w-full">
+                    <TabsList className="grid w-full grid-cols-2">
+                      <TabsTrigger value="phone">手机号</TabsTrigger>
+                      <TabsTrigger value="email">邮箱</TabsTrigger>
+                    </TabsList>
+                  </Tabs>
                 </div>
+                {loginMethod === "phone" ? (
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-phone">手机号</Label>
+                    <Input
+                      id="signup-phone"
+                      type="tel"
+                      placeholder="+86 138 0000 0000"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      required
+                    />
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-email">邮箱</Label>
+                    <Input
+                      id="signup-email"
+                      type="email"
+                      placeholder="your@email.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+                )}
                 <div className="space-y-2">
                   <Label htmlFor="signup-password">密码</Label>
                   <Input
