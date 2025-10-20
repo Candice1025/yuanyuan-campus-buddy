@@ -1,12 +1,98 @@
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, Settings, Trophy, Calendar, Brain, Heart, TrendingUp } from "lucide-react";
+import { ArrowLeft, Settings, Trophy, Calendar, Brain, Heart, LogOut, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import type { User as SupabaseUser } from "@supabase/supabase-js";
+
+interface AvatarConfig {
+  face_type: string;
+  hairstyle: string;
+  eyes: string;
+  nose: string;
+  mouth: string;
+  outfit: string;
+}
+
+const avatarOptions = {
+  face_type: [
+    { value: "oval", emoji: "😊" },
+    { value: "round", emoji: "😄" },
+    { value: "square", emoji: "😐" },
+    { value: "heart", emoji: "😍" }
+  ],
+  hairstyle: [
+    { value: "short", emoji: "👦" },
+    { value: "long", emoji: "👧" },
+    { value: "ponytail", emoji: "👱‍♀️" },
+    { value: "bob", emoji: "💇" }
+  ],
+  eyes: [
+    { value: "normal", emoji: "👁️" },
+    { value: "big", emoji: "👀" },
+    { value: "small", emoji: "😌" },
+    { value: "sparkle", emoji: "✨" }
+  ]
+};
 
 const Profile = () => {
   const navigate = useNavigate();
+  const [user, setUser] = useState<SupabaseUser | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [avatarConfig, setAvatarConfig] = useState<AvatarConfig | null>(null);
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+  const checkAuth = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      navigate("/auth");
+      return;
+    }
+
+    setUser(session.user);
+
+    // Load avatar config
+    const { data } = await supabase
+      .from("avatar_configs")
+      .select("*")
+      .eq("user_id", session.user.id)
+      .single();
+
+    if (data) {
+      setAvatarConfig(data);
+    }
+    setLoading(false);
+  };
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    toast.success("已退出登录");
+    navigate("/auth");
+  };
+
+  const getAvatarEmoji = () => {
+    if (!avatarConfig) return "👤";
+    
+    const face = avatarOptions.face_type.find(o => o.value === avatarConfig.face_type)?.emoji || "😊";
+    const hair = avatarOptions.hairstyle.find(o => o.value === avatarConfig.hairstyle)?.emoji || "👦";
+    const eye = avatarOptions.eyes.find(o => o.value === avatarConfig.eyes)?.emoji || "👁️";
+    return `${face}${hair}${eye}`;
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-lg">加载中...</div>
+      </div>
+    );
+  }
 
   const stats = [
     { label: "完成测试", value: 12, icon: Brain, color: "text-primary" },
@@ -40,8 +126,8 @@ const Profile = () => {
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <h1 className="text-2xl font-bold text-foreground flex-1">个人中心</h1>
-          <Button variant="ghost" size="icon">
-            <Settings className="w-5 h-5" />
+          <Button variant="ghost" size="icon" onClick={handleSignOut} title="退出登录">
+            <LogOut className="w-5 h-5" />
           </Button>
         </div>
       </header>
@@ -52,16 +138,28 @@ const Profile = () => {
           <Card className="p-6 shadow-float border-0 bg-gradient-primary text-white">
             <div className="flex items-start gap-4">
               <div className="relative">
-                <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-3xl font-bold border-2 border-white/40">
-                  👤
+                <div 
+                  className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-3xl font-bold border-2 border-white/40 cursor-pointer hover:bg-white/30 transition-colors"
+                  onClick={() => navigate("/avatar")}
+                  title="自定义形象"
+                >
+                  {getAvatarEmoji()}
                 </div>
                 <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-success rounded-full border-2 border-white flex items-center justify-center">
-                  <Trophy className="w-3 h-3 text-white" />
+                  <User className="w-3 h-3 text-white" />
                 </div>
               </div>
               <div className="flex-1">
-                <h2 className="text-2xl font-bold mb-1">学生用户</h2>
-                <p className="text-primary-light mb-3">探索中的少年 · 加入第45天</p>
+                <h2 className="text-2xl font-bold mb-1">{user?.email?.split("@")[0] || "用户"}</h2>
+                <p className="text-primary-light mb-3">探索中的少年</p>
+                <Button 
+                  variant="secondary" 
+                  size="sm" 
+                  onClick={() => navigate("/avatar")}
+                  className="mb-3"
+                >
+                  自定义形象
+                </Button>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-primary-light">成长等级</span>

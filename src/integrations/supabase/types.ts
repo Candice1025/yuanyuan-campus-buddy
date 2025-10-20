@@ -14,7 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      avatar_configs: {
+        Row: {
+          created_at: string
+          eyes: string
+          face_type: string
+          hairstyle: string
+          id: string
+          mouth: string
+          nose: string
+          outfit: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          eyes?: string
+          face_type?: string
+          hairstyle?: string
+          id?: string
+          mouth?: string
+          nose?: string
+          outfit?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          eyes?: string
+          face_type?: string
+          hairstyle?: string
+          id?: string
+          mouth?: string
+          nose?: string
+          outfit?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          id: string
+          updated_at: string
+          username: string | null
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          updated_at?: string
+          username?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          updated_at?: string
+          username?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

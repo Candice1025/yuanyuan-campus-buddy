@@ -1,10 +1,26 @@
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { Brain, MessageCircle, TreePine, Heart, Sparkles, User } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const Home = () => {
   const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    // Check authentication status
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setIsAuthenticated(!!session);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAuthenticated(!!session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const features = [
     {
@@ -71,6 +87,17 @@ const Home = () => {
                 陪伴你成长的每一步，了解自己、管理情绪、快乐学习
               </p>
               <div className="flex gap-4 justify-center">
+            {!isAuthenticated ? (
+              <Button 
+                size="lg" 
+                className="flex-1 max-w-xs bg-gradient-primary hover:opacity-90 transition-opacity shadow-elegant text-white"
+                onClick={() => navigate("/auth")}
+              >
+                <User className="mr-2 h-5 w-5" />
+                登录/注册
+              </Button>
+            ) : (
+              <>
                 <Button 
                   size="lg" 
                   className="bg-gradient-primary hover:opacity-90 shadow-soft"
@@ -85,6 +112,8 @@ const Home = () => {
                 >
                   心理测试
                 </Button>
+              </>
+            )}
               </div>
             </div>
           </div>
