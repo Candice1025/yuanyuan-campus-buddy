@@ -10,7 +10,7 @@ import { toast } from "sonner";
 
 const Auth = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -38,11 +38,8 @@ const Auth = () => {
 
     try {
       const { error } = await supabase.auth.signUp({
-        email,
+        phone,
         password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/`,
-        },
       });
 
       if (error) throw error;
@@ -60,7 +57,7 @@ const Auth = () => {
 
     try {
       const { error } = await supabase.auth.signInWithPassword({
-        email,
+        phone,
         password,
       });
 
@@ -92,13 +89,13 @@ const Auth = () => {
             <TabsContent value="signin">
               <form onSubmit={handleSignIn} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signin-email">邮箱</Label>
+                  <Label htmlFor="signin-phone">手机号</Label>
                   <Input
-                    id="signin-email"
-                    type="email"
-                    placeholder="your@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    id="signin-phone"
+                    type="tel"
+                    placeholder="+86 138 0000 0000"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
                     required
                   />
                 </div>
@@ -122,13 +119,13 @@ const Auth = () => {
             <TabsContent value="signup">
               <form onSubmit={handleSignUp} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signup-email">邮箱</Label>
+                  <Label htmlFor="signup-phone">手机号</Label>
                   <Input
-                    id="signup-email"
-                    type="email"
-                    placeholder="your@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    id="signup-phone"
+                    type="tel"
+                    placeholder="+86 138 0000 0000"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
                     required
                   />
                 </div>
