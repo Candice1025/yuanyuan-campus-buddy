@@ -13,9 +13,12 @@ interface AvatarConfig {
   face_type: string;
   hairstyle: string;
   eyes: string;
+  eyebrows: string;
   nose: string;
   mouth: string;
+  skin_tone: string;
   outfit: string;
+  accessories: string;
 }
 
 const avatarOptions = {
@@ -29,13 +32,23 @@ const avatarOptions = {
     { value: "short", emoji: "👦" },
     { value: "long", emoji: "👧" },
     { value: "ponytail", emoji: "👱‍♀️" },
-    { value: "bob", emoji: "💇" }
+    { value: "bob", emoji: "💇" },
+    { value: "curly", emoji: "🦱" },
+    { value: "bun", emoji: "🥖" }
   ],
   eyes: [
     { value: "normal", emoji: "👁️" },
     { value: "big", emoji: "👀" },
     { value: "small", emoji: "😌" },
     { value: "sparkle", emoji: "✨" }
+  ],
+  accessories: [
+    { value: "none", emoji: "" },
+    { value: "glasses", emoji: "👓" },
+    { value: "hat", emoji: "🎩" },
+    { value: "headband", emoji: "🎀" },
+    { value: "earrings", emoji: "💎" },
+    { value: "necklace", emoji: "📿" }
   ]
 };
 
@@ -82,8 +95,21 @@ const Profile = () => {
     
     const face = avatarOptions.face_type.find(o => o.value === avatarConfig.face_type)?.emoji || "😊";
     const hair = avatarOptions.hairstyle.find(o => o.value === avatarConfig.hairstyle)?.emoji || "👦";
-    const eye = avatarOptions.eyes.find(o => o.value === avatarConfig.eyes)?.emoji || "👁️";
-    return `${face}${hair}${eye}`;
+    const accessory = avatarConfig.accessories && avatarConfig.accessories !== "none" 
+      ? (avatarOptions.accessories?.find(o => o.value === avatarConfig.accessories)?.emoji || "")
+      : "";
+    return `${face}${hair}${accessory}`;
+  };
+
+  const getSkinColor = () => {
+    if (!avatarConfig || !avatarConfig.skin_tone) return "#FFE5D9";
+    const skinToneOptions = [
+      { value: "light", color: "#FFE5D9" },
+      { value: "medium", color: "#E8B4A0" },
+      { value: "tan", color: "#D4A373" },
+      { value: "dark", color: "#8B6F47" }
+    ];
+    return skinToneOptions.find(o => o.value === avatarConfig.skin_tone)?.color || "#FFE5D9";
   };
 
   if (loading) {
@@ -139,9 +165,10 @@ const Profile = () => {
             <div className="flex items-start gap-4">
               <div className="relative">
                 <div 
-                  className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-3xl font-bold border-2 border-white/40 cursor-pointer hover:bg-white/30 transition-colors"
+                  className="w-20 h-20 rounded-full flex items-center justify-center text-3xl font-bold border-2 border-white/40 cursor-pointer hover:scale-105 transition-transform shadow-lg"
                   onClick={() => navigate("/avatar")}
                   title="自定义形象"
+                  style={{ backgroundColor: getSkinColor() }}
                 >
                   {getAvatarEmoji()}
                 </div>

@@ -16,7 +16,10 @@ export type Database = {
     Tables: {
       avatar_configs: {
         Row: {
+          accessories: string | null
+          avatar_name: string | null
           created_at: string
+          eyebrows: string | null
           eyes: string
           face_type: string
           hairstyle: string
@@ -24,11 +27,15 @@ export type Database = {
           mouth: string
           nose: string
           outfit: string
+          skin_tone: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
+          accessories?: string | null
+          avatar_name?: string | null
           created_at?: string
+          eyebrows?: string | null
           eyes?: string
           face_type?: string
           hairstyle?: string
@@ -36,11 +43,15 @@ export type Database = {
           mouth?: string
           nose?: string
           outfit?: string
+          skin_tone?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
+          accessories?: string | null
+          avatar_name?: string | null
           created_at?: string
+          eyebrows?: string | null
           eyes?: string
           face_type?: string
           hairstyle?: string
@@ -48,6 +59,7 @@ export type Database = {
           mouth?: string
           nose?: string
           outfit?: string
+          skin_tone?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -71,6 +83,60 @@ export type Database = {
           id?: string
           updated_at?: string
           username?: string | null
+        }
+        Relationships: []
+      }
+      saved_avatars: {
+        Row: {
+          accessories: string
+          avatar_name: string
+          created_at: string
+          eyebrows: string
+          eyes: string
+          face_type: string
+          hairstyle: string
+          id: string
+          is_active: boolean
+          mouth: string
+          nose: string
+          outfit: string
+          skin_tone: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          accessories?: string
+          avatar_name?: string
+          created_at?: string
+          eyebrows?: string
+          eyes?: string
+          face_type?: string
+          hairstyle?: string
+          id?: string
+          is_active?: boolean
+          mouth?: string
+          nose?: string
+          outfit?: string
+          skin_tone?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          accessories?: string
+          avatar_name?: string
+          created_at?: string
+          eyebrows?: string
+          eyes?: string
+          face_type?: string
+          hairstyle?: string
+          id?: string
+          is_active?: boolean
+          mouth?: string
+          nose?: string
+          outfit?: string
+          skin_tone?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
