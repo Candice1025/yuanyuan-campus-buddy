@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { toast } from "sonner";
 
 const Auth = () => {
@@ -14,7 +15,10 @@ const Auth = () => {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [countdown, setCountdown] = useState(0);
 
   useEffect(() => {
     // Check if user is already logged in
@@ -33,6 +37,13 @@ const Auth = () => {
 
     return () => subscription.unsubscribe();
   }, [navigate]);
+
+  useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [countdown]);
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,14 +65,58 @@ const Auth = () => {
     }
   };
 
+  const handleSendOtp = async () => {
+    if (!phone) {
+      toast.error("请输入手机号");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        phone,
+      });
+
+      if (error) throw error;
+      toast.success("验证码已发送！");
+      setOtpSent(true);
+      setCountdown(60);
+    } catch (error: any) {
+      toast.error(error.message || "发送验证码失败");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const { error } = await supabase.auth.verifyOtp({
+        phone,
+        token: otp,
+        type: 'sms'
+      });
+
+      if (error) throw error;
+      toast.success("登录成功！");
+    } catch (error: any) {
+      toast.error(error.message || "验证码错误");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword(
-        loginMethod === "phone" ? { phone, password } : { email, password }
-      );
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
 
       if (error) throw error;
       toast.success("登录成功！");
@@ -89,17 +144,8 @@ const Auth = () => {
             </TabsList>
 
             <TabsContent value="signin">
-              <form onSubmit={handleSignIn} className="space-y-4">
-                <div className="space-y-2">
-                  <Label>登录方式</Label>
-                  <Tabs value={loginMethod} onValueChange={(v) => setLoginMethod(v as "phone" | "email")} className="w-full">
-                    <TabsList className="grid w-full grid-cols-2">
-                      <TabsTrigger value="phone">手机号</TabsTrigger>
-                      <TabsTrigger value="email">邮箱</TabsTrigger>
-                    </TabsList>
-                  </Tabs>
-                </div>
-                {loginMethod === "phone" ? (
+              {loginMethod === "phone" ? (
+                <form onSubmit={handleVerifyOtp} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="signin-phone">手机号</Label>
                     <Input
@@ -109,9 +155,67 @@ const Auth = () => {
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       required
+                      disabled={otpSent}
                     />
                   </div>
-                ) : (
+                  {!otpSent ? (
+                    <Button
+                      type="button"
+                      onClick={handleSendOtp}
+                      className="w-full"
+                      disabled={loading || countdown > 0}
+                    >
+                      {countdown > 0 ? `${countdown}秒后重新发送` : loading ? "发送中..." : "发送验证码"}
+                    </Button>
+                  ) : (
+                    <>
+                      <div className="space-y-2">
+                        <Label htmlFor="signin-otp">验证码</Label>
+                        <InputOTP
+                          maxLength={6}
+                          value={otp}
+                          onChange={(value) => setOtp(value)}
+                        >
+                          <InputOTPGroup>
+                            <InputOTPSlot index={0} />
+                            <InputOTPSlot index={1} />
+                            <InputOTPSlot index={2} />
+                            <InputOTPSlot index={3} />
+                            <InputOTPSlot index={4} />
+                            <InputOTPSlot index={5} />
+                          </InputOTPGroup>
+                        </InputOTP>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => {
+                            setOtpSent(false);
+                            setOtp("");
+                          }}
+                          className="flex-1"
+                        >
+                          重新输入手机号
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={handleSendOtp}
+                          disabled={loading || countdown > 0}
+                          className="flex-1"
+                        >
+                          {countdown > 0 ? `${countdown}秒` : "重新发送"}
+                        </Button>
+                      </div>
+                      <Button type="submit" className="w-full" disabled={loading || otp.length !== 6}>
+                        {loading ? "验证中..." : "登录"}
+                      </Button>
+                    </>
+                  )}
+                </form>
+              ) : (
+                <form onSubmit={handleSignIn} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="signin-email">邮箱</Label>
                     <Input
@@ -123,22 +227,22 @@ const Auth = () => {
                       required
                     />
                   </div>
-                )}
-                <div className="space-y-2">
-                  <Label htmlFor="signin-password">密码</Label>
-                  <Input
-                    id="signin-password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "登录中..." : "登录"}
-                </Button>
-              </form>
+                  <div className="space-y-2">
+                    <Label htmlFor="signin-password">密码</Label>
+                    <Input
+                      id="signin-password"
+                      type="password"
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <Button type="submit" className="w-full" disabled={loading}>
+                    {loading ? "登录中..." : "登录"}
+                  </Button>
+                </form>
+              )}
             </TabsContent>
 
             <TabsContent value="signup">
