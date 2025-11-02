@@ -66,18 +66,20 @@ const Auth = () => {
   };
 
   const handleSendOtp = async () => {
-    if (!phone) {
-      toast.error("请输入手机号");
+    if (!phone || !/^1[3-9]\d{9}$/.test(phone)) {
+      toast.error("请输入正确的手机号");
       return;
     }
 
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signInWithOtp({
-        phone,
+      const { data, error } = await supabase.functions.invoke("send-sms", {
+        body: { phone },
       });
 
       if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
       toast.success("验证码已发送！");
       setOtpSent(true);
       setCountdown(60);
@@ -93,13 +95,22 @@ const Auth = () => {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.verifyOtp({
-        phone,
-        token: otp,
-        type: 'sms'
+      const { data, error } = await supabase.functions.invoke("verify-sms", {
+        body: { phone, code: otp },
       });
 
       if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
+      // 使用返回的 magic link 登录
+      if (data?.session?.properties?.hashed_token) {
+        const { error: verifyError } = await supabase.auth.verifyOtp({
+          token_hash: data.session.properties.hashed_token,
+          type: 'magiclink',
+        });
+        if (verifyError) throw verifyError;
+      }
+
       toast.success("登录成功！");
     } catch (error: any) {
       toast.error(error.message || "验证码错误");
@@ -151,7 +162,7 @@ const Auth = () => {
                     <Input
                       id="signin-phone"
                       type="tel"
-                      placeholder="+86 138 0000 0000"
+                      placeholder="13800000000"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       required
@@ -262,7 +273,7 @@ const Auth = () => {
                     <Input
                       id="signup-phone"
                       type="tel"
-                      placeholder="+86 138 0000 0000"
+                      placeholder="13800000000"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       required
