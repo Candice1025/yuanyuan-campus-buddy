@@ -6,7 +6,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// 腾讯云短信签名
+// 腾讯云短信签名辅助函数
 async function sha256(message: string): Promise<string> {
   const encoder = new TextEncoder();
   const data = encoder.encode(message);
@@ -16,19 +16,27 @@ async function sha256(message: string): Promise<string> {
     .join("");
 }
 
-async function hmacSha256(key: string, message: string): Promise<string> {
+// 返回原始字节的 HMAC
+async function hmacSha256Bytes(key: Uint8Array, message: string): Promise<Uint8Array> {
   const encoder = new TextEncoder();
-  const keyData = encoder.encode(key);
   const messageData = encoder.encode(message);
+  // 创建新的 ArrayBuffer 副本以满足类型要求
+  const keyBuffer = new Uint8Array(key).buffer;
   const cryptoKey = await crypto.subtle.importKey(
     "raw",
-    keyData,
+    keyBuffer,
     { name: "HMAC", hash: "SHA-256" },
     false,
     ["sign"]
   );
   const signature = await crypto.subtle.sign("HMAC", cryptoKey, messageData);
-  return Array.from(new Uint8Array(signature))
+  return new Uint8Array(signature);
+}
+
+// 返回十六进制字符串的 HMAC
+async function hmacSha256Hex(key: Uint8Array, message: string): Promise<string> {
+  const bytes = await hmacSha256Bytes(key, message);
+  return Array.from(bytes)
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
 }
@@ -97,17 +105,19 @@ serve(async (req) => {
       TemplateParamSet: [code, "5"], // 验证码和有效期（分钟）
     });
 
-    // 计算签名
+    // 计算签名（腾讯云 TC3 签名算法）
     const hashedRequestPayload = await sha256(payload);
     const canonicalRequest = `POST\n/\n\ncontent-type:application/json\nhost:${endpoint}\n\ncontent-type;host\n${hashedRequestPayload}`;
     const hashedCanonicalRequest = await sha256(canonicalRequest);
     const credentialScope = `${date}/${service}/tc3_request`;
     const stringToSign = `TC3-HMAC-SHA256\n${timestamp}\n${credentialScope}\n${hashedCanonicalRequest}`;
     
-    const secretDate = await hmacSha256(`TC3${secretKey}`, date);
-    const secretService = await hmacSha256(secretDate, service);
-    const secretSigning = await hmacSha256(secretService, "tc3_request");
-    const signature = await hmacSha256(secretSigning, stringToSign);
+    // 派生签名密钥（链式 HMAC，使用原始字节）
+    const encoder = new TextEncoder();
+    const kDate = await hmacSha256Bytes(encoder.encode(`TC3${secretKey}`), date);
+    const kService = await hmacSha256Bytes(kDate, service);
+    const kSigning = await hmacSha256Bytes(kService, "tc3_request");
+    const signature = await hmacSha256Hex(kSigning, stringToSign);
 
     const authorization = `TC3-HMAC-SHA256 Credential=${secretId}/${credentialScope}, SignedHeaders=content-type;host, Signature=${signature}`;
 
