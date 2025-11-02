@@ -89,6 +89,13 @@ serve(async (req) => {
     const signName = Deno.env.get("TENCENT_SMS_SIGN_NAME")!;
     const templateId = Deno.env.get("TENCENT_SMS_TEMPLATE_ID")!;
 
+    // 调试日志
+    console.log("腾讯云配置信息：");
+    console.log("- SecretId 前4位:", secretId.substring(0, 4));
+    console.log("- SdkAppId:", sdkAppId);
+    console.log("- SignName:", signName);
+    console.log("- TemplateId:", templateId);
+
     // 构建请求参数
     const endpoint = "sms.tencentcloudapi.com";
     const service = "sms";
