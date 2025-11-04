@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { ArrowLeft, Send, Sparkles, Book, Heart, Lightbulb } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import chatIcon from "@/assets/chat-icon.png";
 
 interface Message {
@@ -17,6 +18,7 @@ interface Message {
 const Chat = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [user, setUser] = useState<any>(null);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -28,6 +30,34 @@ const Chat = () => {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // 检查用户登录状态并加载历史消息
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
+      setUser(user);
+      
+      if (user) {
+        // 加载历史聊天记录
+        const { data: chatHistory } = await supabase
+          .from('chat_messages')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: true })
+          .limit(50);
+
+        if (chatHistory && chatHistory.length > 0) {
+          const historicalMessages = chatHistory.map(msg => ({
+            id: msg.id,
+            content: msg.content,
+            sender: msg.sender as "user" | "assistant",
+            timestamp: new Date(msg.created_at)
+          }));
+          
+          setMessages(prev => [...prev, ...historicalMessages]);
+        }
+      }
+    });
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -155,6 +185,14 @@ const Chat = () => {
       }
 
       setIsTyping(false);
+      
+      // 保存聊天记录到数据库
+      if (user) {
+        await supabase.from('chat_messages').insert([
+          { user_id: user.id, content: userMessage.content, sender: 'user' },
+          { user_id: user.id, content: assistantContent, sender: 'assistant' }
+        ]);
+      }
     } catch (error) {
       console.error("Chat error:", error);
       toast({

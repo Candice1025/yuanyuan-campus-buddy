@@ -1,30 +1,72 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const moods = [
-  { emoji: "😊", label: "开心", color: "bg-success" },
-  { emoji: "😌", label: "平静", color: "bg-primary" },
-  { emoji: "😔", label: "难过", color: "bg-accent" },
-  { emoji: "😰", label: "焦虑", color: "bg-warning" },
-  { emoji: "😤", label: "愤怒", color: "bg-destructive" },
+  { emoji: "😊", label: "开心", color: "bg-success", intensity: 8 },
+  { emoji: "😌", label: "平静", color: "bg-primary", intensity: 6 },
+  { emoji: "😔", label: "难过", color: "bg-accent", intensity: 4 },
+  { emoji: "😰", label: "焦虑", color: "bg-warning", intensity: 3 },
+  { emoji: "😤", label: "愤怒", color: "bg-destructive", intensity: 2 },
 ];
 
 const Mood = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [user, setUser] = useState<any>(null);
   const [selectedMood, setSelectedMood] = useState<string>("");
   const [note, setNote] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = () => {
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+    });
+  }, []);
+
+  const handleSubmit = async () => {
     if (!selectedMood) {
       toast({
         title: "请选择心情",
         description: "选择一个最符合你现在心情的选项",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!user) {
+      toast({
+        title: "请先登录",
+        description: "需要登录才能保存心情日记",
+        variant: "destructive",
+      });
+      navigate("/auth");
+      return;
+    }
+
+    setIsLoading(true);
+    
+    const selectedMoodData = moods.find(m => m.label === selectedMood);
+    const { error } = await supabase
+      .from('mood_entries')
+      .insert({
+        user_id: user.id,
+        mood: selectedMood,
+        content: note || null,
+        intensity: selectedMoodData?.intensity || 5
+      });
+
+    setIsLoading(false);
+
+    if (error) {
+      toast({
+        title: "保存失败",
+        description: error.message,
         variant: "destructive",
       });
       return;
@@ -98,9 +140,10 @@ const Mood = () => {
 
           <Button
             onClick={handleSubmit}
+            disabled={isLoading}
             className="w-full bg-gradient-primary hover:opacity-90"
           >
-            记录今天的心情
+            {isLoading ? "保存中..." : "记录今天的心情"}
           </Button>
         </Card>
 

@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Heart, MessageCircle, Send, TreePine } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import treeHoleIcon from "@/assets/tree-hole-icon.png";
 
 interface Post {
@@ -18,58 +20,158 @@ interface Post {
 
 const TreeHole = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [newPost, setNewPost] = useState("");
-  const [posts, setPosts] = useState<Post[]>([
-    {
-      id: "1",
-      content: "今天考试考砸了，感觉很沮丧...但是想想明天又是新的一天！加油！",
-      timestamp: new Date(Date.now() - 1000 * 60 * 30),
-      likes: 24,
-      comments: 8,
-      mood: "加油"
-    },
-    {
-      id: "2",
-      content: "终于理解了那道数学题！原来解题的关键在于换个角度思考。感谢元元的引导！",
-      timestamp: new Date(Date.now() - 1000 * 60 * 120),
-      likes: 42,
-      comments: 15,
-      mood: "开心"
-    },
-    {
-      id: "3",
-      content: "最近压力有点大，但是看到大家都在努力，我也不能放弃！一起加油吧！",
-      timestamp: new Date(Date.now() - 1000 * 60 * 180),
-      likes: 56,
-      comments: 23,
-      mood: "奋斗"
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [selectedMood, setSelectedMood] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    // 检查用户登录状态
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+    });
+
+    // 加载帖子
+    fetchPosts();
+
+    // 监听实时更新
+    const channel = supabase
+      .channel('tree_hole_posts_changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'tree_hole_posts'
+        },
+        () => {
+          fetchPosts();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  const fetchPosts = async () => {
+    const { data, error } = await supabase
+      .from('tree_hole_posts')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching posts:', error);
+      return;
     }
-  ]);
+
+    setPosts(data.map(post => ({
+      id: post.id,
+      content: post.content,
+      timestamp: new Date(post.created_at),
+      likes: post.likes,
+      comments: post.comments_count,
+      mood: post.mood
+    })));
+  };
 
   const moods = ["开心", "难过", "焦虑", "压力大", "兴奋", "平静", "迷茫", "感恩"];
 
-  const handlePost = () => {
+  const handlePost = async () => {
     if (!newPost.trim()) return;
 
-    const post: Post = {
-      id: Date.now().toString(),
-      content: newPost,
-      timestamp: new Date(),
-      likes: 0,
-      comments: 0,
-      mood: "分享"
-    };
+    if (!user) {
+      toast({
+        title: "请先登录",
+        description: "需要登录才能发布内容",
+        variant: "destructive"
+      });
+      navigate("/auth");
+      return;
+    }
 
-    setPosts([post, ...posts]);
+    setIsLoading(true);
+    const { error } = await supabase
+      .from('tree_hole_posts')
+      .insert({
+        content: newPost,
+        mood: selectedMood || "分享",
+        user_id: user.id
+      });
+
+    setIsLoading(false);
+
+    if (error) {
+      toast({
+        title: "发布失败",
+        description: error.message,
+        variant: "destructive"
+      });
+      return;
+    }
+
+    toast({
+      title: "发布成功",
+      description: "你的心声已匿名发布"
+    });
+
     setNewPost("");
+    setSelectedMood("");
   };
 
-  const handleLike = (postId: string) => {
-    setPosts(posts.map(post => 
-      post.id === postId 
-        ? { ...post, likes: post.likes + 1 }
-        : post
-    ));
+  const handleLike = async (postId: string) => {
+    if (!user) {
+      toast({
+        title: "请先登录",
+        description: "需要登录才能点赞",
+        variant: "destructive"
+      });
+      navigate("/auth");
+      return;
+    }
+
+    // 检查是否已点赞
+    const { data: existingLike } = await supabase
+      .from('tree_hole_likes')
+      .select('id')
+      .eq('post_id', postId)
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    if (existingLike) {
+      // 取消点赞
+      const { error } = await supabase
+        .from('tree_hole_likes')
+        .delete()
+        .eq('post_id', postId)
+        .eq('user_id', user.id);
+
+      if (!error) {
+        await supabase
+          .from('tree_hole_posts')
+          .update({ likes: Math.max(0, posts.find(p => p.id === postId)!.likes - 1) })
+          .eq('id', postId);
+        
+        fetchPosts();
+      }
+    } else {
+      // 添加点赞
+      const { error } = await supabase
+        .from('tree_hole_likes')
+        .insert({ post_id: postId, user_id: user.id });
+
+      if (!error) {
+        await supabase
+          .from('tree_hole_posts')
+          .update({ likes: posts.find(p => p.id === postId)!.likes + 1 })
+          .eq('id', postId);
+        
+        fetchPosts();
+      }
+    }
   };
 
   return (
@@ -130,8 +232,9 @@ const TreeHole = () => {
                 {moods.slice(0, 4).map(mood => (
                   <Badge
                     key={mood}
-                    variant="secondary"
+                    variant={selectedMood === mood ? "default" : "secondary"}
                     className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
+                    onClick={() => setSelectedMood(selectedMood === mood ? "" : mood)}
                   >
                     {mood}
                   </Badge>
@@ -139,11 +242,11 @@ const TreeHole = () => {
               </div>
               <Button
                 onClick={handlePost}
-                disabled={!newPost.trim()}
+                disabled={!newPost.trim() || isLoading}
                 className="bg-gradient-primary hover:opacity-90"
               >
                 <Send className="w-4 h-4 mr-2" />
-                发布
+                {isLoading ? "发布中..." : "发布"}
               </Button>
             </div>
           </Card>
