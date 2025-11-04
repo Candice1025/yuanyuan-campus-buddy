@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { ArrowLeft, Heart, MessageCircle, Send, TreePine } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,6 +19,12 @@ interface Post {
   mood: string;
 }
 
+interface Comment {
+  id: string;
+  content: string;
+  created_at: string;
+}
+
 const TreeHole = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -26,6 +33,10 @@ const TreeHole = () => {
   const [selectedMood, setSelectedMood] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [newComment, setNewComment] = useState("");
 
   useEffect(() => {
     // 检查用户登录状态
@@ -76,6 +87,18 @@ const TreeHole = () => {
       comments: post.comments_count,
       mood: post.mood
     })));
+
+    // 如果用户已登录，获取用户的点赞状态
+    if (user) {
+      const { data: likes } = await supabase
+        .from('tree_hole_likes')
+        .select('post_id')
+        .eq('user_id', user.id);
+      
+      if (likes) {
+        setLikedPosts(new Set(likes.map(like => like.post_id)));
+      }
+    }
   };
 
   const moods = ["开心", "难过", "焦虑", "压力大", "兴奋", "平静", "迷茫", "感恩"];
@@ -156,6 +179,11 @@ const TreeHole = () => {
           .update({ likes: Math.max(0, posts.find(p => p.id === postId)!.likes - 1) })
           .eq('id', postId);
         
+        setLikedPosts(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(postId);
+          return newSet;
+        });
         fetchPosts();
       }
     } else {
@@ -170,9 +198,64 @@ const TreeHole = () => {
           .update({ likes: posts.find(p => p.id === postId)!.likes + 1 })
           .eq('id', postId);
         
+        setLikedPosts(prev => new Set(prev).add(postId));
         fetchPosts();
       }
     }
+  };
+
+  const fetchComments = async (postId: string) => {
+    const { data, error } = await supabase
+      .from('tree_hole_comments')
+      .select('*')
+      .eq('post_id', postId)
+      .order('created_at', { ascending: true });
+
+    if (error) {
+      console.error('Error fetching comments:', error);
+      return;
+    }
+
+    setComments(data || []);
+  };
+
+  const handleComment = async () => {
+    if (!newComment.trim() || !selectedPost) return;
+
+    if (!user) {
+      toast({
+        title: "请先登录",
+        description: "需要登录才能评论",
+        variant: "destructive"
+      });
+      navigate("/auth");
+      return;
+    }
+
+    const { error } = await supabase
+      .from('tree_hole_comments')
+      .insert({
+        post_id: selectedPost.id,
+        user_id: user.id,
+        content: newComment
+      });
+
+    if (error) {
+      toast({
+        title: "评论失败",
+        description: error.message,
+        variant: "destructive"
+      });
+      return;
+    }
+
+    toast({
+      title: "评论成功"
+    });
+
+    setNewComment("");
+    fetchComments(selectedPost.id);
+    fetchPosts();
   };
 
   return (
@@ -293,19 +376,86 @@ const TreeHole = () => {
                     variant="ghost"
                     size="sm"
                     onClick={() => handleLike(post.id)}
-                    className="hover:text-accent hover:bg-accent/10"
+                    className={likedPosts.has(post.id) ? "text-red-500 hover:text-red-600 hover:bg-red-50" : "hover:text-accent hover:bg-accent/10"}
                   >
-                    <Heart className="w-4 h-4 mr-1" />
+                    <Heart className={`w-4 h-4 mr-1 ${likedPosts.has(post.id) ? "fill-red-500" : ""}`} />
                     {post.likes}
                   </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="hover:text-primary hover:bg-primary/10"
-                  >
-                    <MessageCircle className="w-4 h-4 mr-1" />
-                    {post.comments}
-                  </Button>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="hover:text-primary hover:bg-primary/10"
+                        onClick={() => {
+                          setSelectedPost(post);
+                          fetchComments(post.id);
+                        }}
+                      >
+                        <MessageCircle className="w-4 h-4 mr-1" />
+                        {post.comments}
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                      <DialogHeader>
+                        <DialogTitle>评论</DialogTitle>
+                      </DialogHeader>
+                      <div className="space-y-4">
+                        {/* 原帖内容 */}
+                        <Card className="p-4 bg-muted/50">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Badge variant="secondary">{post.mood}</Badge>
+                          </div>
+                          <p className="text-foreground">{post.content}</p>
+                        </Card>
+
+                        {/* 评论列表 */}
+                        <div className="space-y-3">
+                          {comments.length === 0 ? (
+                            <p className="text-center text-muted-foreground py-8">暂无评论，来说点什么吧</p>
+                          ) : (
+                            comments.map((comment) => (
+                              <Card key={comment.id} className="p-3">
+                                <div className="flex items-start gap-2">
+                                  <div className="w-6 h-6 rounded-full bg-gradient-fresh flex items-center justify-center text-white text-xs flex-shrink-0">
+                                    匿
+                                  </div>
+                                  <div className="flex-1">
+                                    <p className="text-sm text-foreground">{comment.content}</p>
+                                    <span className="text-xs text-muted-foreground">
+                                      {new Date(comment.created_at).toLocaleString("zh-CN", {
+                                        month: "numeric",
+                                        day: "numeric",
+                                        hour: "2-digit",
+                                        minute: "2-digit"
+                                      })}
+                                    </span>
+                                  </div>
+                                </div>
+                              </Card>
+                            ))
+                          )}
+                        </div>
+
+                        {/* 评论输入 */}
+                        <div className="flex gap-2 pt-4 border-t">
+                          <Textarea
+                            placeholder="写下你的评论..."
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                            className="min-h-[80px] resize-none"
+                          />
+                          <Button
+                            onClick={handleComment}
+                            disabled={!newComment.trim()}
+                            className="self-end"
+                          >
+                            <Send className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                 </div>
               </div>
             </Card>
