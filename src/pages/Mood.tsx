@@ -6,6 +6,8 @@ import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
 
 const moods = [
   { emoji: "😊", label: "开心", color: "bg-success", intensity: 8 },
@@ -22,12 +24,34 @@ const Mood = () => {
   const [selectedMood, setSelectedMood] = useState<string>("");
   const [note, setNote] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [moodHistory, setMoodHistory] = useState<any[]>([]);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user);
+      if (user) {
+        fetchMoodHistory(user.id);
+      }
     });
   }, []);
+
+  const fetchMoodHistory = async (userId: string) => {
+    const { data, error } = await supabase
+      .from('mood_entries')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: true })
+      .limit(30);
+
+    if (!error && data) {
+      const chartData = data.map(entry => ({
+        date: new Date(entry.created_at).toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' }),
+        intensity: entry.intensity,
+        mood: entry.mood,
+      }));
+      setMoodHistory(chartData);
+    }
+  };
 
   const handleSubmit = async () => {
     if (!selectedMood) {
@@ -76,6 +100,11 @@ const Mood = () => {
       title: "打卡成功！",
       description: "你的心情已记录 ✨",
     });
+
+    // 刷新历史数据
+    if (user) {
+      fetchMoodHistory(user.id);
+    }
 
     // 清空表单
     setSelectedMood("");
@@ -151,9 +180,70 @@ const Mood = () => {
           <h3 className="text-lg font-semibold text-foreground mb-4">
             心情统计
           </h3>
-          <p className="text-sm text-muted-foreground text-center py-8">
-            开始打卡，追踪你的情绪变化趋势 📊
-          </p>
+          {moodHistory.length > 0 ? (
+            <div className="space-y-4">
+              <ChartContainer
+                config={{
+                  intensity: {
+                    label: "心情指数",
+                    color: "hsl(var(--primary))",
+                  },
+                }}
+                className="h-[250px]"
+              >
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={moodHistory}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                    <XAxis 
+                      dataKey="date" 
+                      stroke="hsl(var(--muted-foreground))"
+                      fontSize={12}
+                    />
+                    <YAxis 
+                      stroke="hsl(var(--muted-foreground))"
+                      fontSize={12}
+                      domain={[0, 10]}
+                    />
+                    <ChartTooltip content={<ChartTooltipContent />} />
+                    <Line
+                      type="monotone"
+                      dataKey="intensity"
+                      stroke="hsl(var(--primary))"
+                      strokeWidth={2}
+                      dot={{ fill: "hsl(var(--primary))", r: 4 }}
+                      activeDot={{ r: 6 }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </ChartContainer>
+              <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-success"></div>
+                  <span>开心 (8-10)</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-primary"></div>
+                  <span>平静 (6-7)</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-accent"></div>
+                  <span>难过 (4-5)</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-warning"></div>
+                  <span>焦虑 (3)</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-destructive"></div>
+                  <span>愤怒 (1-2)</span>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground text-center py-8">
+              开始打卡，追踪你的情绪变化趋势 📊
+            </p>
+          )}
         </Card>
       </main>
     </div>
