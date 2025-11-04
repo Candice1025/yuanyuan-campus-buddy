@@ -120,6 +120,7 @@ const TreeHole = () => {
 
     setNewPost("");
     setSelectedMood("");
+    fetchPosts(); // 立即刷新帖子列表
   };
 
   const handleLike = async (postId: string) => {
