@@ -3,60 +3,16 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, Settings, Trophy, Calendar, Brain, Heart, LogOut, User } from "lucide-react";
+import { ArrowLeft, Trophy, Calendar, Brain, Heart, LogOut, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 
-interface AvatarConfig {
-  face_type: string;
-  hairstyle: string;
-  eyes: string;
-  eyebrows: string;
-  nose: string;
-  mouth: string;
-  skin_tone: string;
-  outfit: string;
-  accessories: string;
-}
-
-const avatarOptions = {
-  face_type: [
-    { value: "oval", emoji: "😊" },
-    { value: "round", emoji: "😄" },
-    { value: "square", emoji: "😐" },
-    { value: "heart", emoji: "😍" }
-  ],
-  hairstyle: [
-    { value: "short", emoji: "👦" },
-    { value: "long", emoji: "👧" },
-    { value: "ponytail", emoji: "👱‍♀️" },
-    { value: "bob", emoji: "💇" },
-    { value: "curly", emoji: "🦱" },
-    { value: "bun", emoji: "🥖" }
-  ],
-  eyes: [
-    { value: "normal", emoji: "👁️" },
-    { value: "big", emoji: "👀" },
-    { value: "small", emoji: "😌" },
-    { value: "sparkle", emoji: "✨" }
-  ],
-  accessories: [
-    { value: "none", emoji: "" },
-    { value: "glasses", emoji: "👓" },
-    { value: "hat", emoji: "🎩" },
-    { value: "headband", emoji: "🎀" },
-    { value: "earrings", emoji: "💎" },
-    { value: "necklace", emoji: "📿" }
-  ]
-};
-
 const Profile = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [loading, setLoading] = useState(true);
-  const [avatarConfig, setAvatarConfig] = useState<AvatarConfig | null>(null);
 
   useEffect(() => {
     checkAuth();
@@ -70,17 +26,6 @@ const Profile = () => {
     }
 
     setUser(session.user);
-
-    // Load avatar config
-    const { data } = await supabase
-      .from("avatar_configs")
-      .select("*")
-      .eq("user_id", session.user.id)
-      .single();
-
-    if (data) {
-      setAvatarConfig(data);
-    }
     setLoading(false);
   };
 
@@ -88,28 +33,6 @@ const Profile = () => {
     await supabase.auth.signOut();
     toast.success("已退出登录");
     navigate("/auth");
-  };
-
-  const getAvatarEmoji = () => {
-    if (!avatarConfig) return "👤";
-    
-    const face = avatarOptions.face_type.find(o => o.value === avatarConfig.face_type)?.emoji || "😊";
-    const hair = avatarOptions.hairstyle.find(o => o.value === avatarConfig.hairstyle)?.emoji || "👦";
-    const accessory = avatarConfig.accessories && avatarConfig.accessories !== "none" 
-      ? (avatarOptions.accessories?.find(o => o.value === avatarConfig.accessories)?.emoji || "")
-      : "";
-    return `${face}${hair}${accessory}`;
-  };
-
-  const getSkinColor = () => {
-    if (!avatarConfig || !avatarConfig.skin_tone) return "#FFE5D9";
-    const skinToneOptions = [
-      { value: "light", color: "#FFE5D9" },
-      { value: "medium", color: "#E8B4A0" },
-      { value: "tan", color: "#D4A373" },
-      { value: "dark", color: "#8B6F47" }
-    ];
-    return skinToneOptions.find(o => o.value === avatarConfig.skin_tone)?.color || "#FFE5D9";
   };
 
   if (loading) {
@@ -165,12 +88,9 @@ const Profile = () => {
             <div className="flex items-start gap-4">
               <div className="relative">
                 <div 
-                  className="w-20 h-20 rounded-full flex items-center justify-center text-3xl font-bold border-2 border-white/40 cursor-pointer hover:scale-105 transition-transform shadow-lg"
-                  onClick={() => navigate("/avatar")}
-                  title="自定义形象"
-                  style={{ backgroundColor: getSkinColor() }}
+                  className="w-20 h-20 rounded-full flex items-center justify-center text-4xl border-2 border-white/40 shadow-lg bg-white/20"
                 >
-                  {getAvatarEmoji()}
+                  👤
                 </div>
                 <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-success rounded-full border-2 border-white flex items-center justify-center">
                   <User className="w-3 h-3 text-white" />
@@ -179,14 +99,6 @@ const Profile = () => {
               <div className="flex-1">
                 <h2 className="text-2xl font-bold mb-1">{user?.email?.split("@")[0] || "用户"}</h2>
                 <p className="text-primary-light mb-3">探索中的少年</p>
-                <Button 
-                  variant="secondary" 
-                  size="sm" 
-                  onClick={() => navigate("/avatar")}
-                  className="mb-3"
-                >
-                  自定义形象
-                </Button>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-primary-light">成长等级</span>
