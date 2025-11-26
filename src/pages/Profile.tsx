@@ -21,6 +21,13 @@ const Profile = () => {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [newUsername, setNewUsername] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [recentTests, setRecentTests] = useState<Array<{
+    id: string;
+    test_name: string;
+    result: string;
+    created_at: string;
+    test_type: string;
+  }>>([]);
 
   useEffect(() => {
     checkAuth();
@@ -49,6 +56,18 @@ const Profile = () => {
       setUsername(data.username || "");
       setNewUsername(data.username || "");
       setAvatarUrl(data.avatar_url);
+    }
+
+    // Load test results
+    const { data: testData, error: testError } = await supabase
+      .from("test_results")
+      .select("*")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false })
+      .limit(3);
+
+    if (!testError && testData) {
+      setRecentTests(testData);
     }
   };
 
@@ -134,10 +153,34 @@ const Profile = () => {
   }
 
   const stats = [
-    { label: "完成测试", value: 12, icon: Brain, color: "text-primary" },
+    { label: "完成测试", value: recentTests.length, icon: Brain, color: "text-primary" },
     { label: "心情记录", value: 45, icon: Heart, color: "text-accent" },
     { label: "连续打卡", value: 7, icon: Calendar, color: "text-success" },
   ];
+
+  const getTestColor = (testType: string) => {
+    const colors: Record<string, string> = {
+      mbti: "bg-primary",
+      learning: "bg-success",
+      stress: "bg-accent",
+      depression: "bg-destructive",
+      anxiety: "bg-warning"
+    };
+    return colors[testType] || "bg-primary";
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - date.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) return "今天";
+    if (diffDays === 1) return "昨天";
+    if (diffDays < 7) return `${diffDays}天前`;
+    if (diffDays < 30) return `${Math.floor(diffDays / 7)}周前`;
+    return `${Math.floor(diffDays / 30)}个月前`;
+  };
 
   const achievements = [
     { title: "初心者", desc: "完成首次测试", unlocked: true },
@@ -146,7 +189,7 @@ const Profile = () => {
     { title: "分享达人", desc: "发布10条树洞", unlocked: false },
   ];
 
-  const recentTests = [
+  const recentTestsData = [
     { name: "MBTI人格测试", date: "2天前", result: "INFP-T 调停者", color: "bg-primary" },
     { name: "压力值测试", date: "5天前", result: "轻度压力", color: "bg-accent" },
     { name: "学习风格测试", date: "1周前", result: "视觉型学习者", color: "bg-success" },
@@ -333,27 +376,37 @@ const Profile = () => {
               查看全部 →
             </Button>
           </div>
-          <div className="space-y-3">
-            {recentTests.map((test, index) => (
-              <Card
-                key={index}
-                className="p-4 shadow-card hover:shadow-soft transition-all cursor-pointer"
-              >
-                <div className="flex items-center gap-4">
-                  <div className={`w-12 h-12 rounded-xl ${test.color} flex items-center justify-center flex-shrink-0`}>
-                    <Brain className="w-6 h-6 text-white" />
+          {recentTests.length > 0 ? (
+            <div className="space-y-3">
+              {recentTests.map((test) => (
+                <Card
+                  key={test.id}
+                  className="p-4 shadow-card hover:shadow-soft transition-all cursor-pointer"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className={`w-12 h-12 rounded-xl ${getTestColor(test.test_type)} flex items-center justify-center flex-shrink-0`}>
+                      <Brain className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-semibold text-foreground mb-1">{test.test_name}</h4>
+                      <p className="text-sm text-muted-foreground">{formatDate(test.created_at)}</p>
+                    </div>
+                    <Badge variant="secondary" className="flex-shrink-0">
+                      {test.result}
+                    </Badge>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <h4 className="font-semibold text-foreground mb-1">{test.name}</h4>
-                    <p className="text-sm text-muted-foreground">{test.date}</p>
-                  </div>
-                  <Badge variant="secondary" className="flex-shrink-0">
-                    {test.result}
-                  </Badge>
-                </div>
-              </Card>
-            ))}
-          </div>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <Card className="p-8 text-center border-dashed">
+              <Brain className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+              <p className="text-muted-foreground mb-4">还没有测试记录</p>
+              <Button onClick={() => navigate("/tests")}>
+                开始测试
+              </Button>
+            </Card>
+          )}
         </div>
       </section>
 
