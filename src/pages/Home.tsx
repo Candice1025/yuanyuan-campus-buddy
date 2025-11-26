@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { Brain, MessageCircle, TreePine, Heart, Sparkles, User, Search, Star, Smile, Book, Lightbulb } from "lucide-react";
+import { Brain, MessageCircle, TreePine, Heart, Sparkles, User, Search, Star, Smile, Book, Lightbulb, Laugh } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import chatIcon from "@/assets/chat-icon.png";
 
@@ -89,6 +89,13 @@ const Home = () => {
       description: "我的数字形象与记录",
       color: "bg-gradient-primary",
       path: "/profile"
+    },
+    {
+      icon: Laugh,
+      title: "娱乐中心",
+      description: "笑话和脑筋急转弯，放松心情",
+      color: "bg-gradient-warm",
+      path: "/entertainment"
     }
   ];
 
