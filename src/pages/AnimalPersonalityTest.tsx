@@ -180,36 +180,36 @@ export default function AnimalPersonalityTest() {
   ];
 
   const animals = {
-    lion: { name: "狮子", desc: "领导力强，自信果断，勇于挑战", traits: "热情、自信、果断、有魄力" },
-    eagle: { name: "鹰", desc: "目标明确，执行力强，追求卓越", traits: "专注、敏锐、独立、高效" },
-    wolf: { name: "狼", desc: "团队意识强，忠诚可靠，策略思考", traits: "忠诚、聪慧、团结、坚韧" },
-    fox: { name: "狐狸", desc: "机智灵活，善于应变，头脑清晰", traits: "聪明、灵活、谨慎、适应力强" },
-    owl: { name: "猫头鹰", desc: "深思熟虑，理性分析，追求智慧", traits: "智慧、冷静、理性、洞察力强" },
-    dolphin: { name: "海豚", desc: "友善温和，善解人意，乐于助人", traits: "友善、热情、善良、同理心强" },
-    panda: { name: "熊猫", desc: "温和平静，不争不抢，随遇而安", traits: "温和、平和、友好、稳定" },
-    elephant: { name: "大象", desc: "稳重可靠，记忆力强，重视传统", traits: "稳重、可靠、忠诚、有耐心" },
-    cat: { name: "猫", desc: "独立自主，优雅神秘，有个性", traits: "独立、优雅、神秘、灵敏" },
-    dog: { name: "狗", desc: "忠诚友好，热情可靠，重视关系", traits: "忠诚、友好、热情、可靠" },
-    tiger: { name: "老虎", desc: "勇敢无畏，独立强大，有威严", traits: "勇敢、强大、独立、有魄力" },
-    rabbit: { name: "兔子", desc: "温柔敏感，机警谨慎，善良可爱", traits: "温柔、敏感、谨慎、善良" },
-    horse: { name: "马", desc: "自由奔放，精力充沛，热爱自由", traits: "自由、热情、活力、冒险" },
-    bear: { name: "熊", desc: "强大有力，保护欲强，温暖可靠", traits: "强大、保护欲强、温暖、可靠" },
-    deer: { name: "鹿", desc: "优雅温柔，敏感细腻，纯真善良", traits: "优雅、温柔、敏感、善良" },
-    peacock: { name: "孔雀", desc: "自信优雅，追求美感，注重形象", traits: "自信、优雅、美丽、表现力强" },
-    penguin: { name: "企鹅", desc: "社交能力强，团队精神，适应力强", traits: "社交、团结、坚韧、适应力强" },
-    squirrel: { name: "松鼠", desc: "活泼好动，精力充沛，善于储备", traits: "活泼、勤奋、机警、有计划" },
-    snake: { name: "蛇", desc: "冷静理性，观察敏锐，善于等待", traits: "冷静、理性、敏锐、有策略" },
-    monkey: { name: "猴子", desc: "聪明机智，灵活多变，好奇心强", traits: "聪明、灵活、好奇、活泼" },
-    butterfly: { name: "蝴蝶", desc: "自由浪漫，追求美好，善于改变", traits: "自由、美丽、灵动、善变" },
-    bee: { name: "蜜蜂", desc: "勤劳认真，团队合作，高效执行", traits: "勤劳、认真、团队、高效" },
-    ant: { name: "蚂蚁", desc: "坚持不懈，组织能力强，脚踏实地", traits: "坚韧、勤奋、有组织、踏实" },
-    swan: { name: "天鹅", desc: "优雅高贵，追求完美，有品位", traits: "优雅、高贵、完美、品位" },
-    koala: { name: "考拉", desc: "慢节奏生活，温和友善，享受当下", traits: "温和、慢节奏、友善、享受生活" },
-    cheetah: { name: "猎豹", desc: "行动迅速，目标明确，爆发力强", traits: "迅速、专注、有爆发力、高效" },
-    giraffe: { name: "长颈鹿", desc: "视野开阔，温和友善，独特视角", traits: "远见、温和、独特、友善" },
-    chameleon: { name: "变色龙", desc: "适应力强，善于伪装，灵活多变", traits: "适应力强、灵活、谨慎、善变" },
-    otter: { name: "水獭", desc: "玩乐有趣，乐观开朗，享受生活", traits: "乐观、有趣、社交、享受生活" },
-    tortoise: { name: "乌龟", desc: "稳重持久，有耐心，脚踏实地", traits: "稳重、持久、有耐心、踏实" },
+    lion: { name: "狮子", emoji: "🦁", desc: "领导力强，自信果断，勇于挑战", traits: "热情、自信、果断、有魄力" },
+    eagle: { name: "鹰", emoji: "🦅", desc: "目标明确，执行力强，追求卓越", traits: "专注、敏锐、独立、高效" },
+    wolf: { name: "狼", emoji: "🐺", desc: "团队意识强，忠诚可靠，策略思考", traits: "忠诚、聪慧、团结、坚韧" },
+    fox: { name: "狐狸", emoji: "🦊", desc: "机智灵活，善于应变，头脑清晰", traits: "聪明、灵活、谨慎、适应力强" },
+    owl: { name: "猫头鹰", emoji: "🦉", desc: "深思熟虑，理性分析，追求智慧", traits: "智慧、冷静、理性、洞察力强" },
+    dolphin: { name: "海豚", emoji: "🐬", desc: "友善温和，善解人意，乐于助人", traits: "友善、热情、善良、同理心强" },
+    panda: { name: "熊猫", emoji: "🐼", desc: "温和平静，不争不抢，随遇而安", traits: "温和、平和、友好、稳定" },
+    elephant: { name: "大象", emoji: "🐘", desc: "稳重可靠，记忆力强，重视传统", traits: "稳重、可靠、忠诚、有耐心" },
+    cat: { name: "猫", emoji: "🐱", desc: "独立自主，优雅神秘，有个性", traits: "独立、优雅、神秘、灵敏" },
+    dog: { name: "狗", emoji: "🐶", desc: "忠诚友好，热情可靠，重视关系", traits: "忠诚、友好、热情、可靠" },
+    tiger: { name: "老虎", emoji: "🐯", desc: "勇敢无畏，独立强大，有威严", traits: "勇敢、强大、独立、有魄力" },
+    rabbit: { name: "兔子", emoji: "🐰", desc: "温柔敏感，机警谨慎，善良可爱", traits: "温柔、敏感、谨慎、善良" },
+    horse: { name: "马", emoji: "🐴", desc: "自由奔放，精力充沛，热爱自由", traits: "自由、热情、活力、冒险" },
+    bear: { name: "熊", emoji: "🐻", desc: "强大有力，保护欲强，温暖可靠", traits: "强大、保护欲强、温暖、可靠" },
+    deer: { name: "鹿", emoji: "🦌", desc: "优雅温柔，敏感细腻，纯真善良", traits: "优雅、温柔、敏感、善良" },
+    peacock: { name: "孔雀", emoji: "🦚", desc: "自信优雅，追求美感，注重形象", traits: "自信、优雅、美丽、表现力强" },
+    penguin: { name: "企鹅", emoji: "🐧", desc: "社交能力强，团队精神，适应力强", traits: "社交、团结、坚韧、适应力强" },
+    squirrel: { name: "松鼠", emoji: "🐿️", desc: "活泼好动，精力充沛，善于储备", traits: "活泼、勤奋、机警、有计划" },
+    snake: { name: "蛇", emoji: "🐍", desc: "冷静理性，观察敏锐，善于等待", traits: "冷静、理性、敏锐、有策略" },
+    monkey: { name: "猴子", emoji: "🐵", desc: "聪明机智，灵活多变，好奇心强", traits: "聪明、灵活、好奇、活泼" },
+    butterfly: { name: "蝴蝶", emoji: "🦋", desc: "自由浪漫，追求美好，善于改变", traits: "自由、美丽、灵动、善变" },
+    bee: { name: "蜜蜂", emoji: "🐝", desc: "勤劳认真，团队合作，高效执行", traits: "勤劳、认真、团队、高效" },
+    ant: { name: "蚂蚁", emoji: "🐜", desc: "坚持不懈，组织能力强，脚踏实地", traits: "坚韧、勤奋、有组织、踏实" },
+    swan: { name: "天鹅", emoji: "🦢", desc: "优雅高贵，追求完美，有品位", traits: "优雅、高贵、完美、品位" },
+    koala: { name: "考拉", emoji: "🐨", desc: "慢节奏生活，温和友善，享受当下", traits: "温和、慢节奏、友善、享受生活" },
+    cheetah: { name: "猎豹", emoji: "🐆", desc: "行动迅速，目标明确，爆发力强", traits: "迅速、专注、有爆发力、高效" },
+    giraffe: { name: "长颈鹿", emoji: "🦒", desc: "视野开阔，温和友善，独特视角", traits: "远见、温和、独特、友善" },
+    chameleon: { name: "变色龙", emoji: "🦎", desc: "适应力强，善于伪装，灵活多变", traits: "适应力强、灵活、谨慎、善变" },
+    otter: { name: "水獭", emoji: "🦦", desc: "玩乐有趣，乐观开朗，享受生活", traits: "乐观、有趣、社交、享受生活" },
+    tortoise: { name: "乌龟", emoji: "🐢", desc: "稳重持久，有耐心，脚踏实地", traits: "稳重、持久、有耐心、踏实" },
   };
 
   const progress = ((currentQuestion + 1) / questions.length) * 100;
@@ -297,7 +297,7 @@ export default function AnimalPersonalityTest() {
 
           <Card className="p-6 space-y-6">
             <div className="text-center space-y-4">
-              <div className="text-6xl">🦁</div>
+              <div className="text-6xl">{result.primary.emoji}</div>
               <h2 className="text-3xl font-bold text-primary">你是：{result.primary.name}</h2>
               <p className="text-xl text-muted-foreground">{result.primary.desc}</p>
             </div>
