@@ -4,10 +4,13 @@ import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { Brain, MessageCircle, TreePine, Heart, Sparkles, User, Search } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import chatIcon from "@/assets/chat-icon.png";
 
 const Home = () => {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [displayedText, setDisplayedText] = useState("");
+  const fullText = "你好，我是元元";
 
   useEffect(() => {
     // Check authentication status
@@ -20,6 +23,21 @@ const Home = () => {
     });
 
     return () => subscription.unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    // Typewriter effect
+    let currentIndex = 0;
+    const timer = setInterval(() => {
+      if (currentIndex <= fullText.length) {
+        setDisplayedText(fullText.slice(0, currentIndex));
+        currentIndex++;
+      } else {
+        clearInterval(timer);
+      }
+    }, 150);
+
+    return () => clearInterval(timer);
   }, []);
 
   const features = [
@@ -81,14 +99,23 @@ const Home = () => {
         <div className="max-w-6xl mx-auto">
           <div className="max-w-3xl mx-auto text-center">
             <div className="space-y-6 animate-fade-in">
+              <div className="flex justify-center mb-8">
+                <img 
+                  src={chatIcon} 
+                  alt="元元" 
+                  className="w-32 h-32 rounded-full shadow-float animate-float"
+                />
+              </div>
               <div className="inline-block">
                 <span className="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">
                   你的校园生活小帮手
                 </span>
               </div>
-              <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight">
-                你好，我是
-                <span className="bg-gradient-primary bg-clip-text text-transparent"> 元元</span>
+              <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight min-h-[5rem]">
+                <span className="bg-gradient-primary bg-clip-text text-transparent">
+                  {displayedText}
+                  <span className="animate-pulse">|</span>
+                </span>
               </h1>
               <p className="text-lg text-muted-foreground leading-relaxed">
                 陪伴你成长的每一步，了解自己、管理情绪、快乐学习
