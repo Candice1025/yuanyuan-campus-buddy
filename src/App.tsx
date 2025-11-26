@@ -13,6 +13,11 @@ import LearningTest from "./pages/LearningTest";
 import DepressionTest from "./pages/DepressionTest";
 import AnxietyTest from "./pages/AnxietyTest";
 import StressTest from "./pages/StressTest";
+import AnimalPersonalityTest from "./pages/AnimalPersonalityTest";
+import MentalAgeTest from "./pages/MentalAgeTest";
+import StrengthsFinderTest from "./pages/StrengthsFinderTest";
+import EnneagramTest from "./pages/EnneagramTest";
+import HollandTest from "./pages/HollandTest";
 import Mood from "./pages/Mood";
 import SandTray from "./pages/SandTray";
 import Auth from "./pages/Auth";
@@ -37,6 +42,11 @@ const App = () => (
           <Route path="/test/depression" element={<DepressionTest />} />
           <Route path="/test/anxiety" element={<AnxietyTest />} />
           <Route path="/test/stress" element={<StressTest />} />
+          <Route path="/test/animal-personality" element={<AnimalPersonalityTest />} />
+          <Route path="/test/mental-age" element={<MentalAgeTest />} />
+          <Route path="/test/strengths-finder" element={<StrengthsFinderTest />} />
+          <Route path="/test/enneagram" element={<EnneagramTest />} />
+          <Route path="/test/holland" element={<HollandTest />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/tree-hole" element={<TreeHole />} />
           <Route path="/profile" element={<Profile />} />
