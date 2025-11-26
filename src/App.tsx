@@ -15,6 +15,7 @@ import SandTray from "./pages/SandTray";
 import Auth from "./pages/Auth";
 import KnowledgeSearch from "./pages/KnowledgeSearch";
 import Entertainment from "./pages/Entertainment";
+import SafetyQuiz from "./pages/SafetyQuiz";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,6 +38,7 @@ const App = () => (
           <Route path="/sandtray" element={<SandTray />} />
           <Route path="/knowledge-search" element={<KnowledgeSearch />} />
           <Route path="/entertainment" element={<Entertainment />} />
+          <Route path="/safety-quiz" element={<SafetyQuiz />} />
           <Route path="/auth" element={<Auth />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
