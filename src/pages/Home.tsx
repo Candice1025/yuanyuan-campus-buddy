@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { Brain, MessageCircle, TreePine, Heart, Sparkles, User, Search } from "lucide-react";
+import { Brain, MessageCircle, TreePine, Heart, Sparkles, User, Search, Star, Smile, Book, Lightbulb } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import chatIcon from "@/assets/chat-icon.png";
 
@@ -96,7 +96,17 @@ const Home = () => {
     <div className="min-h-screen bg-gradient-subtle">
       {/* Hero Section */}
       <section className="relative overflow-hidden px-4 pt-12 pb-20">
-        <div className="max-w-6xl mx-auto">
+        {/* Floating decorative elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <Star className="absolute top-20 left-10 w-8 h-8 text-accent/30 animate-float" style={{ animationDelay: "0s" }} />
+          <Heart className="absolute top-40 right-20 w-6 h-6 text-accent/40 animate-bounce-soft" style={{ animationDelay: "0.5s" }} />
+          <Sparkles className="absolute top-60 left-1/4 w-7 h-7 text-primary/30 animate-float" style={{ animationDelay: "1s" }} />
+          <Smile className="absolute bottom-40 right-10 w-8 h-8 text-success/40 animate-bounce-soft" style={{ animationDelay: "1.5s" }} />
+          <Book className="absolute top-32 right-1/3 w-6 h-6 text-primary/30 animate-float" style={{ animationDelay: "0.7s" }} />
+          <Lightbulb className="absolute bottom-32 left-1/3 w-7 h-7 text-accent/40 animate-bounce-soft" style={{ animationDelay: "2s" }} />
+        </div>
+        
+        <div className="max-w-6xl mx-auto relative z-10">
           <div className="max-w-3xl mx-auto text-center">
             <div className="space-y-6 animate-fade-in">
               <div className="flex justify-center mb-8">
@@ -150,6 +160,34 @@ const Home = () => {
             )}
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="px-4 pb-12">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <Card className="p-6 text-center border-0 shadow-card hover:shadow-float transition-all duration-300">
+              <Brain className="w-8 h-8 text-primary mx-auto mb-2" />
+              <div className="text-2xl font-bold text-foreground mb-1">7+</div>
+              <div className="text-sm text-muted-foreground">实用功能</div>
+            </Card>
+            <Card className="p-6 text-center border-0 shadow-card hover:shadow-float transition-all duration-300">
+              <MessageCircle className="w-8 h-8 text-accent mx-auto mb-2" />
+              <div className="text-2xl font-bold text-foreground mb-1">24/7</div>
+              <div className="text-sm text-muted-foreground">在线陪伴</div>
+            </Card>
+            <Card className="p-6 text-center border-0 shadow-card hover:shadow-float transition-all duration-300">
+              <Heart className="w-8 h-8 text-success mx-auto mb-2" />
+              <div className="text-2xl font-bold text-foreground mb-1">安全</div>
+              <div className="text-sm text-muted-foreground">隐私保护</div>
+            </Card>
+            <Card className="p-6 text-center border-0 shadow-card hover:shadow-float transition-all duration-300">
+              <Sparkles className="w-8 h-8 text-primary mx-auto mb-2" />
+              <div className="text-2xl font-bold text-foreground mb-1">智能</div>
+              <div className="text-sm text-muted-foreground">AI驱动</div>
+            </Card>
           </div>
         </div>
       </section>
