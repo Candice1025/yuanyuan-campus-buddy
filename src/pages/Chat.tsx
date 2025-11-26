@@ -223,7 +223,7 @@ const Chat = () => {
           >
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <img src={chatIcon} alt="元元" className="w-10 h-10 rounded-full animate-wave origin-bottom-right" />
+          <img src={chatIcon} alt="元元" className="w-10 h-10 rounded-full" />
           <div className="flex-1">
             <h1 className="text-lg font-bold text-foreground">元元助手</h1>
             <p className="text-xs text-muted-foreground">在线 · 随时为你服务</p>
@@ -246,7 +246,7 @@ const Chat = () => {
                 <img
                   src={chatIcon}
                   alt="元元"
-                  className="w-10 h-10 rounded-full flex-shrink-0 animate-wave origin-bottom-right"
+                  className="w-10 h-10 rounded-full flex-shrink-0"
                 />
               )}
               {message.sender === "user" && (
@@ -285,7 +285,7 @@ const Chat = () => {
               <img
                 src={chatIcon}
                 alt="元元"
-                className="w-10 h-10 rounded-full animate-wave origin-bottom-right"
+                className="w-10 h-10 rounded-full"
               />
               <Card className="p-4 bg-card">
                 <div className="flex gap-1">
