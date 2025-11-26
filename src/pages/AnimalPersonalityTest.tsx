@@ -27,28 +27,156 @@ export default function AnimalPersonalityTest() {
   }, []);
 
   const questions = [
-    { id: 1, text: "在社交场合中，你通常：", category: "social" },
-    { id: 2, text: "面对困难时，你会：", category: "challenge" },
-    { id: 3, text: "你的工作方式是：", category: "work" },
-    { id: 4, text: "在团队中，你倾向于：", category: "team" },
-    { id: 5, text: "你的决策方式：", category: "decision" },
-    { id: 6, text: "对待变化，你：", category: "change" },
-    { id: 7, text: "你的生活节奏：", category: "pace" },
-    { id: 8, text: "面对冲突，你会：", category: "conflict" },
-    { id: 9, text: "你更喜欢：", category: "preference" },
-    { id: 10, text: "在压力下，你：", category: "stress" },
-    { id: 11, text: "你的注意力更多在：", category: "focus" },
-    { id: 12, text: "你对规则的态度：", category: "rules" },
-    { id: 13, text: "你的能量来源：", category: "energy" },
-    { id: 14, text: "面对新事物：", category: "novelty" },
-    { id: 15, text: "你的表达方式：", category: "expression" },
-  ];
-
-  const options = [
-    { value: 1, label: "A. 主动与人交谈，成为焦点", animal: "lion" },
-    { value: 2, label: "B. 安静观察，等待合适时机", animal: "owl" },
-    { value: 3, label: "C. 与少数人深入交流", animal: "wolf" },
-    { value: 4, label: "D. 随遇而安，顺其自然", animal: "panda" },
+    { 
+      id: 1, 
+      text: "在社交场合中，你通常：",
+      options: [
+        { value: 1, label: "主动与人交谈，成为焦点" },
+        { value: 2, label: "安静观察，等待合适时机" },
+        { value: 3, label: "与少数人深入交流" },
+        { value: 4, label: "随遇而安，顺其自然" },
+      ]
+    },
+    { 
+      id: 2, 
+      text: "面对困难时，你会：",
+      options: [
+        { value: 1, label: "直面挑战，勇往直前" },
+        { value: 2, label: "冷静分析，寻找最佳方案" },
+        { value: 3, label: "团结伙伴，共同面对" },
+        { value: 4, label: "保持乐观，相信会好转" },
+      ]
+    },
+    { 
+      id: 3, 
+      text: "你的工作方式是：",
+      options: [
+        { value: 1, label: "高效执行，追求结果" },
+        { value: 2, label: "深思熟虑，注重细节" },
+        { value: 3, label: "团队协作，互相支持" },
+        { value: 4, label: "灵活自由，享受过程" },
+      ]
+    },
+    { 
+      id: 4, 
+      text: "在团队中，你倾向于：",
+      options: [
+        { value: 1, label: "担任领导，指引方向" },
+        { value: 2, label: "提供智慧，分析问题" },
+        { value: 3, label: "维系关系，促进和谐" },
+        { value: 4, label: "适应环境，配合他人" },
+      ]
+    },
+    { 
+      id: 5, 
+      text: "你的决策方式：",
+      options: [
+        { value: 1, label: "果断迅速，凭借直觉" },
+        { value: 2, label: "谨慎思考，权衡利弊" },
+        { value: 3, label: "考虑他人，寻求共识" },
+        { value: 4, label: "顺其自然，不急不躁" },
+      ]
+    },
+    { 
+      id: 6, 
+      text: "对待变化，你：",
+      options: [
+        { value: 1, label: "主动拥抱，引领变革" },
+        { value: 2, label: "观察评估，再做决定" },
+        { value: 3, label: "与团队一起应对" },
+        { value: 4, label: "随遇而安，慢慢适应" },
+      ]
+    },
+    { 
+      id: 7, 
+      text: "你的生活节奏：",
+      options: [
+        { value: 1, label: "快节奏，充满活力" },
+        { value: 2, label: "有规律，张弛有度" },
+        { value: 3, label: "与朋友的节奏同步" },
+        { value: 4, label: "慢节奏，悠然自得" },
+      ]
+    },
+    { 
+      id: 8, 
+      text: "面对冲突，你会：",
+      options: [
+        { value: 1, label: "直接对抗，解决问题" },
+        { value: 2, label: "理性分析，寻找根源" },
+        { value: 3, label: "协调沟通，促进和解" },
+        { value: 4, label: "回避冲突，保持和平" },
+      ]
+    },
+    { 
+      id: 9, 
+      text: "你更喜欢：",
+      options: [
+        { value: 1, label: "挑战和竞争" },
+        { value: 2, label: "学习和探索" },
+        { value: 3, label: "陪伴和分享" },
+        { value: 4, label: "平静和舒适" },
+      ]
+    },
+    { 
+      id: 10, 
+      text: "在压力下，你：",
+      options: [
+        { value: 1, label: "更加专注，全力以赴" },
+        { value: 2, label: "保持冷静，理性应对" },
+        { value: 3, label: "寻求支持，共度难关" },
+        { value: 4, label: "放松心态，顺其自然" },
+      ]
+    },
+    { 
+      id: 11, 
+      text: "你的注意力更多在：",
+      options: [
+        { value: 1, label: "目标和成就" },
+        { value: 2, label: "知识和真理" },
+        { value: 3, label: "关系和情感" },
+        { value: 4, label: "当下和享受" },
+      ]
+    },
+    { 
+      id: 12, 
+      text: "你对规则的态度：",
+      options: [
+        { value: 1, label: "必要时可以打破" },
+        { value: 2, label: "理解后再遵守" },
+        { value: 3, label: "尊重并遵循" },
+        { value: 4, label: "灵活对待，不拘泥" },
+      ]
+    },
+    { 
+      id: 13, 
+      text: "你的能量来源：",
+      options: [
+        { value: 1, label: "成就和胜利" },
+        { value: 2, label: "发现和洞察" },
+        { value: 3, label: "连接和归属" },
+        { value: 4, label: "宁静和自由" },
+      ]
+    },
+    { 
+      id: 14, 
+      text: "面对新事物：",
+      options: [
+        { value: 1, label: "积极尝试，勇于冒险" },
+        { value: 2, label: "先研究，再行动" },
+        { value: 3, label: "与朋友一起探索" },
+        { value: 4, label: "慢慢接触，不急不躁" },
+      ]
+    },
+    { 
+      id: 15, 
+      text: "你的表达方式：",
+      options: [
+        { value: 1, label: "直接果断，言简意赅" },
+        { value: 2, label: "逻辑清晰，有条不紊" },
+        { value: 3, label: "温和友善，善解人意" },
+        { value: 4, label: "轻松随意，不拘小节" },
+      ]
+    },
   ];
 
   const animals = {
@@ -240,10 +368,10 @@ export default function AnimalPersonalityTest() {
             
             <RadioGroup value={answers[currentQuestion]?.toString()} onValueChange={(value) => handleAnswer(Number(value))}>
               <div className="space-y-3">
-                {options.map((option) => (
+                {questions[currentQuestion].options.map((option, index) => (
                   <div key={option.value} className="flex items-center space-x-3 p-4 rounded-lg border hover:bg-accent transition-colors">
-                    <RadioGroupItem value={option.value.toString()} id={`option-${option.value}`} />
-                    <Label htmlFor={`option-${option.value}`} className="flex-1 cursor-pointer">
+                    <RadioGroupItem value={option.value.toString()} id={`option-${index}`} />
+                    <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">
                       {option.label}
                     </Label>
                   </div>

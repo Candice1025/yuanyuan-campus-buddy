@@ -30,28 +30,156 @@ export default function MentalAgeTest() {
   }, []);
 
   const questions = [
-    { id: 1, text: "你更喜欢哪种周末活动？" },
-    { id: 2, text: "面对新科技产品，你的反应是：" },
-    { id: 3, text: "你的社交方式：" },
-    { id: 4, text: "你对流行文化的态度：" },
-    { id: 5, text: "你的购物习惯：" },
-    { id: 6, text: "你的作息时间：" },
-    { id: 7, text: "面对压力，你会：" },
-    { id: 8, text: "你的娱乐方式：" },
-    { id: 9, text: "你对未来的规划：" },
-    { id: 10, text: "你的学习态度：" },
-    { id: 11, text: "你的消费观念：" },
-    { id: 12, text: "你对健康的重视程度：" },
-    { id: 13, text: "你的穿衣风格：" },
-    { id: 14, text: "你的阅读偏好：" },
-    { id: 15, text: "你对变化的态度：" },
-  ];
-
-  const options = [
-    { value: -10, label: "A. 充满活力的户外运动和探险" },
-    { value: 0, label: "B. 和朋友聚会，尝试新鲜事物" },
-    { value: 5, label: "C. 在家放松，看书或看电影" },
-    { value: 10, label: "D. 宁静的独处时光，回顾过往" },
+    { 
+      id: 1, 
+      text: "你更喜欢哪种周末活动？",
+      options: [
+        { value: -10, label: "充满活力的户外运动和探险" },
+        { value: 0, label: "和朋友聚会，尝试新鲜事物" },
+        { value: 5, label: "在家放松，看书或看电影" },
+        { value: 10, label: "宁静的独处时光，回顾过往" },
+      ]
+    },
+    { 
+      id: 2, 
+      text: "面对新科技产品，你的反应是：",
+      options: [
+        { value: -10, label: "第一时间购买和尝试" },
+        { value: 0, label: "关注评价后再考虑" },
+        { value: 5, label: "等到普及后再使用" },
+        { value: 10, label: "觉得现有的就够用了" },
+      ]
+    },
+    { 
+      id: 3, 
+      text: "你的社交方式：",
+      options: [
+        { value: -10, label: "频繁社交，认识新朋友" },
+        { value: 0, label: "平衡社交和独处" },
+        { value: 5, label: "与老友保持联系" },
+        { value: 10, label: "享受独处，少社交" },
+      ]
+    },
+    { 
+      id: 4, 
+      text: "你对流行文化的态度：",
+      options: [
+        { value: -10, label: "紧跟潮流，追逐热点" },
+        { value: 0, label: "了解但不盲从" },
+        { value: 5, label: "偶尔关注" },
+        { value: 10, label: "不太关心流行趋势" },
+      ]
+    },
+    { 
+      id: 5, 
+      text: "你的购物习惯：",
+      options: [
+        { value: -10, label: "喜欢尝试新品牌和新产品" },
+        { value: 0, label: "在质量和价格间平衡" },
+        { value: 5, label: "偏好熟悉的品牌" },
+        { value: 10, label: "只买必需品，注重实用" },
+      ]
+    },
+    { 
+      id: 6, 
+      text: "你的作息时间：",
+      options: [
+        { value: -10, label: "晚睡晚起，精力充沛" },
+        { value: 0, label: "作息灵活，看情况" },
+        { value: 5, label: "基本规律，偶尔调整" },
+        { value: 10, label: "早睡早起，很有规律" },
+      ]
+    },
+    { 
+      id: 7, 
+      text: "面对压力，你会：",
+      options: [
+        { value: -10, label: "通过运动和娱乐释放" },
+        { value: 0, label: "找朋友倾诉" },
+        { value: 5, label: "自己消化处理" },
+        { value: 10, label: "依靠经验和冷静思考" },
+      ]
+    },
+    { 
+      id: 8, 
+      text: "你的娱乐方式：",
+      options: [
+        { value: -10, label: "电竞、社交媒体、新奇体验" },
+        { value: 0, label: "看电影、听音乐、聚会" },
+        { value: 5, label: "阅读、散步、品茶" },
+        { value: 10, label: "回忆往事、养生、静心" },
+      ]
+    },
+    { 
+      id: 9, 
+      text: "你对未来的规划：",
+      options: [
+        { value: -10, label: "充满梦想和无限可能" },
+        { value: 0, label: "有目标但保持灵活" },
+        { value: 5, label: "务实规划，稳步前进" },
+        { value: 10, label: "更关注当下的稳定" },
+      ]
+    },
+    { 
+      id: 10, 
+      text: "你的学习态度：",
+      options: [
+        { value: -10, label: "对新知识充满好奇和热情" },
+        { value: 0, label: "根据兴趣选择学习" },
+        { value: 5, label: "学习实用的知识" },
+        { value: 10, label: "更喜欢分享经验而非学习" },
+      ]
+    },
+    { 
+      id: 11, 
+      text: "你的消费观念：",
+      options: [
+        { value: -10, label: "享受当下，及时行乐" },
+        { value: 0, label: "平衡消费和储蓄" },
+        { value: 5, label: "注重性价比和投资" },
+        { value: 10, label: "节俭储蓄，为未来打算" },
+      ]
+    },
+    { 
+      id: 12, 
+      text: "你对健康的重视程度：",
+      options: [
+        { value: -10, label: "觉得年轻不用太在意" },
+        { value: 0, label: "偶尔关注健康问题" },
+        { value: 5, label: "定期体检和保养" },
+        { value: 10, label: "非常注重养生保健" },
+      ]
+    },
+    { 
+      id: 13, 
+      text: "你的穿衣风格：",
+      options: [
+        { value: -10, label: "追求时尚潮流" },
+        { value: 0, label: "舒适与风格兼顾" },
+        { value: 5, label: "简约实用为主" },
+        { value: 10, label: "经典保守，注重得体" },
+      ]
+    },
+    { 
+      id: 14, 
+      text: "你的阅读偏好：",
+      options: [
+        { value: -10, label: "网络小说、漫画、短视频" },
+        { value: 0, label: "畅销书和流行杂志" },
+        { value: 5, label: "专业书籍和经典作品" },
+        { value: 10, label: "历史和人文类书籍" },
+      ]
+    },
+    { 
+      id: 15, 
+      text: "你对变化的态度：",
+      options: [
+        { value: -10, label: "喜欢变化，追求新鲜感" },
+        { value: 0, label: "接受适度的变化" },
+        { value: 5, label: "倾向于稳定不变" },
+        { value: 10, label: "偏好熟悉的环境和习惯" },
+      ]
+    },
   ];
 
   const progress = ((currentQuestion + 1) / questions.length) * 100;
@@ -291,10 +419,10 @@ export default function MentalAgeTest() {
             
             <RadioGroup value={answers[currentQuestion]?.toString()} onValueChange={(value) => handleAnswer(Number(value))}>
               <div className="space-y-3">
-                {options.map((option) => (
+                {questions[currentQuestion].options.map((option, index) => (
                   <div key={option.value} className="flex items-center space-x-3 p-4 rounded-lg border hover:bg-accent transition-colors">
-                    <RadioGroupItem value={option.value.toString()} id={`option-${option.value}`} />
-                    <Label htmlFor={`option-${option.value}`} className="flex-1 cursor-pointer">
+                    <RadioGroupItem value={option.value.toString()} id={`option-${index}`} />
+                    <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">
                       {option.label}
                     </Label>
                   </div>
