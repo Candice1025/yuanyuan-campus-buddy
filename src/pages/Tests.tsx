@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
-import { Brain, Smile, Heart, TrendingUp, BookOpen, ArrowLeft } from "lucide-react";
+import { Brain, Smile, Heart, TrendingUp, BookOpen, ArrowLeft, Trophy, Star, Briefcase, Cake } from "lucide-react";
 import mentalTestIcon from "@/assets/mental-test-icon.png";
 
 const Tests = () => {
@@ -61,6 +61,61 @@ const Tests = () => {
       color: "bg-accent",
       badge: "新",
       path: "/test/learning"
+    },
+    {
+      id: "animal",
+      title: "动物性格测试",
+      description: "测试你像哪种动物，发现性格特质",
+      icon: Heart,
+      duration: "约10分钟",
+      questions: 15,
+      color: "bg-success",
+      badge: "趣味",
+      path: "/test/animal-personality"
+    },
+    {
+      id: "mental-age",
+      title: "心理年龄测评",
+      description: "你的心理年龄是多少岁？",
+      icon: Cake,
+      duration: "约8分钟",
+      questions: 15,
+      color: "bg-primary",
+      badge: "热门",
+      path: "/test/mental-age"
+    },
+    {
+      id: "strengths",
+      title: "盖洛普优势识别",
+      description: "发现你的5大天赋优势主题",
+      icon: Trophy,
+      duration: "约12分钟",
+      questions: 20,
+      color: "bg-accent",
+      badge: "专业",
+      path: "/test/strengths-finder"
+    },
+    {
+      id: "enneagram",
+      title: "九型人格测试",
+      description: "探索你的核心人格类型",
+      icon: Star,
+      duration: "约12分钟",
+      questions: 15,
+      color: "bg-primary",
+      badge: "经典",
+      path: "/test/enneagram"
+    },
+    {
+      id: "holland",
+      title: "霍兰德职业兴趣",
+      description: "找到最适合你的职业方向",
+      icon: Briefcase,
+      duration: "约15分钟",
+      questions: 24,
+      color: "bg-success",
+      badge: "职业",
+      path: "/test/holland"
     }
   ];
 
@@ -97,7 +152,7 @@ const Tests = () => {
                 </p>
                 <div className="flex gap-4 pt-2">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-white">5</div>
+                    <div className="text-2xl font-bold text-white">10</div>
                     <div className="text-sm text-primary-light">专业测试</div>
                   </div>
                   <div className="w-px bg-primary-light/30"></div>
