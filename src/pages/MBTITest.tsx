@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -6,12 +6,25 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, ArrowRight, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const MBTITest = () => {
   const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [showResult, setShowResult] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        setUserId(session.user.id);
+      }
+    };
+    checkAuth();
+  }, []);
 
   // MBTI完整测试问题
   const questions = [
@@ -155,10 +168,25 @@ const MBTITest = () => {
     setAnswers({ ...answers, [currentQuestion]: value });
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
+      // Save test result before showing results
+      if (userId) {
+        const result = getResult();
+        try {
+          await supabase.from("test_results").insert({
+            user_id: userId,
+            test_type: "mbti",
+            test_name: "MBTI人格测试",
+            result: `${result.type} - ${result.name}`
+          });
+        } catch (error) {
+          console.error("Error saving test result:", error);
+          toast.error("保存测试结果失败");
+        }
+      }
       setShowResult(true);
     }
   };
