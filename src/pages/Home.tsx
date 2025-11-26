@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { Brain, MessageCircle, TreePine, Heart, Sparkles, User } from "lucide-react";
+import { Brain, MessageCircle, TreePine, Heart, Sparkles, User, Search } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 const Home = () => {
@@ -38,6 +38,13 @@ const Home = () => {
       path: "/chat"
     },
     {
+      icon: Search,
+      title: "知识检索",
+      description: "搜索权威知识，智能排序",
+      color: "bg-gradient-primary",
+      path: "/knowledge-search"
+    },
+    {
       icon: TreePine,
       title: "心灵树洞",
       description: "匿名分享，温暖倾听",
@@ -48,21 +55,21 @@ const Home = () => {
       icon: Heart,
       title: "心情日记",
       description: "记录每日情绪变化",
-      color: "bg-gradient-primary",
+      color: "bg-gradient-warm",
       path: "/mood"
     },
     {
       icon: Sparkles,
       title: "心灵沙盘",
       description: "互动沙盘，探索内心世界",
-      color: "bg-gradient-warm",
+      color: "bg-gradient-fresh",
       path: "/sandtray"
     },
     {
       icon: User,
       title: "个人中心",
       description: "我的数字形象与记录",
-      color: "bg-gradient-fresh",
+      color: "bg-gradient-primary",
       path: "/profile"
     }
   ];

@@ -13,6 +13,7 @@ import LearningTest from "./pages/LearningTest";
 import Mood from "./pages/Mood";
 import SandTray from "./pages/SandTray";
 import Auth from "./pages/Auth";
+import KnowledgeSearch from "./pages/KnowledgeSearch";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/profile" element={<Profile />} />
           <Route path="/mood" element={<Mood />} />
           <Route path="/sandtray" element={<SandTray />} />
+          <Route path="/knowledge-search" element={<KnowledgeSearch />} />
           <Route path="/auth" element={<Auth />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
