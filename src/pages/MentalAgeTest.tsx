@@ -417,7 +417,7 @@ export default function MentalAgeTest() {
           <div className="space-y-6">
             <h3 className="text-lg font-medium">{questions[currentQuestion].text}</h3>
             
-            <RadioGroup value={answers[currentQuestion]?.toString()} onValueChange={(value) => handleAnswer(Number(value))}>
+            <RadioGroup value={answers[currentQuestion]?.toString() || ""} onValueChange={(value) => handleAnswer(Number(value))}>
               <div className="space-y-3">
                 {questions[currentQuestion].options.map((option, index) => (
                   <div key={option.value} className="flex items-center space-x-3 p-4 rounded-lg border hover:bg-accent transition-colors">
