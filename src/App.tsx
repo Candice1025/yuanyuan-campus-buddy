@@ -10,6 +10,9 @@ import TreeHole from "./pages/TreeHole";
 import Profile from "./pages/Profile";
 import MBTITest from "./pages/MBTITest";
 import LearningTest from "./pages/LearningTest";
+import DepressionTest from "./pages/DepressionTest";
+import AnxietyTest from "./pages/AnxietyTest";
+import StressTest from "./pages/StressTest";
 import Mood from "./pages/Mood";
 import SandTray from "./pages/SandTray";
 import Auth from "./pages/Auth";
@@ -31,6 +34,9 @@ const App = () => (
           <Route path="/tests" element={<Tests />} />
           <Route path="/test/mbti" element={<MBTITest />} />
           <Route path="/test/learning" element={<LearningTest />} />
+          <Route path="/test/depression" element={<DepressionTest />} />
+          <Route path="/test/anxiety" element={<AnxietyTest />} />
+          <Route path="/test/stress" element={<StressTest />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/tree-hole" element={<TreeHole />} />
           <Route path="/profile" element={<Profile />} />
