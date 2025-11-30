@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, Send, Sparkles, Book, Heart, Lightbulb } from "lucide-react";
+import { ArrowLeft, Send, Sparkles, Book, Heart, Lightbulb, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -211,6 +211,71 @@ const Chat = () => {
     }
   };
 
+  const handleDeleteMessage = async (messageId: string) => {
+    try {
+      // 从UI中删除消息
+      setMessages(prev => prev.filter(msg => msg.id !== messageId));
+      
+      // 从数据库中删除消息
+      if (user) {
+        const { error } = await supabase
+          .from('chat_messages')
+          .delete()
+          .eq('id', messageId)
+          .eq('user_id', user.id);
+        
+        if (error) throw error;
+        
+        toast({
+          title: "删除成功",
+          description: "消息已删除",
+        });
+      }
+    } catch (error) {
+      console.error("Delete error:", error);
+      toast({
+        title: "删除失败",
+        description: "请重试",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleClearAllMessages = async () => {
+    try {
+      if (user) {
+        const { error } = await supabase
+          .from('chat_messages')
+          .delete()
+          .eq('user_id', user.id);
+        
+        if (error) throw error;
+      }
+      
+      // 清空UI中的所有消息，保留初始欢迎消息
+      setMessages([
+        {
+          id: "1",
+          content: "你好呀！我是元元，你的校园生活小帮手 🌟\n\n我可以帮你：\n✨ 解答学习问题（但不会直接给答案哦）\n💭 倾听你的烦恼\n📚 分享学习方法\n💡 激发学习灵感\n\n有什么我可以帮你的吗？",
+          sender: "assistant",
+          timestamp: new Date()
+        }
+      ]);
+      
+      toast({
+        title: "清空成功",
+        description: "所有聊天记录已清空",
+      });
+    } catch (error) {
+      console.error("Clear all error:", error);
+      toast({
+        title: "清空失败",
+        description: "请重试",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="flex flex-col h-screen bg-background">
       {/* Header */}
@@ -228,6 +293,14 @@ const Chat = () => {
             <h1 className="text-lg font-bold text-foreground">元元助手</h1>
             <p className="text-xs text-muted-foreground">在线 · 随时为你服务</p>
           </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleClearAllMessages}
+            title="清空聊天记录"
+          >
+            <Trash2 className="w-5 h-5 text-muted-foreground hover:text-destructive" />
+          </Button>
           <div className="w-2 h-2 bg-success rounded-full animate-pulse"></div>
         </div>
       </header>
@@ -238,7 +311,7 @@ const Chat = () => {
           {messages.map((message) => (
             <div
               key={message.id}
-              className={`flex gap-3 animate-slide-up ${
+              className={`flex gap-3 animate-slide-up group ${
                 message.sender === "user" ? "flex-row-reverse" : ""
               }`}
             >
@@ -257,19 +330,31 @@ const Chat = () => {
               <div
                 className={`max-w-[70%] ${
                   message.sender === "user" ? "items-end" : "items-start"
-                }`}
+                } flex flex-col`}
               >
-                <Card
-                  className={`p-4 ${
-                    message.sender === "user"
-                      ? "bg-gradient-primary text-white border-0"
-                      : "bg-card"
-                  }`}
-                >
-                  <p className="whitespace-pre-wrap leading-relaxed">
-                    {message.content}
-                  </p>
-                </Card>
+                <div className="flex items-start gap-2">
+                  <Card
+                    className={`p-4 ${
+                      message.sender === "user"
+                        ? "bg-gradient-primary text-white border-0"
+                        : "bg-card"
+                    }`}
+                  >
+                    <p className="whitespace-pre-wrap leading-relaxed">
+                      {message.content}
+                    </p>
+                  </Card>
+                  {message.id !== "1" && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                      onClick={() => handleDeleteMessage(message.id)}
+                    >
+                      <Trash2 className="w-4 h-4 text-muted-foreground hover:text-destructive" />
+                    </Button>
+                  )}
+                </div>
                 <p className="text-xs text-muted-foreground mt-1 px-1">
                   {message.timestamp.toLocaleTimeString("zh-CN", {
                     hour: "2-digit",
