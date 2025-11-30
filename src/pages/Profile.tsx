@@ -182,17 +182,26 @@ const Profile = () => {
     return `${Math.floor(diffDays / 30)}个月前`;
   };
 
+  const formatTestResult = (result: string) => {
+    try {
+      const parsed = JSON.parse(result);
+      if (parsed.primary && parsed.primary.name) {
+        return parsed.primary.name;
+      }
+      if (typeof parsed === 'object') {
+        return JSON.stringify(parsed).substring(0, 20) + '...';
+      }
+      return result;
+    } catch {
+      return result;
+    }
+  };
+
   const achievements = [
     { title: "初心者", desc: "完成首次测试", unlocked: true },
     { title: "探索家", desc: "完成5个不同测试", unlocked: true },
     { title: "坚持者", desc: "连续7天打卡", unlocked: true },
     { title: "分享达人", desc: "发布10条树洞", unlocked: false },
-  ];
-
-  const recentTestsData = [
-    { name: "MBTI人格测试", date: "2天前", result: "INFP-T 调停者", color: "bg-primary" },
-    { name: "压力值测试", date: "5天前", result: "轻度压力", color: "bg-accent" },
-    { name: "学习风格测试", date: "1周前", result: "视觉型学习者", color: "bg-success" },
   ];
 
   return (
@@ -392,7 +401,7 @@ const Profile = () => {
                       <p className="text-sm text-muted-foreground">{formatDate(test.created_at)}</p>
                     </div>
                     <Badge variant="secondary" className="flex-shrink-0">
-                      {test.result}
+                      {formatTestResult(test.result)}
                     </Badge>
                   </div>
                 </Card>
