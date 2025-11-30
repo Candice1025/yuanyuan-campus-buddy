@@ -90,7 +90,9 @@ const Chat = () => {
     try {
       const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
       
-      const chatMessages = [...messages, userMessage].map(msg => ({
+      // 只发送最近的对话历史（最多10条消息），排除第一条欢迎消息
+      const recentMessages = [...messages.slice(1), userMessage].slice(-10);
+      const chatMessages = recentMessages.map(msg => ({
         role: msg.sender === "user" ? "user" : "assistant",
         content: msg.content
       }));
