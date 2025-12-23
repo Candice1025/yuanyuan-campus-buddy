@@ -14,8 +14,8 @@ const Tests = () => {
       title: "MBTI人格测试",
       description: "探索你独特的性格类型，发现真实的自己",
       icon: Brain,
-      duration: "约15分钟",
-      questions: 28,
+      duration: "约8分钟",
+      questions: 16,
       color: "bg-primary",
       badge: "热门",
       path: "/test/mbti"
@@ -37,7 +37,7 @@ const Tests = () => {
       description: "了解焦虑程度，及时关注心理健康",
       icon: Heart,
       duration: "约10分钟",
-      questions: 21,
+      questions: 20,
       color: "bg-success",
       path: "/test/anxiety"
     },
@@ -56,8 +56,8 @@ const Tests = () => {
       title: "学习风格测试",
       description: "找到最适合你的学习方式，提升效率",
       icon: BookOpen,
-      duration: "约12分钟",
-      questions: 24,
+      duration: "约6分钟",
+      questions: 12,
       color: "bg-accent",
       badge: "新",
       path: "/test/learning"
