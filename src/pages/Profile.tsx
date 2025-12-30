@@ -21,13 +21,16 @@ const Profile = () => {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [newUsername, setNewUsername] = useState("");
   const [uploading, setUploading] = useState(false);
-  const [recentTests, setRecentTests] = useState<Array<{
-    id: string;
-    test_name: string;
-    result: string;
-    created_at: string;
-    test_type: string;
-  }>>([]);
+  const [recentTests, setRecentTests] = useState<
+    Array<{
+      id: string;
+      test_name: string;
+      result: string;
+      created_at: string;
+      test_type: string;
+    }>
+  >([]);
+  const [totalTests, setTotalTests] = useState(0);
 
   useEffect(() => {
     checkAuth();
@@ -50,7 +53,7 @@ const Profile = () => {
       .from("profiles")
       .select("username, avatar_url")
       .eq("id", userId)
-      .single();
+      .maybeSingle();
 
     if (!error && data) {
       setUsername(data.username || "");
@@ -58,16 +61,24 @@ const Profile = () => {
       setAvatarUrl(data.avatar_url);
     }
 
-    // Load test results
-    const { data: testData, error: testError } = await supabase
+    // Load test results (recent + total count)
+    const {
+      data: testData,
+      error: testError,
+      count,
+    } = await supabase
       .from("test_results")
-      .select("*")
+      .select("*", { count: "exact" })
       .eq("user_id", userId)
       .order("created_at", { ascending: false })
       .limit(3);
 
     if (!testError && testData) {
       setRecentTests(testData);
+      setTotalTests(count ?? testData.length);
+    } else {
+      setRecentTests([]);
+      setTotalTests(0);
     }
   };
 
@@ -153,7 +164,7 @@ const Profile = () => {
   }
 
   const stats = [
-    { label: "完成测试", value: recentTests.length, icon: Brain, color: "text-primary" },
+    { label: "完成测试", value: totalTests, icon: Brain, color: "text-primary" },
     { label: "心情记录", value: 45, icon: Heart, color: "text-accent" },
     { label: "连续打卡", value: 7, icon: Calendar, color: "text-success" },
   ];
@@ -172,10 +183,10 @@ const Profile = () => {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
-    const diffTime = Math.abs(now.getTime() - date.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays === 0) return "今天";
+    const diffMs = now.getTime() - date.getTime();
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    if (diffDays <= 0) return "今天";
     if (diffDays === 1) return "昨天";
     if (diffDays < 7) return `${diffDays}天前`;
     if (diffDays < 30) return `${Math.floor(diffDays / 7)}周前`;
@@ -412,25 +423,35 @@ const Profile = () => {
           </div>
           {recentTests.length > 0 ? (
             <div className="space-y-3">
-              {recentTests.map((test) => (
-                <Card
-                  key={test.id}
-                  className="p-4 shadow-card hover:shadow-soft transition-all cursor-pointer"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className={`w-12 h-12 rounded-xl ${getTestColor(test.test_type)} flex items-center justify-center flex-shrink-0`}>
-                      <Brain className="w-6 h-6 text-white" />
+              {recentTests.map((test) => {
+                const badgeText = formatTestResult(test.result, test.test_type);
+
+                return (
+                  <Card
+                    key={test.id}
+                    className="p-4 shadow-card hover:shadow-soft transition-all cursor-pointer"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div
+                        className={`w-12 h-12 rounded-xl ${getTestColor(test.test_type)} flex items-center justify-center flex-shrink-0`}
+                      >
+                        <Brain className="w-6 h-6 text-white" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-semibold text-foreground mb-1">{test.test_name}</h4>
+                        <p className="text-sm text-muted-foreground">{formatDate(test.created_at)}</p>
+                      </div>
+                      <Badge
+                        variant="secondary"
+                        title={badgeText}
+                        className="flex-shrink-0 max-w-40 truncate"
+                      >
+                        {badgeText}
+                      </Badge>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-semibold text-foreground mb-1">{test.test_name}</h4>
-                      <p className="text-sm text-muted-foreground">{formatDate(test.created_at)}</p>
-                    </div>
-                    <Badge variant="secondary" className="flex-shrink-0">
-                      {formatTestResult(test.result, test.test_type)}
-                    </Badge>
-                  </div>
-                </Card>
-              ))}
+                  </Card>
+                );
+              })}
             </div>
           ) : (
             <Card className="p-8 text-center border-dashed">
