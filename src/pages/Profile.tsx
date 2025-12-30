@@ -182,17 +182,42 @@ const Profile = () => {
     return `${Math.floor(diffDays / 30)}个月前`;
   };
 
-  const formatTestResult = (result: string) => {
+  const formatTestResult = (result: string, testType: string) => {
     try {
       const parsed = JSON.parse(result);
+      
+      // 动物性格测试
       if (parsed.primary && parsed.primary.name) {
         return parsed.primary.name;
       }
-      if (typeof parsed === 'object') {
-        return JSON.stringify(parsed).substring(0, 20) + '...';
+      
+      // 心理年龄测试
+      if (parsed.mentalAge !== undefined) {
+        return `心理年龄 ${parsed.mentalAge}岁`;
       }
+      
+      // 霍兰德测试
+      if (parsed.code) {
+        return parsed.code;
+      }
+      
+      // 九型人格测试
+      if (parsed.type && parsed.name) {
+        return `${parsed.type}号 ${parsed.name}`;
+      }
+      
+      // 其他复杂对象
+      if (typeof parsed === 'object') {
+        // 尝试提取常见字段
+        if (parsed.name) return parsed.name;
+        if (parsed.result) return parsed.result;
+        if (parsed.category) return parsed.category;
+        return '查看详情';
+      }
+      
       return result;
     } catch {
+      // 非JSON格式，直接返回原始结果
       return result;
     }
   };
@@ -401,7 +426,7 @@ const Profile = () => {
                       <p className="text-sm text-muted-foreground">{formatDate(test.created_at)}</p>
                     </div>
                     <Badge variant="secondary" className="flex-shrink-0">
-                      {formatTestResult(test.result)}
+                      {formatTestResult(test.result, test.test_type)}
                     </Badge>
                   </div>
                 </Card>
