@@ -49,7 +49,7 @@ const Home = () => {
     path: "/tests"
   }, {
     icon: MessageCircle,
-    title: "元元助手",
+    title: "心灵陪聊",
     description: "智能陪伴，学习好帮手",
     color: "bg-gradient-warm",
     path: "/chat"
