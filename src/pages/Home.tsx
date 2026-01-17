@@ -128,8 +128,8 @@ const Home = () => {
                 <img alt="元元" className="w-32 h-32 rounded-full shadow-float animate-float" src="/lovable-uploads/165ff53c-4a07-485f-98f3-9b64eab3cad9.png" />
               </div>
               <div className="inline-block">
-                <span className="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">
-                  你的校园生活小帮手
+              <span className="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                  你的自我探索空间
                 </span>
               </div>
               <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight min-h-[5rem]">
