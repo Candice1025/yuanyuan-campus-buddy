@@ -49,7 +49,7 @@ const Home = () => {
     path: "/tests"
   }, {
     icon: MessageCircle,
-    title: "元元助手",
+    title: "心灵陪聊",
     description: "智能陪伴，学习好帮手",
     color: "bg-gradient-warm",
     path: "/chat"
@@ -125,17 +125,17 @@ const Home = () => {
           <div className="max-w-3xl mx-auto text-center">
             <div className="space-y-6 animate-fade-in">
               <div className="flex justify-center mb-8">
-                <img src={chatIcon} alt="元元" className="w-32 h-32 rounded-full shadow-float animate-float" />
+                <img alt="元元" className="w-32 h-32 rounded-full shadow-float animate-float" src="/lovable-uploads/165ff53c-4a07-485f-98f3-9b64eab3cad9.png" />
               </div>
               <div className="inline-block">
-                <span className="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">
-                  你的校园生活小帮手
+              <span className="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                  你的自我探索空间
                 </span>
               </div>
               <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight min-h-[5rem]">
                 <span className="bg-gradient-primary bg-clip-text text-transparent">
                   {displayedText}
-                  <span className="animate-pulse">陪伴你成长的每一步，了解自己、管理情绪、快乐生活</span>
+                  <span className="animate-pulse">|</span>
                 </span>
               </h1>
               <p className="text-lg text-muted-foreground leading-relaxed">
