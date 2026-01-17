@@ -290,16 +290,7 @@ const Chat = () => {
                   我
                 </div>}
               <div className={`max-w-[70%] ${message.sender === "user" ? "items-end" : "items-start"} flex flex-col`}>
-                <div className="flex items-start gap-2">
-                  <Card className={`p-4 ${message.sender === "user" ? "bg-gradient-primary text-white border-0" : "bg-card"}`}>
-                    <p className="whitespace-pre-wrap leading-relaxed">
-                      {message.content}
-                    </p>
-                  </Card>
-                  {message.id !== "1" && <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => handleDeleteMessage(message.id)}>
-                      <Trash2 className="w-4 h-4 text-muted-foreground hover:text-destructive" />
-                    </Button>}
-                </div>
+                
                 <p className="text-xs text-muted-foreground mt-1 px-1">
                   {message.timestamp.toLocaleTimeString("zh-CN", {
                 hour: "2-digit",
