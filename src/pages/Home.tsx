@@ -10,7 +10,7 @@ const Home = () => {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [displayedText, setDisplayedText] = useState("");
-  const fullText = "荣格的房间";
+  const fullText = "欢迎来到荣格的房间";
 
   useEffect(() => {
     // Check authentication status
