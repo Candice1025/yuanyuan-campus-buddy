@@ -285,7 +285,7 @@ const Chat = () => {
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
           {messages.map(message => <div key={message.id} className={`flex gap-3 animate-slide-up group ${message.sender === "user" ? "flex-row-reverse" : ""}`}>
-              {message.sender === "assistant" && <img src={chatIcon} alt="守伴者" className="w-10 h-10 rounded-full flex-shrink-0" />}
+              {message.sender === "assistant" && <img alt="守伴者" className="w-10 h-10 rounded-full flex-shrink-0" src="/lovable-uploads/e035ddcd-361c-4660-902b-430c11c07636.png" />}
               {message.sender === "user" && <div className="w-10 h-10 rounded-full bg-gradient-primary flex items-center justify-center text-white font-semibold flex-shrink-0">
                   我
                 </div>}
