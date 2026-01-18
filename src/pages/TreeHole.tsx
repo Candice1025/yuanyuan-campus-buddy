@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import treeHoleIcon from "@/assets/tree-hole-icon.png";
-
 interface Post {
   id: string;
   content: string;
@@ -20,17 +19,17 @@ interface Post {
   mood: string;
   user_id: string | null;
 }
-
 interface Comment {
   id: string;
   content: string;
   created_at: string;
   user_id: string | null;
 }
-
 const TreeHole = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const [newPost, setNewPost] = useState("");
   const [posts, setPosts] = useState<Post[]>([]);
   const [selectedMood, setSelectedMood] = useState("");
@@ -40,10 +39,13 @@ const TreeHole = () => {
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
-
   useEffect(() => {
     // 检查用户登录状态
-    supabase.auth.getUser().then(({ data: { user } }) => {
+    supabase.auth.getUser().then(({
+      data: {
+        user
+      }
+    }) => {
       setUser(user);
     });
 
@@ -51,37 +53,28 @@ const TreeHole = () => {
     fetchPosts();
 
     // 监听实时更新
-    const channel = supabase
-      .channel('tree_hole_posts_changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'tree_hole_posts'
-        },
-        () => {
-          fetchPosts();
-        }
-      )
-      .subscribe();
-
+    const channel = supabase.channel('tree_hole_posts_changes').on('postgres_changes', {
+      event: '*',
+      schema: 'public',
+      table: 'tree_hole_posts'
+    }, () => {
+      fetchPosts();
+    }).subscribe();
     return () => {
       supabase.removeChannel(channel);
     };
   }, []);
-
   const fetchPosts = async () => {
-    const { data, error } = await supabase
-      .from('tree_hole_posts')
-      .select('*')
-      .order('created_at', { ascending: false });
-
+    const {
+      data,
+      error
+    } = await supabase.from('tree_hole_posts').select('*').order('created_at', {
+      ascending: false
+    });
     if (error) {
       console.error('Error fetching posts:', error);
       return;
     }
-
     setPosts(data.map(post => ({
       id: post.id,
       content: post.content,
@@ -94,22 +87,17 @@ const TreeHole = () => {
 
     // 如果用户已登录，获取用户的点赞状态
     if (user) {
-      const { data: likes } = await supabase
-        .from('tree_hole_likes')
-        .select('post_id')
-        .eq('user_id', user.id);
-      
+      const {
+        data: likes
+      } = await supabase.from('tree_hole_likes').select('post_id').eq('user_id', user.id);
       if (likes) {
         setLikedPosts(new Set(likes.map(like => like.post_id)));
       }
     }
   };
-
   const moods = ["开心", "难过", "焦虑", "压力大", "兴奋", "平静", "迷茫", "感恩"];
-
   const handlePost = async () => {
     if (!newPost.trim()) return;
-
     if (!user) {
       toast({
         title: "请先登录",
@@ -119,18 +107,15 @@ const TreeHole = () => {
       navigate("/auth");
       return;
     }
-
     setIsLoading(true);
-    const { error } = await supabase
-      .from('tree_hole_posts')
-      .insert({
-        content: newPost,
-        mood: selectedMood || "分享",
-        user_id: user.id
-      });
-
+    const {
+      error
+    } = await supabase.from('tree_hole_posts').insert({
+      content: newPost,
+      mood: selectedMood || "分享",
+      user_id: user.id
+    });
     setIsLoading(false);
-
     if (error) {
       toast({
         title: "发布失败",
@@ -139,17 +124,14 @@ const TreeHole = () => {
       });
       return;
     }
-
     toast({
       title: "发布成功",
       description: "你的心声已匿名发布"
     });
-
     setNewPost("");
     setSelectedMood("");
     fetchPosts(); // 立即刷新帖子列表
   };
-
   const handleLike = async (postId: string) => {
     if (!user) {
       toast({
@@ -162,27 +144,18 @@ const TreeHole = () => {
     }
 
     // 检查是否已点赞
-    const { data: existingLike } = await supabase
-      .from('tree_hole_likes')
-      .select('id')
-      .eq('post_id', postId)
-      .eq('user_id', user.id)
-      .maybeSingle();
-
+    const {
+      data: existingLike
+    } = await supabase.from('tree_hole_likes').select('id').eq('post_id', postId).eq('user_id', user.id).maybeSingle();
     if (existingLike) {
       // 取消点赞
-      const { error } = await supabase
-        .from('tree_hole_likes')
-        .delete()
-        .eq('post_id', postId)
-        .eq('user_id', user.id);
-
+      const {
+        error
+      } = await supabase.from('tree_hole_likes').delete().eq('post_id', postId).eq('user_id', user.id);
       if (!error) {
-        await supabase
-          .from('tree_hole_posts')
-          .update({ likes: Math.max(0, posts.find(p => p.id === postId)!.likes - 1) })
-          .eq('id', postId);
-        
+        await supabase.from('tree_hole_posts').update({
+          likes: Math.max(0, posts.find(p => p.id === postId)!.likes - 1)
+        }).eq('id', postId);
         setLikedPosts(prev => {
           const newSet = new Set(prev);
           newSet.delete(postId);
@@ -192,40 +165,36 @@ const TreeHole = () => {
       }
     } else {
       // 添加点赞
-      const { error } = await supabase
-        .from('tree_hole_likes')
-        .insert({ post_id: postId, user_id: user.id });
-
+      const {
+        error
+      } = await supabase.from('tree_hole_likes').insert({
+        post_id: postId,
+        user_id: user.id
+      });
       if (!error) {
-        await supabase
-          .from('tree_hole_posts')
-          .update({ likes: posts.find(p => p.id === postId)!.likes + 1 })
-          .eq('id', postId);
-        
+        await supabase.from('tree_hole_posts').update({
+          likes: posts.find(p => p.id === postId)!.likes + 1
+        }).eq('id', postId);
         setLikedPosts(prev => new Set(prev).add(postId));
         fetchPosts();
       }
     }
   };
-
   const fetchComments = async (postId: string) => {
-    const { data, error } = await supabase
-      .from('tree_hole_comments')
-      .select('*')
-      .eq('post_id', postId)
-      .order('created_at', { ascending: true });
-
+    const {
+      data,
+      error
+    } = await supabase.from('tree_hole_comments').select('*').eq('post_id', postId).order('created_at', {
+      ascending: true
+    });
     if (error) {
       console.error('Error fetching comments:', error);
       return;
     }
-
     setComments(data || []);
   };
-
   const handleComment = async () => {
     if (!newComment.trim() || !selectedPost) return;
-
     if (!user) {
       toast({
         title: "请先登录",
@@ -235,15 +204,13 @@ const TreeHole = () => {
       navigate("/auth");
       return;
     }
-
-    const { error } = await supabase
-      .from('tree_hole_comments')
-      .insert({
-        post_id: selectedPost.id,
-        user_id: user.id,
-        content: newComment
-      });
-
+    const {
+      error
+    } = await supabase.from('tree_hole_comments').insert({
+      post_id: selectedPost.id,
+      user_id: user.id,
+      content: newComment
+    });
     if (error) {
       toast({
         title: "评论失败",
@@ -252,16 +219,13 @@ const TreeHole = () => {
       });
       return;
     }
-
     toast({
       title: "评论成功"
     });
-
     setNewComment("");
     fetchComments(selectedPost.id);
     fetchPosts();
   };
-
   const handleDeleteComment = async (commentId: string, postId: string) => {
     if (!user) {
       toast({
@@ -271,13 +235,9 @@ const TreeHole = () => {
       });
       return;
     }
-
-    const { error } = await supabase
-      .from('tree_hole_comments')
-      .delete()
-      .eq('id', commentId)
-      .eq('user_id', user.id);
-
+    const {
+      error
+    } = await supabase.from('tree_hole_comments').delete().eq('id', commentId).eq('user_id', user.id);
     if (error) {
       toast({
         title: "删除失败",
@@ -288,20 +248,16 @@ const TreeHole = () => {
     }
 
     // 更新帖子的评论数
-    await supabase
-      .from('tree_hole_posts')
-      .update({ comments_count: Math.max(0, (posts.find(p => p.id === postId)?.comments || 1) - 1) })
-      .eq('id', postId);
-
+    await supabase.from('tree_hole_posts').update({
+      comments_count: Math.max(0, (posts.find(p => p.id === postId)?.comments || 1) - 1)
+    }).eq('id', postId);
     toast({
       title: "删除成功",
       description: "评论已被删除"
     });
-
     fetchComments(postId);
     fetchPosts();
   };
-
   const handleDeletePost = async (postId: string) => {
     if (!user) {
       toast({
@@ -315,13 +271,9 @@ const TreeHole = () => {
     // 先删除相关的评论和点赞
     await supabase.from('tree_hole_comments').delete().eq('post_id', postId);
     await supabase.from('tree_hole_likes').delete().eq('post_id', postId);
-
-    const { error } = await supabase
-      .from('tree_hole_posts')
-      .delete()
-      .eq('id', postId)
-      .eq('user_id', user.id);
-
+    const {
+      error
+    } = await supabase.from('tree_hole_posts').delete().eq('id', postId).eq('user_id', user.id);
     if (error) {
       toast({
         title: "删除失败",
@@ -330,25 +282,17 @@ const TreeHole = () => {
       });
       return;
     }
-
     toast({
       title: "删除成功",
       description: "帖子已被删除"
     });
-
     fetchPosts();
   };
-
-  return (
-    <div className="min-h-screen bg-gradient-subtle">
+  return <div className="min-h-screen bg-gradient-subtle">
       {/* Header */}
       <header className="sticky top-0 bg-card/80 backdrop-blur-lg border-b border-border z-10">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-4">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => navigate("/")}
-          >
+          <Button variant="ghost" size="icon" onClick={() => navigate("/")}>
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <TreePine className="w-6 h-6 text-success" />
@@ -364,11 +308,7 @@ const TreeHole = () => {
         <div className="max-w-4xl mx-auto">
           <Card className="p-6 bg-gradient-fresh border-0 shadow-soft overflow-hidden relative">
             <div className="relative z-10 flex items-center gap-4">
-              <img 
-                src={treeHoleIcon} 
-                alt="树洞" 
-                className="w-20 h-20 object-contain animate-float"
-              />
+              
               <div className="flex-1">
                 <h2 className="text-xl font-bold text-white mb-2">
                   这里是安全的倾诉空间
@@ -386,30 +326,14 @@ const TreeHole = () => {
       <section className="px-4 pb-6">
         <div className="max-w-4xl mx-auto">
           <Card className="p-4 shadow-card">
-            <Textarea
-              placeholder="写下你的心声... (匿名发布，无需担心)"
-              value={newPost}
-              onChange={(e) => setNewPost(e.target.value)}
-              className="min-h-[100px] resize-none border-0 focus-visible:ring-0"
-            />
+            <Textarea placeholder="写下你的心声... (匿名发布，无需担心)" value={newPost} onChange={e => setNewPost(e.target.value)} className="min-h-[100px] resize-none border-0 focus-visible:ring-0" />
             <div className="flex items-center justify-between mt-3 pt-3 border-t border-border">
               <div className="flex gap-2 flex-wrap">
-                {moods.slice(0, 4).map(mood => (
-                  <Badge
-                    key={mood}
-                    variant={selectedMood === mood ? "default" : "secondary"}
-                    className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
-                    onClick={() => setSelectedMood(selectedMood === mood ? "" : mood)}
-                  >
+                {moods.slice(0, 4).map(mood => <Badge key={mood} variant={selectedMood === mood ? "default" : "secondary"} className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors" onClick={() => setSelectedMood(selectedMood === mood ? "" : mood)}>
                     {mood}
-                  </Badge>
-                ))}
+                  </Badge>)}
               </div>
-              <Button
-                onClick={handlePost}
-                disabled={!newPost.trim() || isLoading}
-                className="bg-gradient-primary hover:opacity-90"
-              >
+              <Button onClick={handlePost} disabled={!newPost.trim() || isLoading} className="bg-gradient-primary hover:opacity-90">
                 <Send className="w-4 h-4 mr-2" />
                 {isLoading ? "发布中..." : "发布"}
               </Button>
@@ -421,12 +345,9 @@ const TreeHole = () => {
       {/* Posts List */}
       <section className="px-4 pb-12">
         <div className="max-w-4xl mx-auto space-y-4">
-          {posts.map((post, index) => (
-            <Card
-              key={post.id}
-              className="p-5 shadow-card hover:shadow-soft transition-all duration-300 animate-slide-up"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
+          {posts.map((post, index) => <Card key={post.id} className="p-5 shadow-card hover:shadow-soft transition-all duration-300 animate-slide-up" style={{
+          animationDelay: `${index * 0.1}s`
+        }}>
               <div className="space-y-3">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1">
@@ -436,11 +357,11 @@ const TreeHole = () => {
                       </div>
                       <span className="text-sm text-muted-foreground">
                         {post.timestamp.toLocaleString("zh-CN", {
-                          month: "numeric",
-                          day: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit"
-                        })}
+                      month: "numeric",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit"
+                    })}
                       </span>
                       <Badge variant="secondary" className="text-xs">
                         {post.mood}
@@ -453,26 +374,16 @@ const TreeHole = () => {
                 </div>
 
                 <div className="flex items-center gap-4 pt-2 border-t border-border">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleLike(post.id)}
-                    className={likedPosts.has(post.id) ? "text-red-500 hover:text-red-600 hover:bg-red-50" : "hover:text-accent hover:bg-accent/10"}
-                  >
+                  <Button variant="ghost" size="sm" onClick={() => handleLike(post.id)} className={likedPosts.has(post.id) ? "text-red-500 hover:text-red-600 hover:bg-red-50" : "hover:text-accent hover:bg-accent/10"}>
                     <Heart className={`w-4 h-4 mr-1 ${likedPosts.has(post.id) ? "fill-red-500" : ""}`} />
                     {post.likes}
                   </Button>
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="hover:text-primary hover:bg-primary/10"
-                        onClick={() => {
-                          setSelectedPost(post);
-                          fetchComments(post.id);
-                        }}
-                      >
+                      <Button variant="ghost" size="sm" className="hover:text-primary hover:bg-primary/10" onClick={() => {
+                    setSelectedPost(post);
+                    fetchComments(post.id);
+                  }}>
                         <MessageCircle className="w-4 h-4 mr-1" />
                         {post.comments}
                       </Button>
@@ -492,11 +403,7 @@ const TreeHole = () => {
 
                         {/* 评论列表 */}
                         <div className="space-y-3">
-                          {comments.length === 0 ? (
-                            <p className="text-center text-muted-foreground py-8">暂无评论，来说点什么吧</p>
-                          ) : (
-                            comments.map((comment) => (
-                              <Card key={comment.id} className="p-3">
+                          {comments.length === 0 ? <p className="text-center text-muted-foreground py-8">暂无评论，来说点什么吧</p> : comments.map(comment => <Card key={comment.id} className="p-3">
                                 <div className="flex items-start gap-2">
                                   <div className="w-6 h-6 rounded-full bg-gradient-fresh flex items-center justify-center text-white text-xs flex-shrink-0">
                                     匿
@@ -506,20 +413,15 @@ const TreeHole = () => {
                                     <div className="flex items-center justify-between mt-1">
                                       <span className="text-xs text-muted-foreground">
                                         {new Date(comment.created_at).toLocaleString("zh-CN", {
-                                          month: "numeric",
-                                          day: "numeric",
-                                          hour: "2-digit",
-                                          minute: "2-digit"
-                                        })}
+                                  month: "numeric",
+                                  day: "numeric",
+                                  hour: "2-digit",
+                                  minute: "2-digit"
+                                })}
                                       </span>
-                                      {user && comment.user_id === user.id && (
-                                        <AlertDialog>
+                                      {user && comment.user_id === user.id && <AlertDialog>
                                           <AlertDialogTrigger asChild>
-                                            <Button
-                                              variant="ghost"
-                                              size="sm"
-                                              className="h-6 px-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                                            >
+                                            <Button variant="ghost" size="sm" className="h-6 px-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10">
                                               <Trash2 className="w-3 h-3" />
                                             </Button>
                                           </AlertDialogTrigger>
@@ -532,37 +434,22 @@ const TreeHole = () => {
                                             </AlertDialogHeader>
                                             <AlertDialogFooter>
                                               <AlertDialogCancel>取消</AlertDialogCancel>
-                                              <AlertDialogAction
-                                                onClick={() => handleDeleteComment(comment.id, post.id)}
-                                                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                                              >
+                                              <AlertDialogAction onClick={() => handleDeleteComment(comment.id, post.id)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
                                                 确认删除
                                               </AlertDialogAction>
                                             </AlertDialogFooter>
                                           </AlertDialogContent>
-                                        </AlertDialog>
-                                      )}
+                                        </AlertDialog>}
                                     </div>
                                   </div>
                                 </div>
-                              </Card>
-                            ))
-                          )}
+                              </Card>)}
                         </div>
 
                         {/* 评论输入 */}
                         <div className="flex gap-2 pt-4 border-t">
-                          <Textarea
-                            placeholder="写下你的评论..."
-                            value={newComment}
-                            onChange={(e) => setNewComment(e.target.value)}
-                            className="min-h-[80px] resize-none"
-                          />
-                          <Button
-                            onClick={handleComment}
-                            disabled={!newComment.trim()}
-                            className="self-end"
-                          >
+                          <Textarea placeholder="写下你的评论..." value={newComment} onChange={e => setNewComment(e.target.value)} className="min-h-[80px] resize-none" />
+                          <Button onClick={handleComment} disabled={!newComment.trim()} className="self-end">
                             <Send className="w-4 h-4" />
                           </Button>
                         </div>
@@ -571,14 +458,9 @@ const TreeHole = () => {
                   </Dialog>
                   
                   {/* 删除按钮 - 仅对自己的帖子显示 */}
-                  {user && post.user_id === user.id && (
-                    <AlertDialog>
+                  {user && post.user_id === user.id && <AlertDialog>
                       <AlertDialogTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 ml-auto"
-                        >
+                        <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 ml-auto">
                           <Trash2 className="w-4 h-4" />
                         </Button>
                       </AlertDialogTrigger>
@@ -591,20 +473,15 @@ const TreeHole = () => {
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                           <AlertDialogCancel>取消</AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={() => handleDeletePost(post.id)}
-                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                          >
+                          <AlertDialogAction onClick={() => handleDeletePost(post.id)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
                             确认删除
                           </AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>
-                    </AlertDialog>
-                  )}
+                    </AlertDialog>}
                 </div>
               </div>
-            </Card>
-          ))}
+            </Card>)}
         </div>
       </section>
 
@@ -618,8 +495,6 @@ const TreeHole = () => {
           </Card>
         </div>
       </section>
-    </div>
-  );
+    </div>;
 };
-
 export default TreeHole;
