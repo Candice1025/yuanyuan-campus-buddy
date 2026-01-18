@@ -6,20 +6,77 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// 输入验证Schema
+interface VerifySmsInput {
+  phone: string;
+  code: string;
+}
+
+function validateInput(data: unknown): { valid: true; data: VerifySmsInput } | { valid: false; error: string } {
+  if (!data || typeof data !== 'object') {
+    return { valid: false, error: "无效的请求格式" };
+  }
+
+  const { phone, code } = data as Record<string, unknown>;
+
+  // 验证手机号
+  if (!phone || typeof phone !== 'string') {
+    return { valid: false, error: "手机号不能为空" };
+  }
+
+  // 手机号格式验证（中国大陆11位手机号）
+  const phoneRegex = /^1[3-9]\d{9}$/;
+  if (!phoneRegex.test(phone.trim())) {
+    return { valid: false, error: "无效的手机号码格式" };
+  }
+
+  // 验证码验证
+  if (!code || typeof code !== 'string') {
+    return { valid: false, error: "验证码不能为空" };
+  }
+
+  // 验证码格式（6位数字）
+  const codeRegex = /^\d{6}$/;
+  if (!codeRegex.test(code.trim())) {
+    return { valid: false, error: "验证码格式无效，应为6位数字" };
+  }
+
+  return { 
+    valid: true, 
+    data: { 
+      phone: phone.trim(), 
+      code: code.trim() 
+    } 
+  };
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { phone, code } = await req.json();
-
-    if (!phone || !code) {
+    // 解析并验证输入
+    let requestBody: unknown;
+    try {
+      requestBody = await req.json();
+    } catch {
       return new Response(
-        JSON.stringify({ error: "手机号和验证码不能为空" }),
+        JSON.stringify({ error: "无效的JSON格式" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
+
+    const validation = validateInput(requestBody);
+    if (!validation.valid) {
+      console.log("Input validation failed:", validation.error);
+      return new Response(
+        JSON.stringify({ error: validation.error }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const { phone, code } = validation.data;
 
     // 初始化 Supabase 客户端（使用 service role 绕过 RLS）
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
@@ -90,7 +147,7 @@ serve(async (req) => {
         );
       }
 
-      console.log("New user created:", newUser);
+      console.log("New user created");
     }
 
     // 生成访问令牌
@@ -129,7 +186,7 @@ serve(async (req) => {
   } catch (error) {
     console.error("verify-sms error:", error);
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "未知错误" }),
+      JSON.stringify({ error: "服务暂时不可用" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }

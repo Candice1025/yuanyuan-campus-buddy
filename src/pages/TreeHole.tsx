@@ -65,10 +65,11 @@ const TreeHole = () => {
     };
   }, []);
   const fetchPosts = async () => {
+    // 使用公开视图获取帖子（不暴露user_id）
     const {
       data,
       error
-    } = await supabase.from('tree_hole_posts').select('*').order('created_at', {
+    } = await supabase.from('tree_hole_posts_public').select('*').order('created_at', {
       ascending: false
     });
     if (error) {
@@ -82,7 +83,7 @@ const TreeHole = () => {
       likes: post.likes,
       comments: post.comments_count,
       mood: post.mood,
-      user_id: post.user_id
+      user_id: null // 公开视图不暴露user_id
     })));
 
     // 如果用户已登录，获取用户的点赞状态
@@ -181,17 +182,24 @@ const TreeHole = () => {
     }
   };
   const fetchComments = async (postId: string) => {
+    // 使用公开视图获取评论（不暴露user_id）
     const {
       data,
       error
-    } = await supabase.from('tree_hole_comments').select('*').eq('post_id', postId).order('created_at', {
+    } = await supabase.from('tree_hole_comments_public').select('*').eq('post_id', postId).order('created_at', {
       ascending: true
     });
     if (error) {
       console.error('Error fetching comments:', error);
       return;
     }
-    setComments(data || []);
+    // 将公开视图数据映射为Comment类型，user_id设为null
+    setComments((data || []).map(c => ({
+      id: c.id,
+      content: c.content,
+      created_at: c.created_at,
+      user_id: null
+    })));
   };
   const handleComment = async () => {
     if (!newComment.trim() || !selectedPost) return;

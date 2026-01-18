@@ -5,16 +5,115 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// 物件接口定义
+interface SandtrayItem {
+  name: string;
+  category: string;
+  emoji: string;
+}
+
+interface SandtrayInput {
+  items: SandtrayItem[];
+}
+
+// 输入验证函数
+function validateInput(data: unknown): { valid: true; data: SandtrayInput } | { valid: false; error: string } {
+  if (!data || typeof data !== 'object') {
+    return { valid: false, error: "无效的请求格式" };
+  }
+
+  const { items } = data as Record<string, unknown>;
+
+  // 验证items数组存在
+  if (!items || !Array.isArray(items)) {
+    return { valid: false, error: "物件列表不能为空" };
+  }
+
+  // 验证物件数量限制
+  if (items.length === 0) {
+    return { valid: false, error: "请至少选择一个物件" };
+  }
+
+  if (items.length > 50) {
+    return { valid: false, error: "物件数量超出限制（最多50个）" };
+  }
+
+  // 验证每个物件的格式
+  const validatedItems: SandtrayItem[] = [];
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    
+    if (!item || typeof item !== 'object') {
+      return { valid: false, error: `第${i + 1}个物件格式无效` };
+    }
+
+    const { name, category, emoji } = item as Record<string, unknown>;
+
+    // 验证name
+    if (!name || typeof name !== 'string') {
+      return { valid: false, error: `第${i + 1}个物件名称无效` };
+    }
+    if (name.length > 100) {
+      return { valid: false, error: `第${i + 1}个物件名称过长` };
+    }
+
+    // 验证category
+    if (!category || typeof category !== 'string') {
+      return { valid: false, error: `第${i + 1}个物件分类无效` };
+    }
+    if (category.length > 50) {
+      return { valid: false, error: `第${i + 1}个物件分类名过长` };
+    }
+
+    // 验证emoji
+    if (!emoji || typeof emoji !== 'string') {
+      return { valid: false, error: `第${i + 1}个物件图标无效` };
+    }
+    if (emoji.length > 10) {
+      return { valid: false, error: `第${i + 1}个物件图标过长` };
+    }
+
+    validatedItems.push({
+      name: name.trim().slice(0, 100),
+      category: category.trim().slice(0, 50),
+      emoji: emoji.trim().slice(0, 10)
+    });
+  }
+
+  return { valid: true, data: { items: validatedItems } };
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { items } = await req.json();
+    // 解析并验证输入
+    let requestBody: unknown;
+    try {
+      requestBody = await req.json();
+    } catch {
+      return new Response(
+        JSON.stringify({ error: "无效的JSON格式" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const validation = validateInput(requestBody);
+    if (!validation.valid) {
+      console.log("Sandtray input validation failed:", validation.error);
+      return new Response(
+        JSON.stringify({ error: validation.error }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const { items } = validation.data;
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
     // 构建分析提示词
-    const itemsList = items.map((item: any) => 
+    const itemsList = items.map((item) => 
       `${item.category}类：${item.name}(${item.emoji})`
     ).join("、");
 
@@ -94,7 +193,7 @@ ${itemsList}
   } catch (e) {
     console.error("sandtray-analysis error:", e);
     return new Response(
-      JSON.stringify({ error: e instanceof Error ? e.message : "未知错误" }), 
+      JSON.stringify({ error: "服务暂时不可用" }), 
       {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },

@@ -5,11 +5,154 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// 接口定义
+interface SandtrayItem {
+  name: string;
+  category?: string;
+  emoji?: string;
+}
+
+interface AvatarConfig {
+  skin_tone?: string;
+  face_type?: string;
+  hairstyle?: string;
+  eyebrows?: string;
+  eyes?: string;
+  nose?: string;
+  mouth?: string;
+  outfit?: string;
+  accessories?: string;
+}
+
+interface GenerateAvatarInput {
+  items?: SandtrayItem[];
+  config?: AvatarConfig;
+}
+
+// 允许的配置值
+const ALLOWED_VALUES = {
+  skin_tone: ['porcelain', 'fair', 'light', 'light-medium', 'medium', 'medium-tan', 'tan', 'olive', 'brown', 'deep-brown', 'dark'],
+  face_type: ['oval', 'round', 'square', 'heart', 'diamond', 'oblong', 'triangle'],
+  hairstyle: ['short', 'medium', 'long', 'ponytail', 'bun', 'bob', 'pixie', 'wavy', 'straight', 'curly', 'braids', 'mohawk', 'afro'],
+  eyebrows: ['natural', 'thick', 'thin', 'arched', 'straight', 'angled', 'rounded', 'soft', 's-shaped', 'high-arch'],
+  eyes: ['normal', 'big', 'small', 'almond', 'round', 'upturned', 'downturned', 'hooded', 'monolid', 'deep-set', 'close-set', 'wide-set', 'sparkle'],
+  nose: ['normal', 'small', 'button', 'straight', 'upturned', 'roman', 'hawk', 'snub', 'wide', 'narrow'],
+  mouth: ['smile', 'grin', 'neutral', 'happy', 'slight-smile', 'full-smile', 'closed', 'open', 'smirk', 'pursed', 'wide', 'small'],
+  outfit: ['casual', 'formal', 'sporty', 'cute', 'school', 'party', 'hoodie', 'tshirt', 'sweater', 'jacket', 'dress', 'suit', 'uniform'],
+  accessories: ['none', 'glasses', 'sunglasses', 'hat', 'cap', 'beanie', 'headband', 'bow', 'earrings', 'necklace', 'scarf', 'bandana', 'hairclip']
+};
+
+// 输入验证函数
+function validateInput(data: unknown): { valid: true; data: GenerateAvatarInput } | { valid: false; error: string } {
+  if (!data || typeof data !== 'object') {
+    return { valid: false, error: "无效的请求格式" };
+  }
+
+  const { items, config } = data as Record<string, unknown>;
+
+  // 必须提供items或config
+  if (!items && !config) {
+    return { valid: false, error: "请提供头像配置或沙盘物件" };
+  }
+
+  const result: GenerateAvatarInput = {};
+
+  // 验证config
+  if (config) {
+    if (typeof config !== 'object') {
+      return { valid: false, error: "头像配置格式无效" };
+    }
+
+    const configObj = config as Record<string, unknown>;
+    const validatedConfig: AvatarConfig = {};
+
+    for (const [key, allowedValues] of Object.entries(ALLOWED_VALUES)) {
+      const value = configObj[key];
+      if (value !== undefined) {
+        if (typeof value !== 'string') {
+          return { valid: false, error: `配置项 ${key} 值无效` };
+        }
+        if (!allowedValues.includes(value)) {
+          return { valid: false, error: `配置项 ${key} 值不在允许范围内` };
+        }
+        (validatedConfig as Record<string, string>)[key] = value;
+      }
+    }
+
+    result.config = validatedConfig;
+  }
+
+  // 验证items
+  if (items) {
+    if (!Array.isArray(items)) {
+      return { valid: false, error: "物件列表格式无效" };
+    }
+
+    if (items.length === 0) {
+      return { valid: false, error: "物件列表不能为空" };
+    }
+
+    if (items.length > 50) {
+      return { valid: false, error: "物件数量超出限制（最多50个）" };
+    }
+
+    const validatedItems: SandtrayItem[] = [];
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      
+      if (!item || typeof item !== 'object') {
+        return { valid: false, error: `第${i + 1}个物件格式无效` };
+      }
+
+      const { name, category, emoji } = item as Record<string, unknown>;
+
+      if (!name || typeof name !== 'string') {
+        return { valid: false, error: `第${i + 1}个物件名称无效` };
+      }
+
+      if (name.length > 100) {
+        return { valid: false, error: `第${i + 1}个物件名称过长` };
+      }
+
+      validatedItems.push({
+        name: name.trim().slice(0, 100),
+        category: typeof category === 'string' ? category.trim().slice(0, 50) : undefined,
+        emoji: typeof emoji === 'string' ? emoji.trim().slice(0, 10) : undefined
+      });
+    }
+
+    result.items = validatedItems;
+  }
+
+  return { valid: true, data: result };
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { items, analysis, config } = await req.json();
+    // 解析并验证输入
+    let requestBody: unknown;
+    try {
+      requestBody = await req.json();
+    } catch {
+      return new Response(
+        JSON.stringify({ error: "无效的JSON格式" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const validation = validateInput(requestBody);
+    if (!validation.valid) {
+      console.log("Avatar input validation failed:", validation.error);
+      return new Response(
+        JSON.stringify({ error: validation.error }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const { items, config } = validation.data;
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
@@ -148,21 +291,21 @@ serve(async (req) => {
       };
 
       prompt = `Create a cute illustration-style character portrait with the following features:
-- ${skinToneMap[config.skin_tone] || config.skin_tone}
-- ${faceMap[config.face_type] || config.face_type}
-- ${hairMap[config.hairstyle] || config.hairstyle}
-- ${eyebrowMap[config.eyebrows] || config.eyebrows}
-- ${eyeMap[config.eyes] || config.eyes}
-- ${noseMap[config.nose] || config.nose}
-- ${mouthMap[config.mouth] || config.mouth}
-- ${outfitMap[config.outfit] || config.outfit}
-${config.accessories !== 'none' ? `- ${accessoryMap[config.accessories] || config.accessories}` : ''}
+- ${skinToneMap[config.skin_tone || 'light'] || 'light skin'}
+- ${faceMap[config.face_type || 'oval'] || 'oval face shape'}
+- ${hairMap[config.hairstyle || 'short'] || 'short hair'}
+- ${eyebrowMap[config.eyebrows || 'natural'] || 'natural eyebrows'}
+- ${eyeMap[config.eyes || 'normal'] || 'normal eyes'}
+- ${noseMap[config.nose || 'normal'] || 'normal nose'}
+- ${mouthMap[config.mouth || 'smile'] || 'gentle smile'}
+- ${outfitMap[config.outfit || 'casual'] || 'casual clothing'}
+${config.accessories && config.accessories !== 'none' ? `- ${accessoryMap[config.accessories] || config.accessories}` : ''}
 
 Style: Modern illustration art, cute and friendly, clean lines, soft pastel colors, suitable for children and teenagers. The character should be facing forward in portrait view, with a warm and welcoming expression. High quality digital illustration with professional finish, white or light background. Full color, detailed but simple, kawaii-inspired aesthetic.`;
 
     } else if (items) {
       // 沙盘分析模式
-      const itemsList = items.map((item: any) => item.name).join("、");
+      const itemsList = items.map((item) => item.name).join("、");
       prompt = `Create a mystical 3D character avatar that represents a person's inner world. 
 Based on their sand tray therapy selection: ${itemsList}.
 The avatar should be ethereal, dream-like, and symbolic, incorporating elements from nature, fantasy, and emotion.
@@ -173,7 +316,7 @@ Ultra high resolution, cinematic quality.`;
       throw new Error("Invalid request: missing config or items");
     }
 
-    console.log("Generating avatar with prompt:", prompt);
+    console.log("Generating avatar");
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -228,7 +371,7 @@ Ultra high resolution, cinematic quality.`;
   } catch (e) {
     console.error("Avatar generation error:", e);
     return new Response(
-      JSON.stringify({ error: e instanceof Error ? e.message : "生成失败" }),
+      JSON.stringify({ error: "服务暂时不可用" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
