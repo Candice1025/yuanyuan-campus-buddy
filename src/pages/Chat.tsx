@@ -21,7 +21,7 @@ const Chat = () => {
   const [user, setUser] = useState<any>(null);
   const [messages, setMessages] = useState<Message[]>([{
     id: "1",
-    content: "你好呀！我是守伴者，你的校园生活小帮手 🌟\n\n我可以帮你：\n✨ 解答学习问题（但不会直接给答案哦）\n💭 倾听你的烦恼\n📚 分享学习方法\n💡 激发学习灵感\n\n有什么我可以帮你的吗？",
+    content: "欢迎来到这里，我是守伴者。🌿\n这是一个可以放慢脚步、整理内心的空间。\n\n你可以把困惑、情绪，\n或还没想好名字的感受放在这里。\n我会陪你一起看，一起想。🤍\n\n当你准备好了，我们就开始吧。✨",
     sender: "assistant",
     timestamp: new Date()
   }]);
@@ -245,7 +245,7 @@ const Chat = () => {
       // 清空UI中的所有消息，保留初始欢迎消息
       setMessages([{
         id: "1",
-        content: "你好呀！我是守伴者，你的校园生活小帮手 🌟\n\n我可以帮你：\n✨ 解答学习问题（但不会直接给答案哦）\n💭 倾听你的烦恼\n📚 分享学习方法\n💡 激发学习灵感\n\n有什么我可以帮你的吗？",
+        content: "欢迎来到这里，我是守伴者。🌿\n这是一个可以放慢脚步、整理内心的空间。\n\n你可以把困惑、情绪，\n或还没想好名字的感受放在这里。\n我会陪你一起看，一起想。🤍\n\n当你准备好了，我们就开始吧。✨",
         sender: "assistant",
         timestamp: new Date()
       }]);
