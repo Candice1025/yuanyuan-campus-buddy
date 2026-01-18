@@ -4,131 +4,112 @@ import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { Brain, Smile, Heart, TrendingUp, BookOpen, ArrowLeft, Trophy, Star, Briefcase, Cake } from "lucide-react";
 import mentalTestIcon from "@/assets/mental-test-icon.png";
-
 const Tests = () => {
   const navigate = useNavigate();
-
-  const tests = [
-    {
-      id: "mbti",
-      title: "MBTI人格测试",
-      description: "探索你独特的性格类型，发现真实的自己",
-      icon: Brain,
-      duration: "约8分钟",
-      questions: 16,
-      color: "bg-primary",
-      badge: "热门",
-      path: "/test/mbti"
-    },
-    {
-      id: "stress",
-      title: "压力值测试",
-      description: "评估当前压力水平，获得专业缓解建议",
-      icon: TrendingUp,
-      duration: "约8分钟",
-      questions: 20,
-      color: "bg-accent",
-      badge: "推荐",
-      path: "/test/stress"
-    },
-    {
-      id: "anxiety",
-      title: "焦虑自测量表",
-      description: "了解焦虑程度，及时关注心理健康",
-      icon: Heart,
-      duration: "约10分钟",
-      questions: 20,
-      color: "bg-success",
-      path: "/test/anxiety"
-    },
-    {
-      id: "depression",
-      title: "抑郁自评量表",
-      description: "筛查抑郁症状，获得专业帮助渠道",
-      icon: Smile,
-      duration: "约10分钟",
-      questions: 20,
-      color: "bg-primary",
-      path: "/test/depression"
-    },
-    {
-      id: "learning",
-      title: "学习风格测试",
-      description: "找到最适合你的学习方式，提升效率",
-      icon: BookOpen,
-      duration: "约6分钟",
-      questions: 12,
-      color: "bg-accent",
-      badge: "新",
-      path: "/test/learning"
-    },
-    {
-      id: "animal",
-      title: "动物性格测试",
-      description: "测试你像哪种动物，发现性格特质",
-      icon: Heart,
-      duration: "约10分钟",
-      questions: 15,
-      color: "bg-success",
-      badge: "趣味",
-      path: "/test/animal-personality"
-    },
-    {
-      id: "mental-age",
-      title: "心理年龄测评",
-      description: "你的心理年龄是多少岁？",
-      icon: Cake,
-      duration: "约8分钟",
-      questions: 15,
-      color: "bg-primary",
-      badge: "热门",
-      path: "/test/mental-age"
-    },
-    {
-      id: "strengths",
-      title: "盖洛普优势识别",
-      description: "发现你的5大天赋优势主题",
-      icon: Trophy,
-      duration: "约12分钟",
-      questions: 20,
-      color: "bg-accent",
-      badge: "专业",
-      path: "/test/strengths-finder"
-    },
-    {
-      id: "enneagram",
-      title: "九型人格测试",
-      description: "探索你的核心人格类型",
-      icon: Star,
-      duration: "约12分钟",
-      questions: 15,
-      color: "bg-primary",
-      badge: "经典",
-      path: "/test/enneagram"
-    },
-    {
-      id: "holland",
-      title: "霍兰德职业兴趣",
-      description: "找到最适合你的职业方向",
-      icon: Briefcase,
-      duration: "约15分钟",
-      questions: 24,
-      color: "bg-success",
-      badge: "职业",
-      path: "/test/holland"
-    }
-  ];
-
-  return (
-    <div className="min-h-screen bg-gradient-subtle">
+  const tests = [{
+    id: "mbti",
+    title: "MBTI人格测试",
+    description: "探索你独特的性格类型，发现真实的自己",
+    icon: Brain,
+    duration: "约8分钟",
+    questions: 16,
+    color: "bg-primary",
+    badge: "热门",
+    path: "/test/mbti"
+  }, {
+    id: "stress",
+    title: "压力值测试",
+    description: "评估当前压力水平，获得专业缓解建议",
+    icon: TrendingUp,
+    duration: "约8分钟",
+    questions: 20,
+    color: "bg-accent",
+    badge: "推荐",
+    path: "/test/stress"
+  }, {
+    id: "anxiety",
+    title: "焦虑自测量表",
+    description: "了解焦虑程度，及时关注心理健康",
+    icon: Heart,
+    duration: "约10分钟",
+    questions: 20,
+    color: "bg-success",
+    path: "/test/anxiety"
+  }, {
+    id: "depression",
+    title: "抑郁自评量表",
+    description: "筛查抑郁症状，获得专业帮助渠道",
+    icon: Smile,
+    duration: "约10分钟",
+    questions: 20,
+    color: "bg-primary",
+    path: "/test/depression"
+  }, {
+    id: "learning",
+    title: "学习风格测试",
+    description: "找到最适合你的学习方式，提升效率",
+    icon: BookOpen,
+    duration: "约6分钟",
+    questions: 12,
+    color: "bg-accent",
+    badge: "新",
+    path: "/test/learning"
+  }, {
+    id: "animal",
+    title: "动物性格测试",
+    description: "测试你像哪种动物，发现性格特质",
+    icon: Heart,
+    duration: "约10分钟",
+    questions: 15,
+    color: "bg-success",
+    badge: "趣味",
+    path: "/test/animal-personality"
+  }, {
+    id: "mental-age",
+    title: "心理年龄测评",
+    description: "你的心理年龄是多少岁？",
+    icon: Cake,
+    duration: "约8分钟",
+    questions: 15,
+    color: "bg-primary",
+    badge: "热门",
+    path: "/test/mental-age"
+  }, {
+    id: "strengths",
+    title: "盖洛普优势识别",
+    description: "发现你的5大天赋优势主题",
+    icon: Trophy,
+    duration: "约12分钟",
+    questions: 20,
+    color: "bg-accent",
+    badge: "专业",
+    path: "/test/strengths-finder"
+  }, {
+    id: "enneagram",
+    title: "九型人格测试",
+    description: "探索你的核心人格类型",
+    icon: Star,
+    duration: "约12分钟",
+    questions: 15,
+    color: "bg-primary",
+    badge: "经典",
+    path: "/test/enneagram"
+  }, {
+    id: "holland",
+    title: "霍兰德职业兴趣",
+    description: "找到最适合你的职业方向",
+    icon: Briefcase,
+    duration: "约15分钟",
+    questions: 24,
+    color: "bg-success",
+    badge: "职业",
+    path: "/test/holland"
+  }];
+  return <div className="min-h-screen bg-gradient-subtle">
       {/* Header */}
       <header className="sticky top-0 bg-card/80 backdrop-blur-lg border-b border-border z-10">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center gap-4">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => navigate("/")}
-          >
+          <Button variant="ghost" size="icon" onClick={() => navigate("/")}>
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div>
@@ -168,11 +149,7 @@ const Tests = () => {
                 </div>
               </div>
               <div className="flex justify-center">
-                <img 
-                  src={mentalTestIcon} 
-                  alt="心理测试" 
-                  className="w-48 h-48 object-contain animate-float"
-                />
+                
               </div>
             </div>
           </Card>
@@ -183,14 +160,10 @@ const Tests = () => {
       <section className="px-4 pb-12">
         <div className="max-w-6xl mx-auto space-y-6">
           {tests.map((test, index) => {
-            const Icon = test.icon;
-            return (
-              <Card
-                key={test.id}
-                className="group overflow-hidden border-0 shadow-card hover:shadow-float transition-all duration-300 hover:-translate-y-1 cursor-pointer animate-slide-up"
-                style={{ animationDelay: `${index * 0.1}s` }}
-                onClick={() => navigate(test.path)}
-              >
+          const Icon = test.icon;
+          return <Card key={test.id} className="group overflow-hidden border-0 shadow-card hover:shadow-float transition-all duration-300 hover:-translate-y-1 cursor-pointer animate-slide-up" style={{
+            animationDelay: `${index * 0.1}s`
+          }} onClick={() => navigate(test.path)}>
                 <div className="p-6">
                   <div className="flex items-start gap-6">
                     <div className={`w-16 h-16 rounded-2xl ${test.color} flex items-center justify-center shadow-soft flex-shrink-0 group-hover:scale-110 transition-transform duration-300`}>
@@ -204,11 +177,9 @@ const Tests = () => {
                             <h3 className="text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
                               {test.title}
                             </h3>
-                            {test.badge && (
-                              <Badge variant="secondary" className="text-xs">
+                            {test.badge && <Badge variant="secondary" className="text-xs">
                                 {test.badge}
-                              </Badge>
-                            )}
+                              </Badge>}
                           </div>
                           <p className="text-muted-foreground">
                             {test.description}
@@ -225,21 +196,17 @@ const Tests = () => {
                         </span>
                       </div>
                       
-                      <Button 
-                        className="bg-gradient-primary hover:opacity-90"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          navigate(test.path);
-                        }}
-                      >
+                      <Button className="bg-gradient-primary hover:opacity-90" onClick={e => {
+                    e.stopPropagation();
+                    navigate(test.path);
+                  }}>
                         开始测试
                       </Button>
                     </div>
                   </div>
                 </div>
-              </Card>
-            );
-          })}
+              </Card>;
+        })}
         </div>
       </section>
 
@@ -257,8 +224,6 @@ const Tests = () => {
           </Card>
         </div>
       </section>
-    </div>
-  );
+    </div>;
 };
-
 export default Tests;
