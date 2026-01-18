@@ -65,46 +65,195 @@ export default function HollandTest() {
     },
   };
 
+  // 30题，每题4选项
   const questions = [
-    { id: 1, text: "你喜欢使用工具和机器工作吗？", type: "R" },
-    { id: 2, text: "你喜欢进行科学实验和研究吗？", type: "I" },
-    { id: 3, text: "你喜欢绘画、音乐或写作等创作活动吗？", type: "A" },
-    { id: 4, text: "你喜欢帮助和教导他人吗？", type: "S" },
-    { id: 5, text: "你喜欢领导团队和组织活动吗？", type: "E" },
-    { id: 6, text: "你喜欢整理文件和数据工作吗？", type: "C" },
-    { id: 7, text: "你喜欢户外工作和体力活动吗？", type: "R" },
-    { id: 8, text: "你喜欢阅读科学文献和专业书籍吗？", type: "I" },
-    { id: 9, text: "你喜欢参加艺术展览和文化活动吗？", type: "A" },
-    { id: 10, text: "你喜欢参与志愿者和社区服务吗？", type: "S" },
-    { id: 11, text: "你喜欢商业谈判和说服他人吗？", type: "E" },
-    { id: 12, text: "你喜欢遵循既定流程和标准吗？", type: "C" },
-    { id: 13, text: "你喜欢修理和组装东西吗？", type: "R" },
-    { id: 14, text: "你喜欢解决复杂的理论问题吗？", type: "I" },
-    { id: 15, text: "你喜欢自由表达和创新吗？", type: "A" },
-    { id: 16, text: "你关心他人的情感和需求吗？", type: "S" },
-    { id: 17, text: "你喜欢制定计划和目标吗？", type: "E" },
-    { id: 18, text: "你喜欢精确和细致的工作吗？", type: "C" },
-    { id: 19, text: "你喜欢实践多于理论吗？", type: "R" },
-    { id: 20, text: "你喜欢探索未知和新发现吗？", type: "I" },
-    { id: 21, text: "你喜欢美和艺术的事物吗？", type: "A" },
-    { id: 22, text: "你喜欢团队合作和人际互动吗？", type: "S" },
-    { id: 23, text: "你喜欢竞争和挑战吗？", type: "E" },
-    { id: 24, text: "你喜欢按部就班的工作方式吗？", type: "C" },
-  ];
-
-  const options = [
-    { value: 5, label: "非常喜欢" },
-    { value: 3, label: "比较喜欢" },
-    { value: 1, label: "一般" },
-    { value: 0, label: "不太喜欢" },
+    { id: 1, text: "你喜欢使用工具和机器工作吗？", options: [
+      { value: "R:3", label: "非常喜欢，动手操作让我很有成就感" },
+      { value: "R:2", label: "比较喜欢，偶尔会动手修理东西" },
+      { value: "R:1", label: "一般，不太主动但会尝试" },
+      { value: "R:0", label: "不太喜欢，更愿意做其他事" }
+    ]},
+    { id: 2, text: "你喜欢进行科学实验和研究吗？", options: [
+      { value: "I:3", label: "非常喜欢，探索未知让我兴奋" },
+      { value: "I:2", label: "比较喜欢，会主动了解新知识" },
+      { value: "I:1", label: "一般，偶尔会感兴趣" },
+      { value: "I:0", label: "不太喜欢，觉得枯燥" }
+    ]},
+    { id: 3, text: "你喜欢绘画、音乐或写作等创作活动吗？", options: [
+      { value: "A:3", label: "非常喜欢，创作是我的热情所在" },
+      { value: "A:2", label: "比较喜欢，经常进行艺术创作" },
+      { value: "A:1", label: "一般，偶尔会参与" },
+      { value: "A:0", label: "不太喜欢，没有艺术天赋" }
+    ]},
+    { id: 4, text: "你喜欢帮助和教导他人吗？", options: [
+      { value: "S:3", label: "非常喜欢，帮助他人让我快乐" },
+      { value: "S:2", label: "比较喜欢，乐于分享知识" },
+      { value: "S:1", label: "一般，有时候会帮助" },
+      { value: "S:0", label: "不太喜欢，更愿意独处" }
+    ]},
+    { id: 5, text: "你喜欢领导团队和组织活动吗？", options: [
+      { value: "E:3", label: "非常喜欢，天生就是领导者" },
+      { value: "E:2", label: "比较喜欢，愿意承担责任" },
+      { value: "E:1", label: "一般，有时候会主动" },
+      { value: "E:0", label: "不太喜欢，更愿意做跟随者" }
+    ]},
+    { id: 6, text: "你喜欢整理文件和数据工作吗？", options: [
+      { value: "C:3", label: "非常喜欢，有序让我感到安心" },
+      { value: "C:2", label: "比较喜欢，喜欢条理清晰" },
+      { value: "C:1", label: "一般，必要时会做" },
+      { value: "C:0", label: "不太喜欢，觉得单调" }
+    ]},
+    { id: 7, text: "你喜欢户外工作和体力活动吗？", options: [
+      { value: "R:3", label: "非常喜欢，户外活动让我充满活力" },
+      { value: "R:2", label: "比较喜欢，经常参与户外运动" },
+      { value: "R:1", label: "一般，偶尔会参与" },
+      { value: "R:0", label: "不太喜欢，更愿意待在室内" }
+    ]},
+    { id: 8, text: "你喜欢阅读科学文献和专业书籍吗？", options: [
+      { value: "I:3", label: "非常喜欢，知识让我充实" },
+      { value: "I:2", label: "比较喜欢，经常阅读" },
+      { value: "I:1", label: "一般，有需要时会看" },
+      { value: "I:0", label: "不太喜欢，更愿意看轻松读物" }
+    ]},
+    { id: 9, text: "你喜欢参加艺术展览和文化活动吗？", options: [
+      { value: "A:3", label: "非常喜欢，艺术是我的生活" },
+      { value: "A:2", label: "比较喜欢，经常参加" },
+      { value: "A:1", label: "一般，偶尔会去" },
+      { value: "A:0", label: "不太喜欢，没什么兴趣" }
+    ]},
+    { id: 10, text: "你喜欢参与志愿者和社区服务吗？", options: [
+      { value: "S:3", label: "非常喜欢，乐于奉献" },
+      { value: "S:2", label: "比较喜欢，经常参与" },
+      { value: "S:1", label: "一般，有时间会参加" },
+      { value: "S:0", label: "不太喜欢，更注重个人事务" }
+    ]},
+    { id: 11, text: "你喜欢商业谈判和说服他人吗？", options: [
+      { value: "E:3", label: "非常喜欢，很擅长说服人" },
+      { value: "E:2", label: "比较喜欢，喜欢挑战" },
+      { value: "E:1", label: "一般，有时候会尝试" },
+      { value: "E:0", label: "不太喜欢，不擅长此类活动" }
+    ]},
+    { id: 12, text: "你喜欢遵循既定流程和标准吗？", options: [
+      { value: "C:3", label: "非常喜欢，规则给我安全感" },
+      { value: "C:2", label: "比较喜欢，喜欢有章可循" },
+      { value: "C:1", label: "一般，视情况而定" },
+      { value: "C:0", label: "不太喜欢，更愿意灵活应对" }
+    ]},
+    { id: 13, text: "你喜欢修理和组装东西吗？", options: [
+      { value: "R:3", label: "非常喜欢，有成就感" },
+      { value: "R:2", label: "比较喜欢，愿意尝试" },
+      { value: "R:1", label: "一般，不太主动" },
+      { value: "R:0", label: "不太喜欢，宁愿找人帮忙" }
+    ]},
+    { id: 14, text: "你喜欢解决复杂的理论问题吗？", options: [
+      { value: "I:3", label: "非常喜欢，越复杂越有趣" },
+      { value: "I:2", label: "比较喜欢，喜欢挑战" },
+      { value: "I:1", label: "一般，有时候会尝试" },
+      { value: "I:0", label: "不太喜欢，觉得费脑" }
+    ]},
+    { id: 15, text: "你喜欢自由表达和创新吗？", options: [
+      { value: "A:3", label: "非常喜欢，创新是我的追求" },
+      { value: "A:2", label: "比较喜欢，经常有新想法" },
+      { value: "A:1", label: "一般，偶尔会有创意" },
+      { value: "A:0", label: "不太喜欢，更愿意遵循现有方式" }
+    ]},
+    { id: 16, text: "你关心他人的情感和需求吗？", options: [
+      { value: "S:3", label: "非常关心，总是注意到他人感受" },
+      { value: "S:2", label: "比较关心，会主动询问" },
+      { value: "S:1", label: "一般，有时候会注意" },
+      { value: "S:0", label: "不太关心，更注重自己" }
+    ]},
+    { id: 17, text: "你喜欢制定计划和目标吗？", options: [
+      { value: "E:3", label: "非常喜欢，目标明确让我前进" },
+      { value: "E:2", label: "比较喜欢，喜欢有方向" },
+      { value: "E:1", label: "一般，有时候会制定" },
+      { value: "E:0", label: "不太喜欢，更愿意随遇而安" }
+    ]},
+    { id: 18, text: "你喜欢精确和细致的工作吗？", options: [
+      { value: "C:3", label: "非常喜欢，追求完美" },
+      { value: "C:2", label: "比较喜欢，注重细节" },
+      { value: "C:1", label: "一般，视情况而定" },
+      { value: "C:0", label: "不太喜欢，觉得太繁琐" }
+    ]},
+    { id: 19, text: "你喜欢实践多于理论吗？", options: [
+      { value: "R:3", label: "非常同意，实践出真知" },
+      { value: "R:2", label: "比较同意，喜欢动手" },
+      { value: "R:1", label: "一般，两者兼顾" },
+      { value: "R:0", label: "不太同意，更喜欢理论" }
+    ]},
+    { id: 20, text: "你喜欢探索未知和新发现吗？", options: [
+      { value: "I:3", label: "非常喜欢，好奇心驱使我" },
+      { value: "I:2", label: "比较喜欢，经常探索" },
+      { value: "I:1", label: "一般，偶尔会尝试" },
+      { value: "I:0", label: "不太喜欢，喜欢熟悉的事物" }
+    ]},
+    { id: 21, text: "你喜欢美和艺术的事物吗？", options: [
+      { value: "A:3", label: "非常喜欢，美让我陶醉" },
+      { value: "A:2", label: "比较喜欢，欣赏美的事物" },
+      { value: "A:1", label: "一般，偶尔会注意" },
+      { value: "A:0", label: "不太喜欢，更注重实用" }
+    ]},
+    { id: 22, text: "你喜欢团队合作和人际互动吗？", options: [
+      { value: "S:3", label: "非常喜欢，团队力量大" },
+      { value: "S:2", label: "比较喜欢，喜欢交流" },
+      { value: "S:1", label: "一般，视情况而定" },
+      { value: "S:0", label: "不太喜欢，更愿意独立工作" }
+    ]},
+    { id: 23, text: "你喜欢竞争和挑战吗？", options: [
+      { value: "E:3", label: "非常喜欢，竞争激励我" },
+      { value: "E:2", label: "比较喜欢，享受挑战" },
+      { value: "E:1", label: "一般，有时候会参与" },
+      { value: "E:0", label: "不太喜欢，更愿意安稳" }
+    ]},
+    { id: 24, text: "你喜欢按部就班的工作方式吗？", options: [
+      { value: "C:3", label: "非常喜欢，有序让我高效" },
+      { value: "C:2", label: "比较喜欢，喜欢稳定" },
+      { value: "C:1", label: "一般，视情况而定" },
+      { value: "C:0", label: "不太喜欢，更愿意灵活" }
+    ]},
+    { id: 25, text: "你喜欢操作机械设备吗？", options: [
+      { value: "R:3", label: "非常喜欢，机械很有趣" },
+      { value: "R:2", label: "比较喜欢，愿意学习" },
+      { value: "R:1", label: "一般，必要时会操作" },
+      { value: "R:0", label: "不太喜欢，不擅长" }
+    ]},
+    { id: 26, text: "你喜欢分析数据和信息吗？", options: [
+      { value: "I:3", label: "非常喜欢，数据说话" },
+      { value: "I:2", label: "比较喜欢，喜欢分析" },
+      { value: "I:1", label: "一般，有需要时会做" },
+      { value: "I:0", label: "不太喜欢，觉得枯燥" }
+    ]},
+    { id: 27, text: "你喜欢用独特方式表达自己吗？", options: [
+      { value: "A:3", label: "非常喜欢，独特是我的风格" },
+      { value: "A:2", label: "比较喜欢，经常有创意表达" },
+      { value: "A:1", label: "一般，偶尔会尝试" },
+      { value: "A:0", label: "不太喜欢，更愿意随大流" }
+    ]},
+    { id: 28, text: "你喜欢倾听和安慰他人吗？", options: [
+      { value: "S:3", label: "非常喜欢，我是好的倾听者" },
+      { value: "S:2", label: "比较喜欢，愿意帮助" },
+      { value: "S:1", label: "一般，有时候会做" },
+      { value: "S:0", label: "不太喜欢，不擅长" }
+    ]},
+    { id: 29, text: "你喜欢推销产品或想法吗？", options: [
+      { value: "E:3", label: "非常喜欢，很有说服力" },
+      { value: "E:2", label: "比较喜欢，愿意尝试" },
+      { value: "E:1", label: "一般，有时候会做" },
+      { value: "E:0", label: "不太喜欢，不擅长推销" }
+    ]},
+    { id: 30, text: "你喜欢记录和归档信息吗？", options: [
+      { value: "C:3", label: "非常喜欢，整理让我满足" },
+      { value: "C:2", label: "比较喜欢，喜欢有序" },
+      { value: "C:1", label: "一般，必要时会做" },
+      { value: "C:0", label: "不太喜欢，觉得繁琐" }
+    ]},
   ];
 
   const progress = ((currentQuestion + 1) / questions.length) * 100;
 
-  const handleAnswer = (value: number) => {
+  const handleAnswer = (value: string) => {
     const newAnswers = [...answers];
-    const answerData = `${questions[currentQuestion].type}:${value}`;
-    newAnswers[currentQuestion] = answerData;
+    newAnswers[currentQuestion] = value;
     setAnswers(newAnswers);
   };
 
@@ -222,7 +371,7 @@ export default function HollandTest() {
                       <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
                         <div 
                           className="h-full bg-primary transition-all"
-                          style={{ width: `${(score / 120) * 100}%` }}
+                          style={{ width: `${(score / 15) * 100}%` }}
                         />
                       </div>
                       <span className="text-sm text-muted-foreground min-w-8">{score}</span>
@@ -276,14 +425,14 @@ export default function HollandTest() {
             <h3 className="text-lg font-medium">{questions[currentQuestion].text}</h3>
             
             <RadioGroup 
-              value={answers[currentQuestion]?.split(":")[1]} 
-              onValueChange={(value) => handleAnswer(Number(value))}
+              value={answers[currentQuestion]} 
+              onValueChange={handleAnswer}
             >
               <div className="space-y-3">
-                {options.map((option) => (
-                  <div key={option.value} className="flex items-center space-x-3 p-4 rounded-lg border hover:bg-accent transition-colors">
-                    <RadioGroupItem value={option.value.toString()} id={`option-${option.value}`} />
-                    <Label htmlFor={`option-${option.value}`} className="flex-1 cursor-pointer">
+                {questions[currentQuestion].options.map((option, index) => (
+                  <div key={index} className="flex items-center space-x-3 p-4 rounded-lg border hover:bg-accent transition-colors">
+                    <RadioGroupItem value={option.value} id={`option-${index}`} />
+                    <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">
                       {option.label}
                     </Label>
                   </div>

@@ -63,27 +63,188 @@ export default function StrengthsFinderTest() {
     woo: { name: "取悦", desc: "善于社交，赢得他人好感", category: "影响力" },
   };
 
+  // 30题，每题4选项
   const questions = [
-    { id: 1, options: ["achiever", "learner"], textA: "我总是精力充沛，想要完成更多任务", textB: "我热爱学习新知识，享受成长过程" },
-    { id: 2, options: ["activator", "deliberative"], textA: "我喜欢将想法快速付诸行动", textB: "我做决定前需要仔细考虑各种风险" },
-    { id: 3, options: ["communication", "intellection"], textA: "我善于用语言表达想法", textB: "我喜欢独自深入思考问题" },
-    { id: 4, options: ["empathy", "analytical"], textA: "我能敏锐感知他人的情绪", textB: "我习惯理性分析问题的原因" },
-    { id: 5, options: ["focus", "adaptability"], textA: "我专注于目标，不轻易改变方向", textB: "我能灵活应对各种变化" },
-    { id: 6, options: ["strategic", "discipline"], textA: "我善于找到达成目标的多种路径", textB: "我需要有条理的计划和秩序" },
-    { id: 7, options: ["competition", "harmony"], textA: "我以他人表现来衡量自己的成功", textB: "我追求团队和谐，避免冲突" },
-    { id: 8, options: ["command", "includer"], textA: "我能自然地掌控局面和主导讨论", textB: "我希望每个人都感到被接纳" },
-    { id: 9, options: ["futuristic", "context"], textA: "我对未来充满憧憬和想象", textB: "我从历史中寻找答案和经验" },
-    { id: 10, options: ["ideation", "restorative"], textA: "我经常产生新颖的想法", textB: "我善于发现问题并解决它们" },
-    { id: 11, options: ["maximizer", "developer"], textA: "我专注于将优势发挥到极致", textB: "我喜欢帮助他人成长进步" },
-    { id: 12, options: ["positivity", "belief"], textA: "我总是充满热情和正能量", textB: "我的核心价值观指引我的人生" },
-    { id: 13, options: ["relator", "woo"], textA: "我享受与少数人的深度关系", textB: "我善于结识新朋友并赢得好感" },
-    { id: 14, options: ["responsibility", "self_assurance"], textA: "我对承诺非常认真，言出必行", textB: "我对自己的判断很有信心" },
-    { id: 15, options: ["significance", "connectedness"], textA: "我追求卓越和他人的认可", textB: "我相信万物相连，寻找人生意义" },
-    { id: 16, options: ["arranger", "consistency"], textA: "我善于统筹复杂的情况", textB: "我追求公平对待每个人" },
-    { id: 17, options: ["input", "individualization"], textA: "我喜欢收集各种信息和资源", textB: "我关注每个人的独特之处" },
-    { id: 18, options: ["achiever", "strategic"], textA: "我不断追求完成更多任务", textB: "我善于制定达成目标的策略" },
-    { id: 19, options: ["activator", "focus"], textA: "我倾向于快速行动而非等待", textB: "我能长时间专注于重要目标" },
-    { id: 20, options: ["communication", "empathy"], textA: "我擅长清晰表达想法", textB: "我能感同身受地理解他人" },
+    { id: 1, text: "我的工作方式：", options: [
+      { theme: "achiever", text: "我总是精力充沛，想要完成更多任务" },
+      { theme: "learner", text: "我热爱学习新知识，享受成长过程" },
+      { theme: "deliberative", text: "我做决定前需要仔细考虑各种风险" },
+      { theme: "adaptability", text: "我能灵活应对各种变化和意外" },
+    ]},
+    { id: 2, text: "面对新任务，我会：", options: [
+      { theme: "activator", text: "立即开始行动，边做边调整" },
+      { theme: "strategic", text: "先规划好路径再开始执行" },
+      { theme: "analytical", text: "深入分析问题，找出最佳方案" },
+      { theme: "discipline", text: "制定详细计划，按步骤执行" },
+    ]},
+    { id: 3, text: "在沟通中，我：", options: [
+      { theme: "communication", text: "善于用语言表达想法，感染他人" },
+      { theme: "empathy", text: "能敏锐感知他人的情绪和感受" },
+      { theme: "harmony", text: "追求团队和谐，避免冲突" },
+      { theme: "command", text: "能自然地掌控局面和主导讨论" },
+    ]},
+    { id: 4, text: "我对目标的态度：", options: [
+      { theme: "focus", text: "专注于目标，不轻易改变方向" },
+      { theme: "futuristic", text: "对未来充满憧憬和想象" },
+      { theme: "competition", text: "以他人表现来衡量自己的成功" },
+      { theme: "significance", text: "追求卓越和他人的认可" },
+    ]},
+    { id: 5, text: "在团队中，我：", options: [
+      { theme: "developer", text: "喜欢帮助他人成长进步" },
+      { theme: "includer", text: "希望每个人都感到被接纳" },
+      { theme: "relator", text: "享受与少数人的深度关系" },
+      { theme: "woo", text: "善于结识新朋友并赢得好感" },
+    ]},
+    { id: 6, text: "我处理问题的方式：", options: [
+      { theme: "restorative", text: "善于发现问题并解决它们" },
+      { theme: "ideation", text: "经常产生新颖的想法和创意" },
+      { theme: "context", text: "从历史中寻找答案和经验" },
+      { theme: "input", text: "喜欢收集各种信息和资源" },
+    ]},
+    { id: 7, text: "我的价值观：", options: [
+      { theme: "belief", text: "核心价值观指引我的人生方向" },
+      { theme: "responsibility", text: "对承诺非常认真，言出必行" },
+      { theme: "consistency", text: "追求公平对待每个人" },
+      { theme: "connectedness", text: "相信万物相连，寻找人生意义" },
+    ]},
+    { id: 8, text: "我的自信来源：", options: [
+      { theme: "self_assurance", text: "对自己的判断很有信心" },
+      { theme: "maximizer", text: "专注于将优势发挥到极致" },
+      { theme: "positivity", text: "总是充满热情和正能量" },
+      { theme: "intellection", text: "喜欢独自深入思考问题" },
+    ]},
+    { id: 9, text: "面对他人，我：", options: [
+      { theme: "individualization", text: "关注每个人的独特之处" },
+      { theme: "arranger", text: "善于统筹复杂的情况和人员" },
+      { theme: "developer", text: "能发现他人的潜力并帮助发展" },
+      { theme: "empathy", text: "能感同身受地理解他人" },
+    ]},
+    { id: 10, text: "我的学习态度：", options: [
+      { theme: "learner", text: "热爱学习，不断追求进步" },
+      { theme: "input", text: "喜欢收集和积累各种知识" },
+      { theme: "analytical", text: "习惯理性分析问题的原因" },
+      { theme: "intellection", text: "享受独自思考和反思" },
+    ]},
+    { id: 11, text: "我做决策时：", options: [
+      { theme: "deliberative", text: "谨慎思考，识别各种风险" },
+      { theme: "strategic", text: "善于找到达成目标的多种路径" },
+      { theme: "command", text: "果断直接，凭借直觉决策" },
+      { theme: "activator", text: "倾向于快速行动而非等待" },
+    ]},
+    { id: 12, text: "我的人际关系：", options: [
+      { theme: "relator", text: "享受与少数人的深度友谊" },
+      { theme: "woo", text: "善于结识新朋友扩展人脉" },
+      { theme: "harmony", text: "追求团队和谐避免冲突" },
+      { theme: "includer", text: "希望每个人都有归属感" },
+    ]},
+    { id: 13, text: "我的工作动力：", options: [
+      { theme: "achiever", text: "不断追求完成更多任务" },
+      { theme: "competition", text: "与他人竞争激励我前进" },
+      { theme: "significance", text: "追求卓越和被认可" },
+      { theme: "belief", text: "核心价值观驱动我工作" },
+    ]},
+    { id: 14, text: "我的思维方式：", options: [
+      { theme: "ideation", text: "经常产生创新的想法" },
+      { theme: "futuristic", text: "受未来愿景激励" },
+      { theme: "context", text: "从历史中寻找智慧" },
+      { theme: "analytical", text: "寻求逻辑和因果关系" },
+    ]},
+    { id: 15, text: "我的表达方式：", options: [
+      { theme: "communication", text: "擅长清晰表达想法" },
+      { theme: "positivity", text: "传播积极和正能量" },
+      { theme: "command", text: "直接有力地表达观点" },
+      { theme: "empathy", text: "温暖关怀地与人交流" },
+    ]},
+    { id: 16, text: "我对待规则：", options: [
+      { theme: "discipline", text: "需要结构和秩序" },
+      { theme: "consistency", text: "追求公平和一致性" },
+      { theme: "responsibility", text: "认真履行承诺和责任" },
+      { theme: "adaptability", text: "灵活应对，不拘泥规则" },
+    ]},
+    { id: 17, text: "我的核心能力：", options: [
+      { theme: "arranger", text: "善于组织和统筹" },
+      { theme: "restorative", text: "善于解决问题" },
+      { theme: "maximizer", text: "将优势发挥到极致" },
+      { theme: "strategic", text: "善于制定策略" },
+    ]},
+    { id: 18, text: "我与团队的关系：", options: [
+      { theme: "developer", text: "帮助他人成长发展" },
+      { theme: "harmony", text: "促进团队和谐" },
+      { theme: "includer", text: "接纳每一个人" },
+      { theme: "individualization", text: "因材施教，尊重差异" },
+    ]},
+    { id: 19, text: "我的内在驱动：", options: [
+      { theme: "learner", text: "持续学习和成长" },
+      { theme: "focus", text: "专注于重要目标" },
+      { theme: "achiever", text: "完成任务的成就感" },
+      { theme: "belief", text: "价值观和使命感" },
+    ]},
+    { id: 20, text: "我的社交风格：", options: [
+      { theme: "woo", text: "主动结交新朋友" },
+      { theme: "relator", text: "深耕少数深度关系" },
+      { theme: "communication", text: "通过表达建立连接" },
+      { theme: "positivity", text: "用热情感染他人" },
+    ]},
+    { id: 21, text: "我的决策依据：", options: [
+      { theme: "analytical", text: "数据和逻辑分析" },
+      { theme: "deliberative", text: "风险评估和谨慎考量" },
+      { theme: "self_assurance", text: "内心的直觉和信念" },
+      { theme: "context", text: "历史经验和先例" },
+    ]},
+    { id: 22, text: "我追求的是：", options: [
+      { theme: "significance", text: "卓越和影响力" },
+      { theme: "competition", text: "胜出和第一名" },
+      { theme: "maximizer", text: "优势的最大化" },
+      { theme: "futuristic", text: "美好的未来愿景" },
+    ]},
+    { id: 23, text: "我的行动模式：", options: [
+      { theme: "activator", text: "立即行动，快速推进" },
+      { theme: "discipline", text: "有计划地按步执行" },
+      { theme: "focus", text: "专注于最重要的事" },
+      { theme: "achiever", text: "高效完成更多任务" },
+    ]},
+    { id: 24, text: "我对变化的态度：", options: [
+      { theme: "adaptability", text: "灵活适应各种变化" },
+      { theme: "strategic", text: "预见变化并提前规划" },
+      { theme: "deliberative", text: "谨慎评估变化的影响" },
+      { theme: "restorative", text: "解决变化带来的问题" },
+    ]},
+    { id: 25, text: "我的领导方式：", options: [
+      { theme: "command", text: "果断决策，掌控全局" },
+      { theme: "developer", text: "培养团队成员成长" },
+      { theme: "arranger", text: "高效统筹和组织" },
+      { theme: "includer", text: "包容接纳每个人" },
+    ]},
+    { id: 26, text: "我的情感特点：", options: [
+      { theme: "empathy", text: "敏锐感知他人情绪" },
+      { theme: "positivity", text: "乐观积极有感染力" },
+      { theme: "connectedness", text: "感受万物的联系" },
+      { theme: "harmony", text: "追求和谐避免冲突" },
+    ]},
+    { id: 27, text: "我的思考方式：", options: [
+      { theme: "intellection", text: "享受独自深入思考" },
+      { theme: "ideation", text: "不断产生新想法" },
+      { theme: "input", text: "收集各种信息资源" },
+      { theme: "analytical", text: "理性分析因果关系" },
+    ]},
+    { id: 28, text: "我的责任感：", options: [
+      { theme: "responsibility", text: "言出必行，认真负责" },
+      { theme: "belief", text: "价值观驱动的使命感" },
+      { theme: "consistency", text: "公平对待每个人" },
+      { theme: "discipline", text: "遵循规则和秩序" },
+    ]},
+    { id: 29, text: "我的影响力：", options: [
+      { theme: "communication", text: "通过表达影响他人" },
+      { theme: "woo", text: "通过社交赢得人心" },
+      { theme: "command", text: "通过决策领导团队" },
+      { theme: "significance", text: "追求卓越的影响力" },
+    ]},
+    { id: 30, text: "我的发展方向：", options: [
+      { theme: "learner", text: "不断学习成长" },
+      { theme: "maximizer", text: "发挥优势到极致" },
+      { theme: "futuristic", text: "实现未来愿景" },
+      { theme: "developer", text: "帮助他人发展" },
+    ]},
   ];
 
   const progress = ((currentQuestion + 1) / questions.length) * 100;
@@ -134,8 +295,9 @@ export default function StrengthsFinderTest() {
     const topThemes = Object.entries(themeScores)
       .sort(([, a], [, b]) => b - a)
       .slice(0, 5)
-      .map(([theme]) => ({
+      .map(([theme, score]) => ({
         key: theme,
+        score,
         ...themes[theme as keyof typeof themes]
       }));
 
@@ -247,31 +409,21 @@ export default function StrengthsFinderTest() {
           </div>
 
           <div className="space-y-6">
-            <p className="text-sm text-muted-foreground">选择更符合你的描述</p>
+            <h3 className="text-lg font-medium">{questions[currentQuestion].text}</h3>
             
             <RadioGroup 
               value={answers[currentQuestion]} 
               onValueChange={handleAnswer}
             >
               <div className="space-y-3">
-                <div className="flex items-center space-x-3 p-4 rounded-lg border hover:bg-accent transition-colors">
-                  <RadioGroupItem 
-                    value={questions[currentQuestion].options[0]} 
-                    id="option-a" 
-                  />
-                  <Label htmlFor="option-a" className="flex-1 cursor-pointer">
-                    {questions[currentQuestion].textA}
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-3 p-4 rounded-lg border hover:bg-accent transition-colors">
-                  <RadioGroupItem 
-                    value={questions[currentQuestion].options[1]} 
-                    id="option-b" 
-                  />
-                  <Label htmlFor="option-b" className="flex-1 cursor-pointer">
-                    {questions[currentQuestion].textB}
-                  </Label>
-                </div>
+                {questions[currentQuestion].options.map((option, index) => (
+                  <div key={index} className="flex items-center space-x-3 p-4 rounded-lg border hover:bg-accent transition-colors">
+                    <RadioGroupItem value={option.theme} id={`option-${index}`} />
+                    <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">
+                      {option.text}
+                    </Label>
+                  </div>
+                ))}
               </div>
             </RadioGroup>
           </div>
