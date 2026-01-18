@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { Brain, MessageCircle, TreePine, Heart, Sparkles, User, Search, Star, Smile, Book, Lightbulb, Laugh, Shield } from "lucide-react";
+import { Brain, MessageCircle, TreePine, Heart, Sparkles, User, Search, Star, Smile, Book, Lightbulb, Laugh } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import chatIcon from "@/assets/chat-icon.png";
 const Home = () => {
@@ -89,13 +89,8 @@ const Home = () => {
     description: "笑话和脑筋急转弯，放松心情",
     color: "bg-gradient-warm",
     path: "/entertainment"
-  }, {
-    icon: Shield,
-    title: "安全竞赛",
-    description: "安全知识问答，学习自我保护",
-    color: "bg-gradient-primary",
-    path: "/safety-quiz"
   }];
+
   return <div className="min-h-screen bg-gradient-subtle">
       {/* Hero Section */}
       <section className="relative overflow-hidden px-4 pt-12 pb-20">
