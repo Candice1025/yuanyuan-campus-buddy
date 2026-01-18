@@ -6,7 +6,7 @@ import { ArrowLeft, Send, Sparkles, Book, Heart, Lightbulb, Trash2 } from "lucid
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import chatIcon from "@/assets/chat-icon.png";
+const SHOUBANZHЕ_AVATAR = "/lovable-uploads/e035ddcd-361c-4660-902b-430c11c07636.png";
 interface Message {
   id: string;
   content: string;
@@ -310,7 +310,7 @@ const Chat = () => {
             </div>)}
           
           {isTyping && <div className="flex gap-3 animate-slide-up">
-              <img src={chatIcon} alt="守伴者" className="w-10 h-10 rounded-full" />
+              <img src={SHOUBANZHЕ_AVATAR} alt="守伴者" className="w-10 h-10 rounded-full" />
               <Card className="p-4 bg-card">
                 <div className="flex gap-1">
                   <span className="w-2 h-2 bg-primary rounded-full animate-bounce"></span>
