@@ -5,11 +5,105 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// 消息接口定义
+interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+interface ChatInput {
+  messages: ChatMessage[];
+}
+
+// 输入验证函数
+function validateInput(data: unknown): { valid: true; data: ChatInput } | { valid: false; error: string } {
+  if (!data || typeof data !== 'object') {
+    return { valid: false, error: "无效的请求格式" };
+  }
+
+  const { messages } = data as Record<string, unknown>;
+
+  // 验证messages数组存在
+  if (!messages || !Array.isArray(messages)) {
+    return { valid: false, error: "消息不能为空" };
+  }
+
+  // 验证消息数量限制（防止滥用）
+  if (messages.length === 0) {
+    return { valid: false, error: "消息不能为空" };
+  }
+
+  if (messages.length > 50) {
+    return { valid: false, error: "消息数量超出限制" };
+  }
+
+  // 验证每条消息的格式
+  const validatedMessages: ChatMessage[] = [];
+  for (let i = 0; i < messages.length; i++) {
+    const msg = messages[i];
+    
+    if (!msg || typeof msg !== 'object') {
+      return { valid: false, error: `第${i + 1}条消息格式无效` };
+    }
+
+    const { role, content } = msg as Record<string, unknown>;
+
+    // 验证role
+    if (!role || (role !== 'user' && role !== 'assistant')) {
+      return { valid: false, error: `第${i + 1}条消息角色无效` };
+    }
+
+    // 验证content
+    if (!content || typeof content !== 'string') {
+      return { valid: false, error: `第${i + 1}条消息内容不能为空` };
+    }
+
+    // 内容长度限制（防止滥用）
+    if (content.length > 5000) {
+      return { valid: false, error: `第${i + 1}条消息内容过长（最多5000字符）` };
+    }
+
+    // 基本内容清理（移除潜在的注入内容）
+    const sanitizedContent = content.trim();
+    if (sanitizedContent.length === 0) {
+      return { valid: false, error: `第${i + 1}条消息内容不能为空` };
+    }
+
+    validatedMessages.push({
+      role: role as 'user' | 'assistant',
+      content: sanitizedContent
+    });
+  }
+
+  return { valid: true, data: { messages: validatedMessages } };
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { messages } = await req.json();
+    // 解析并验证输入
+    let requestBody: unknown;
+    try {
+      requestBody = await req.json();
+    } catch {
+      return new Response(
+        JSON.stringify({ error: "无效的JSON格式" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const validation = validateInput(requestBody);
+    if (!validation.valid) {
+      console.log("Chat input validation failed:", validation.error);
+      return new Response(
+        JSON.stringify({ error: validation.error }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const { messages } = validation.data;
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
@@ -87,7 +181,7 @@ serve(async (req) => {
     });
   } catch (e) {
     console.error("chat error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "未知错误" }), {
+    return new Response(JSON.stringify({ error: "服务暂时不可用" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

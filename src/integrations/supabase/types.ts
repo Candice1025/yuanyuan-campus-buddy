@@ -257,6 +257,13 @@ export type Database = {
             referencedRelation: "tree_hole_posts"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "tree_hole_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "tree_hole_posts_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       tree_hole_likes: {
@@ -284,6 +291,13 @@ export type Database = {
             columns: ["post_id"]
             isOneToOne: false
             referencedRelation: "tree_hole_posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tree_hole_likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "tree_hole_posts_public"
             referencedColumns: ["id"]
           },
         ]
@@ -350,7 +364,72 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      tree_hole_comments_public: {
+        Row: {
+          content: string | null
+          created_at: string | null
+          id: string | null
+          post_id: string | null
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string | null
+          id?: string | null
+          post_id?: string | null
+        }
+        Update: {
+          content?: string | null
+          created_at?: string | null
+          id?: string | null
+          post_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tree_hole_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "tree_hole_posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tree_hole_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "tree_hole_posts_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tree_hole_posts_public: {
+        Row: {
+          comments_count: number | null
+          content: string | null
+          created_at: string | null
+          id: string | null
+          likes: number | null
+          mood: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          comments_count?: number | null
+          content?: string | null
+          created_at?: string | null
+          id?: string | null
+          likes?: number | null
+          mood?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          comments_count?: number | null
+          content?: string | null
+          created_at?: string | null
+          id?: string | null
+          likes?: number | null
+          mood?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       cleanup_expired_codes: { Args: never; Returns: undefined }

@@ -6,6 +6,37 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// 输入验证Schema
+interface SendSmsInput {
+  phone: string;
+}
+
+function validateInput(data: unknown): { valid: true; data: SendSmsInput } | { valid: false; error: string } {
+  if (!data || typeof data !== 'object') {
+    return { valid: false, error: "无效的请求格式" };
+  }
+
+  const { phone } = data as Record<string, unknown>;
+
+  // 验证手机号
+  if (!phone || typeof phone !== 'string') {
+    return { valid: false, error: "手机号不能为空" };
+  }
+
+  // 手机号格式验证（中国大陆11位手机号）
+  const phoneRegex = /^1[3-9]\d{9}$/;
+  if (!phoneRegex.test(phone.trim())) {
+    return { valid: false, error: "无效的手机号码格式" };
+  }
+
+  // 长度限制
+  if (phone.length > 15) {
+    return { valid: false, error: "手机号长度无效" };
+  }
+
+  return { valid: true, data: { phone: phone.trim() } };
+}
+
 // 腾讯云短信签名辅助函数
 async function sha256(message: string): Promise<string> {
   const encoder = new TextEncoder();
@@ -20,7 +51,6 @@ async function sha256(message: string): Promise<string> {
 async function hmacSha256Bytes(key: Uint8Array, message: string): Promise<Uint8Array> {
   const encoder = new TextEncoder();
   const messageData = encoder.encode(message);
-  // 创建新的 ArrayBuffer 副本以满足类型要求
   const keyBuffer = new Uint8Array(key).buffer;
   const cryptoKey = await crypto.subtle.importKey(
     "raw",
@@ -47,14 +77,27 @@ serve(async (req) => {
   }
 
   try {
-    const { phone } = await req.json();
-
-    if (!phone || !/^1[3-9]\d{9}$/.test(phone)) {
+    // 解析并验证输入
+    let requestBody: unknown;
+    try {
+      requestBody = await req.json();
+    } catch {
       return new Response(
-        JSON.stringify({ error: "无效的手机号码" }),
+        JSON.stringify({ error: "无效的JSON格式" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
+
+    const validation = validateInput(requestBody);
+    if (!validation.valid) {
+      console.log("Input validation failed:", validation.error);
+      return new Response(
+        JSON.stringify({ error: validation.error }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const { phone } = validation.data;
 
     // 初始化 Supabase 客户端（使用 service role 绕过 RLS）
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
@@ -89,12 +132,8 @@ serve(async (req) => {
     const signName = Deno.env.get("TENCENT_SMS_SIGN_NAME")!;
     const templateId = Deno.env.get("TENCENT_SMS_TEMPLATE_ID")!;
 
-    // 调试日志
-    console.log("腾讯云配置信息：");
-    console.log("- SecretId 前4位:", secretId.substring(0, 4));
-    console.log("- SdkAppId:", sdkAppId);
-    console.log("- SignName:", signName);
-    console.log("- TemplateId:", templateId);
+    // 调试日志（不记录敏感信息）
+    console.log("Sending SMS to phone (masked):", phone.substring(0, 3) + "****" + phone.substring(7));
 
     // 构建请求参数
     const endpoint = "sms.tencentcloudapi.com";
@@ -153,7 +192,7 @@ serve(async (req) => {
       );
     }
 
-    console.log("SMS sent successfully:", result);
+    console.log("SMS sent successfully");
 
     return new Response(
       JSON.stringify({ success: true, message: "验证码已发送" }),
@@ -162,7 +201,7 @@ serve(async (req) => {
   } catch (error) {
     console.error("send-sms error:", error);
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "未知错误" }),
+      JSON.stringify({ error: "服务暂时不可用" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
