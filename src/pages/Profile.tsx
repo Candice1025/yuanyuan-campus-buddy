@@ -172,8 +172,32 @@ const Profile = () => {
     }
 
     const file = event.target.files[0];
-    const fileExt = file.name.split(".").pop();
-    const filePath = `${user.id}/avatar.${fileExt}`;
+    
+    // 文件大小验证 (最大 5MB)
+    const maxSize = 5 * 1024 * 1024;
+    if (file.size > maxSize) {
+      toast.error("文件大小不能超过5MB");
+      return;
+    }
+    
+    // 文件类型验证
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error("只支持 JPG、PNG、WebP 和 GIF 格式");
+      return;
+    }
+    
+    // 文件扩展名验证
+    const fileExt = file.name.split(".").pop()?.toLowerCase();
+    const allowedExts = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+    if (!fileExt || !allowedExts.includes(fileExt)) {
+      toast.error("文件扩展名无效");
+      return;
+    }
+    
+    // 安全化文件名
+    const sanitizedExt = fileExt.replace(/[^a-z0-9]/gi, '');
+    const filePath = `${user.id}/avatar.${sanitizedExt}`;
 
     setUploading(true);
 
