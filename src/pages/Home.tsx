@@ -130,10 +130,10 @@ const Home = () => {
               <div className="inline-block">
                 <span className="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">你的自我探索空间</span>
               </div>
-              <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight min-h-[5rem]">
-                <span className="bg-gradient-primary bg-clip-text text-transparent">
+              <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight min-h-[5rem] text-center">
+                <span className="bg-gradient-primary bg-clip-text text-transparent block text-center">
                   {displayedText}
-                  <span className="animate-pulse">陪伴你成长的每一步，了解自己、管理情绪、轻松生活</span>
+                  <span className="animate-pulse block">陪伴你成长的每一步，了解自己、管理情绪、轻松生活</span>
                 </span>
               </h1>
               <p className="text-lg text-muted-foreground leading-relaxed">
