@@ -12,7 +12,7 @@ import { toast } from "sonner";
 export default function EnneagramTest() {
   const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [answers, setAnswers] = useState<number[]>([]);
+  const [answers, setAnswers] = useState<string[]>([]);
   const [showResult, setShowResult] = useState(false);
   const [userId, setUserId] = useState<string>("");
 
@@ -38,111 +38,169 @@ export default function EnneagramTest() {
     9: { name: "和平主义者", core: "追求和谐和平静", fear: "害怕冲突、失去连接", desire: "内心和平、和谐", traits: "包容、平和、顺从、逃避冲突" },
   };
 
+  // 27题，每题4选项
   const questions = [
-    { id: 1, text: "我经常：", options: [
+    { id: 1, text: "我通常：", options: [
       { type: 1, text: "对自己和他人要求很高，追求完美" },
       { type: 2, text: "关心他人需求，乐于帮助" },
       { type: 3, text: "设定目标并努力达成，在意成功" },
       { type: 4, text: "感受深刻，追求独特和真实" },
-      { type: 5, text: "需要独处时间思考和学习" },
     ]},
-    { id: 2, text: "面对压力时，我会：", options: [
-      { type: 6, text: "感到焦虑，寻求支持和保障" },
-      { type: 7, text: "寻找快乐和新体验来转移注意" },
-      { type: 8, text: "变得更加强硬和主导" },
+    { id: 2, text: "我更倾向于：", options: [
+      { type: 5, text: "需要独处时间思考和学习" },
+      { type: 6, text: "寻求安全感和可靠的支持" },
+      { type: 7, text: "追求新鲜体验和快乐" },
+      { type: 8, text: "掌控局面，保护自己和他人" },
+    ]},
+    { id: 3, text: "面对压力时，我会：", options: [
       { type: 9, text: "回避问题，寻求平静" },
       { type: 1, text: "更加批判和追求完美" },
+      { type: 6, text: "感到焦虑，寻求支持和保障" },
+      { type: 7, text: "寻找快乐和新体验来转移注意" },
     ]},
-    { id: 3, text: "在人际关系中：", options: [
+    { id: 4, text: "在人际关系中：", options: [
+      { type: 8, text: "我直接表达想法，不怕冲突" },
       { type: 2, text: "我总是优先考虑他人的需求" },
       { type: 3, text: "我希望展现最好的自己" },
       { type: 4, text: "我渴望深刻的情感连接" },
-      { type: 5, text: "我需要保持独立空间" },
-      { type: 6, text: "我重视忠诚和可靠" },
     ]},
-    { id: 4, text: "我的核心价值观是：", options: [
-      { type: 7, text: "自由和享受生活" },
-      { type: 8, text: "力量和正义" },
+    { id: 5, text: "我更看重：", options: [
+      { type: 5, text: "知识和理解" },
+      { type: 6, text: "安全和忠诚" },
       { type: 9, text: "和平和和谐" },
       { type: 1, text: "正直和完美" },
-      { type: 2, text: "爱和被需要" },
     ]},
-    { id: 5, text: "我最害怕的是：", options: [
+    { id: 6, text: "我最害怕的是：", options: [
+      { type: 2, text: "不被需要和被拒绝" },
       { type: 3, text: "失败和被认为无价值" },
       { type: 4, text: "失去自我和变得平凡" },
       { type: 5, text: "无知和无能" },
-      { type: 6, text: "没有安全感和支持" },
-      { type: 7, text: "痛苦和被限制" },
     ]},
-    { id: 6, text: "别人常说我：", options: [
+    { id: 7, text: "别人常说我：", options: [
+      { type: 6, text: "很谨慎、有责任心" },
+      { type: 7, text: "很开朗、充满活力" },
       { type: 8, text: "很强大、有魄力" },
       { type: 9, text: "很好相处、平和" },
-      { type: 1, text: "很有原则、严谨" },
-      { type: 2, text: "很温暖、乐于助人" },
-      { type: 3, text: "很成功、有魅力" },
     ]},
-    { id: 7, text: "我的决策方式：", options: [
+    { id: 8, text: "我的决策方式：", options: [
+      { type: 1, text: "遵循原则和标准" },
       { type: 4, text: "跟随内心感受和直觉" },
       { type: 5, text: "经过深思熟虑和分析" },
-      { type: 6, text: "考虑各种风险和可能" },
       { type: 7, text: "追随兴奋和可能性" },
-      { type: 8, text: "果断直接，凭直觉" },
     ]},
-    { id: 8, text: "我的能量来源于：", options: [
-      { type: 9, text: "平静和谐的环境" },
-      { type: 1, text: "把事情做对做好" },
+    { id: 9, text: "我的能量来源于：", options: [
       { type: 2, text: "帮助他人和被感激" },
       { type: 3, text: "达成目标和获得认可" },
-      { type: 4, text: "表达自我和创造" },
+      { type: 8, text: "掌控局面和克服困难" },
+      { type: 9, text: "平静和谐的环境" },
     ]},
-    { id: 9, text: "我倾向于：", options: [
+    { id: 10, text: "我倾向于：", options: [
+      { type: 1, text: "纠正错误和改善事物" },
       { type: 5, text: "观察和思考多于行动" },
       { type: 6, text: "为最坏情况做准备" },
       { type: 7, text: "保持乐观和期待" },
-      { type: 8, text: "掌控局面和保护他人" },
-      { type: 9, text: "顺其自然和保持和平" },
     ]},
-    { id: 10, text: "在团队中，我：", options: [
-      { type: 1, text: "确保事情正确完成" },
+    { id: 11, text: "在团队中，我：", options: [
       { type: 2, text: "支持和鼓励他人" },
       { type: 3, text: "推动目标达成" },
       { type: 4, text: "带来创意和独特视角" },
-      { type: 5, text: "提供深入分析" },
+      { type: 8, text: "自然承担领导角色" },
     ]},
-    { id: 11, text: "我的成长方向是：", options: [
+    { id: 12, text: "我的成长方向是：", options: [
+      { type: 1, text: "学会接受不完美" },
       { type: 6, text: "学会更加自信和独立" },
       { type: 7, text: "学会面对痛苦和深入" },
-      { type: 8, text: "学会脆弱和温柔" },
       { type: 9, text: "学会主动和表达需求" },
-      { type: 1, text: "学会接受不完美" },
     ]},
-    { id: 12, text: "我的弱点可能是：", options: [
+    { id: 13, text: "我的弱点可能是：", options: [
       { type: 2, text: "忽视自己的需求" },
       { type: 3, text: "过度在意形象" },
       { type: 4, text: "情绪起伏大" },
       { type: 5, text: "与人保持距离" },
-      { type: 6, text: "过度焦虑和怀疑" },
     ]},
-    { id: 13, text: "我追求的是：", options: [
+    { id: 14, text: "我追求的是：", options: [
+      { type: 1, text: "改善和进步" },
+      { type: 6, text: "安全和确定" },
       { type: 7, text: "多样性和刺激" },
       { type: 8, text: "独立和力量" },
-      { type: 9, text: "稳定和安宁" },
-      { type: 1, text: "改善和进步" },
-      { type: 2, text: "连接和被爱" },
     ]},
-    { id: 14, text: "我的沟通风格：", options: [
+    { id: 15, text: "我的沟通风格：", options: [
+      { type: 2, text: "温暖关怀和支持性" },
       { type: 3, text: "注重效率和成果" },
       { type: 4, text: "情感丰富和真实" },
-      { type: 5, text: "简洁和逻辑清晰" },
-      { type: 6, text: "谨慎和深思熟虑" },
-      { type: 7, text: "热情和充满想法" },
+      { type: 9, text: "温和包容" },
     ]},
-    { id: 15, text: "我最看重：", options: [
+    { id: 16, text: "我最看重：", options: [
+      { type: 1, text: "正确和公正" },
+      { type: 5, text: "知识和理解" },
       { type: 8, text: "真实和直接" },
       { type: 9, text: "包容和理解" },
-      { type: 1, text: "正确和公正" },
-      { type: 2, text: "关怀和连接" },
-      { type: 3, text: "效率和成就" },
+    ]},
+    { id: 17, text: "当遇到问题时：", options: [
+      { type: 1, text: "我会找出问题并修正" },
+      { type: 3, text: "我会寻找最有效的解决方案" },
+      { type: 5, text: "我会深入分析和研究" },
+      { type: 6, text: "我会考虑各种风险" },
+    ]},
+    { id: 18, text: "我的情感表达：", options: [
+      { type: 2, text: "温暖热情，关心他人感受" },
+      { type: 4, text: "深刻敏感，追求真实" },
+      { type: 7, text: "乐观积极，传播快乐" },
+      { type: 8, text: "直接有力，不掩饰" },
+    ]},
+    { id: 19, text: "我的自我认知：", options: [
+      { type: 1, text: "我是有原则的人" },
+      { type: 3, text: "我是成功的人" },
+      { type: 5, text: "我是聪明的人" },
+      { type: 9, text: "我是随和的人" },
+    ]},
+    { id: 20, text: "在压力下我会：", options: [
+      { type: 2, text: "更加努力讨好他人" },
+      { type: 4, text: "变得更加敏感内省" },
+      { type: 6, text: "变得更加焦虑谨慎" },
+      { type: 8, text: "变得更加强硬对抗" },
+    ]},
+    { id: 21, text: "我认为生活应该：", options: [
+      { type: 1, text: "有序且有意义" },
+      { type: 7, text: "充满乐趣和体验" },
+      { type: 8, text: "由自己掌控" },
+      { type: 9, text: "平静祥和" },
+    ]},
+    { id: 22, text: "面对批评，我：", options: [
+      { type: 1, text: "会认真反思并改进" },
+      { type: 3, text: "可能会感到自尊受挫" },
+      { type: 4, text: "可能会感到被误解" },
+      { type: 5, text: "会理性分析其合理性" },
+    ]},
+    { id: 23, text: "我最擅长：", options: [
+      { type: 2, text: "照顾和支持他人" },
+      { type: 3, text: "达成目标和激励团队" },
+      { type: 5, text: "深入思考和分析问题" },
+      { type: 7, text: "创造快乐和新想法" },
+    ]},
+    { id: 24, text: "我内心渴望：", options: [
+      { type: 2, text: "被爱和被需要" },
+      { type: 4, text: "被理解和独特价值" },
+      { type: 6, text: "安全感和归属感" },
+      { type: 9, text: "内心平静和和谐" },
+    ]},
+    { id: 25, text: "我的领导风格：", options: [
+      { type: 1, text: "以身作则，追求卓越" },
+      { type: 3, text: "目标导向，激励团队" },
+      { type: 8, text: "果断有力，保护团队" },
+      { type: 9, text: "包容协调，促进和谐" },
+    ]},
+    { id: 26, text: "休息时我喜欢：", options: [
+      { type: 4, text: "独自沉浸在艺术和情感中" },
+      { type: 5, text: "独处阅读和思考" },
+      { type: 7, text: "探索新事物和体验" },
+      { type: 9, text: "放松休息，什么都不做" },
+    ]},
+    { id: 27, text: "我认为成功意味着：", options: [
+      { type: 1, text: "做正确的事，达到高标准" },
+      { type: 2, text: "被他人需要和感激" },
+      { type: 3, text: "获得成就和认可" },
+      { type: 8, text: "拥有力量和影响力" },
     ]},
   ];
 
@@ -150,7 +208,7 @@ export default function EnneagramTest() {
 
   const handleAnswer = (typeNum: number) => {
     const newAnswers = [...answers];
-    newAnswers[currentQuestion] = typeNum;
+    newAnswers[currentQuestion] = typeNum.toString();
     setAnswers(newAnswers);
   };
 
@@ -188,7 +246,8 @@ export default function EnneagramTest() {
     const typeScores: { [key: number]: number } = {};
     
     answers.forEach((type) => {
-      typeScores[type] = (typeScores[type] || 0) + 1;
+      const typeNum = parseInt(type);
+      typeScores[typeNum] = (typeScores[typeNum] || 0) + 1;
     });
 
     const sortedTypes = Object.entries(typeScores)
@@ -200,6 +259,7 @@ export default function EnneagramTest() {
     return {
       primary: { type: primaryType, ...types[primaryType as keyof typeof types], score: sortedTypes[0][1] },
       secondary: secondaryType ? { type: secondaryType, ...types[secondaryType as keyof typeof types], score: sortedTypes[1][1] } : null,
+      allScores: typeScores,
     };
   };
 
@@ -249,6 +309,18 @@ export default function EnneagramTest() {
                 </div>
               )}
 
+              <div className="bg-muted/50 p-4 rounded-lg">
+                <h3 className="font-semibold mb-3">九型得分分布</h3>
+                <div className="grid grid-cols-3 gap-2">
+                  {[1,2,3,4,5,6,7,8,9].map(type => (
+                    <div key={type} className="text-center p-2 rounded bg-card">
+                      <div className="font-bold text-primary">{type}型</div>
+                      <div className="text-sm text-muted-foreground">{result.allScores[type] || 0}分</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <div className="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-lg">
                 <p className="text-sm text-muted-foreground">
                   九型人格理论认为，每个人都有一个核心人格类型，了解自己的类型可以帮助你更好地理解自己的动机、恐惧和成长方向。没有任何一型比另一型更好，关键是认识和接纳真实的自己。
@@ -294,7 +366,7 @@ export default function EnneagramTest() {
             <h3 className="text-lg font-medium">{questions[currentQuestion].text}</h3>
             
             <RadioGroup 
-              value={answers[currentQuestion]?.toString()} 
+              value={answers[currentQuestion]} 
               onValueChange={(value) => handleAnswer(Number(value))}
             >
               <div className="space-y-3">

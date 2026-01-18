@@ -29,6 +29,7 @@ export default function MentalAgeTest() {
     getUser();
   }, []);
 
+  // 20题，每题4选项
   const questions = [
     { 
       id: 1, 
@@ -178,6 +179,56 @@ export default function MentalAgeTest() {
         { value: 0, label: "接受适度的变化" },
         { value: 5, label: "倾向于稳定不变" },
         { value: 10, label: "偏好熟悉的环境和习惯" },
+      ]
+    },
+    { 
+      id: 16, 
+      text: "你的音乐偏好：",
+      options: [
+        { value: -10, label: "最新流行歌曲和电子音乐" },
+        { value: 0, label: "各种风格都能接受" },
+        { value: 5, label: "经典老歌和怀旧音乐" },
+        { value: 10, label: "古典音乐和传统艺术" },
+      ]
+    },
+    { 
+      id: 17, 
+      text: "你的饮食习惯：",
+      options: [
+        { value: -10, label: "喜欢尝试新奇美食" },
+        { value: 0, label: "多样化但有偏好" },
+        { value: 5, label: "偏好熟悉的口味" },
+        { value: 10, label: "清淡健康为主" },
+      ]
+    },
+    { 
+      id: 18, 
+      text: "你的旅行方式：",
+      options: [
+        { value: -10, label: "说走就走的冒险之旅" },
+        { value: 0, label: "计划但保持灵活" },
+        { value: 5, label: "详细规划每一步" },
+        { value: 10, label: "更喜欢熟悉的目的地" },
+      ]
+    },
+    { 
+      id: 19, 
+      text: "你的情感表达：",
+      options: [
+        { value: -10, label: "热情奔放，直接表达" },
+        { value: 0, label: "适度表达情感" },
+        { value: 5, label: "含蓄内敛" },
+        { value: 10, label: "稳重理性，少表露情感" },
+      ]
+    },
+    { 
+      id: 20, 
+      text: "你对时间的感受：",
+      options: [
+        { value: -10, label: "感觉时间很长，未来无限" },
+        { value: 0, label: "珍惜当下，期待未来" },
+        { value: 5, label: "感觉时间过得越来越快" },
+        { value: 10, label: "常常回忆过去的时光" },
       ]
     },
   ];
@@ -420,7 +471,7 @@ export default function MentalAgeTest() {
             <RadioGroup value={answers[currentQuestion]?.toString() || ""} onValueChange={(value) => handleAnswer(Number(value))}>
               <div className="space-y-3">
                 {questions[currentQuestion].options.map((option, index) => (
-                  <div key={option.value} className="flex items-center space-x-3 p-4 rounded-lg border hover:bg-accent transition-colors">
+                  <div key={index} className="flex items-center space-x-3 p-4 rounded-lg border hover:bg-accent transition-colors">
                     <RadioGroupItem value={option.value.toString()} id={`option-${index}`} />
                     <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">
                       {option.label}

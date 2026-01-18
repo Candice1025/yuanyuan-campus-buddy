@@ -26,138 +26,250 @@ const MBTITest = () => {
     checkAuth();
   }, []);
 
-  // MBTI完整测试问题
+  // MBTI完整测试问题 - 24题，每题4选项
   const questions = [
-    // E/I 维度（外向/内向）
+    // E/I 维度（外向/内向）- 6题
     {
       id: 0,
       question: "在社交场合中，你通常：",
       options: [
-        { value: "E", label: "A. 感到精力充沛，享受与人交流" },
-        { value: "I", label: "B. 感到疲惫，需要独处恢复能量" }
+        { value: "E2", label: "非常享受，主动成为话题中心" },
+        { value: "E1", label: "比较喜欢，乐于和大家交流" },
+        { value: "I1", label: "偶尔参与，更多时候在观察" },
+        { value: "I2", label: "感到疲惫，希望尽快离开" }
       ]
     },
     {
       id: 1,
       question: "在小组项目中，你更倾向于：",
       options: [
-        { value: "E", label: "A. 主动分享想法，推动讨论" },
-        { value: "I", label: "B. 先思考后发言，独立完成任务" }
+        { value: "E2", label: "主动担任组长，协调大家分工" },
+        { value: "E1", label: "积极分享想法，推动讨论进行" },
+        { value: "I1", label: "先独立思考，再发表成熟观点" },
+        { value: "I2", label: "倾向于独立完成自己的部分" }
       ]
     },
     {
       id: 2,
       question: "周末休息时，你更喜欢：",
       options: [
-        { value: "E", label: "A. 约朋友出去玩，参加聚会活动" },
-        { value: "I", label: "B. 独自待在家里，做自己喜欢的事" }
+        { value: "E2", label: "组织朋友聚会，越热闹越开心" },
+        { value: "E1", label: "约几个好友出去逛街或吃饭" },
+        { value: "I1", label: "和一两个密友安静聊天" },
+        { value: "I2", label: "独自在家看书、看剧或打游戏" }
       ]
     },
     {
       id: 3,
       question: "认识新朋友时，你通常：",
       options: [
-        { value: "E", label: "A. 很快就能打开话题，主动交流" },
-        { value: "I", label: "B. 比较慢热，需要时间熟悉" }
+        { value: "E2", label: "很快就能聊开，留下联系方式" },
+        { value: "E1", label: "主动打招呼，尝试找共同话题" },
+        { value: "I1", label: "等对方先开口，再慢慢回应" },
+        { value: "I2", label: "比较拘谨，需要很长时间才能熟悉" }
       ]
     },
-    // S/N 维度（实感/直觉）
     {
       id: 4,
-      question: "当学习新知识时，你更倾向于：",
+      question: "获得能量的方式：",
       options: [
-        { value: "S", label: "A. 关注具体事实和细节" },
-        { value: "N", label: "B. 关注整体概念和可能性" }
+        { value: "E2", label: "与人交流让我精力充沛" },
+        { value: "E1", label: "适度社交可以提升我的状态" },
+        { value: "I1", label: "需要独处时间来恢复能量" },
+        { value: "I2", label: "只有独处才能让我真正放松" }
       ]
     },
     {
       id: 5,
-      question: "面对问题时，你首先会：",
+      question: "在课堂上，你更喜欢：",
       options: [
-        { value: "S", label: "A. 回顾过去的经验和已知方法" },
-        { value: "N", label: "B. 探索新的可能性和创新方案" }
+        { value: "E2", label: "积极举手发言，参与讨论" },
+        { value: "E1", label: "小组讨论时分享自己的看法" },
+        { value: "I1", label: "认真听讲，有问题下课再问" },
+        { value: "I2", label: "默默记笔记，不太愿意发言" }
       ]
     },
+    // S/N 维度（实感/直觉）- 6题
     {
       id: 6,
-      question: "做作业或任务时，你更喜欢：",
+      question: "当学习新知识时，你更倾向于：",
       options: [
-        { value: "S", label: "A. 按部就班，遵循既定步骤" },
-        { value: "N", label: "B. 发挥想象，尝试新的方法" }
+        { value: "S2", label: "需要具体的例子和实际应用" },
+        { value: "S1", label: "关注事实、数据和细节" },
+        { value: "N1", label: "思考整体概念和背后原理" },
+        { value: "N2", label: "联想到各种可能性和创新应用" }
       ]
     },
     {
       id: 7,
-      question: "老师讲课时，你更关注：",
+      question: "面对问题时，你首先会：",
       options: [
-        { value: "S", label: "A. 具体的例子和实际应用" },
-        { value: "N", label: "B. 背后的原理和深层含义" }
+        { value: "S2", label: "回顾过去类似的经验和方法" },
+        { value: "S1", label: "收集具体信息，分析已知数据" },
+        { value: "N1", label: "思考问题的深层原因和含义" },
+        { value: "N2", label: "探索全新的可能性和创新方案" }
       ]
     },
-    // T/F 维度（思考/情感）
     {
       id: 8,
-      question: "做决定时，你更看重：",
+      question: "做作业或任务时，你更喜欢：",
       options: [
-        { value: "T", label: "A. 逻辑分析和客观标准" },
-        { value: "F", label: "B. 个人价值观和他人感受" }
+        { value: "S2", label: "严格按照要求和既定步骤完成" },
+        { value: "S1", label: "参考成功的案例和模板" },
+        { value: "N1", label: "在要求的基础上加入自己的理解" },
+        { value: "N2", label: "发挥想象力，尝试全新的方法" }
       ]
     },
     {
       id: 9,
-      question: "同学向你求助时，你会：",
+      question: "老师讲课时，你更关注：",
       options: [
-        { value: "T", label: "A. 直接指出问题并给出解决方案" },
-        { value: "F", label: "B. 先安慰对方情绪，再一起想办法" }
+        { value: "S2", label: "具体的公式、步骤和操作方法" },
+        { value: "S1", label: "实际的例子和应用场景" },
+        { value: "N1", label: "知识点之间的联系和规律" },
+        { value: "N2", label: "背后的原理和深层含义" }
       ]
     },
     {
       id: 10,
-      question: "评价一件事时，你更注重：",
+      question: "描述一件事情时，你倾向于：",
       options: [
-        { value: "T", label: "A. 是否符合逻辑和效率" },
-        { value: "F", label: "B. 是否考虑了大家的感受" }
+        { value: "S2", label: "按时间顺序详细描述细节" },
+        { value: "S1", label: "说明具体发生了什么事" },
+        { value: "N1", label: "概括主要内容和意义" },
+        { value: "N2", label: "用比喻和隐喻来表达感受" }
       ]
     },
     {
       id: 11,
-      question: "别人批评你时，你会：",
+      question: "对于未来，你更：",
       options: [
-        { value: "T", label: "A. 理性分析批评是否合理" },
-        { value: "F", label: "B. 首先关注对方的态度和情绪" }
+        { value: "S2", label: "制定详细可行的短期计划" },
+        { value: "S1", label: "根据现实情况做实际打算" },
+        { value: "N1", label: "有大致的方向和长远目标" },
+        { value: "N2", label: "充满各种美好的想象和可能" }
       ]
     },
-    // J/P 维度（判断/知觉）
+    // T/F 维度（思考/情感）- 6题
     {
       id: 12,
-      question: "对待计划和时间，你更喜欢：",
+      question: "做决定时，你更看重：",
       options: [
-        { value: "J", label: "A. 有明确的计划和时间表" },
-        { value: "P", label: "B. 保持灵活，随机应变" }
+        { value: "T2", label: "客观数据和逻辑分析结果" },
+        { value: "T1", label: "利弊得失和效率考量" },
+        { value: "F1", label: "对他人的影响和感受" },
+        { value: "F2", label: "内心的价值观和情感认同" }
       ]
     },
     {
       id: 13,
-      question: "完成作业时，你通常：",
+      question: "同学向你求助时，你会：",
       options: [
-        { value: "J", label: "A. 提前完成，不喜欢拖到最后" },
-        { value: "P", label: "B. 临近截止日期才有动力完成" }
+        { value: "T2", label: "直接分析问题并给出解决方案" },
+        { value: "T1", label: "指出问题所在，提供建议" },
+        { value: "F1", label: "先表示理解，再一起想办法" },
+        { value: "F2", label: "先安慰对方情绪，陪伴倾听" }
       ]
     },
     {
       id: 14,
-      question: "整理书包或房间时，你：",
+      question: "评价一件事时，你更注重：",
       options: [
-        { value: "J", label: "A. 喜欢保持整洁有序" },
-        { value: "P", label: "B. 觉得找得到就行，不必太整齐" }
+        { value: "T2", label: "是否符合逻辑和客观标准" },
+        { value: "T1", label: "是否高效和有实际意义" },
+        { value: "F1", label: "是否照顾到了大家的感受" },
+        { value: "F2", label: "是否符合自己的价值观" }
       ]
     },
     {
       id: 15,
+      question: "别人批评你时，你会：",
+      options: [
+        { value: "T2", label: "理性分析批评是否有道理" },
+        { value: "T1", label: "思考如何改进和提升" },
+        { value: "F1", label: "先关注对方的态度和情绪" },
+        { value: "F2", label: "可能会感到受伤和难过" }
+      ]
+    },
+    {
+      id: 16,
+      question: "与他人发生分歧时，你会：",
+      options: [
+        { value: "T2", label: "用事实和逻辑说服对方" },
+        { value: "T1", label: "客观分析双方的观点" },
+        { value: "F1", label: "尝试理解对方的立场" },
+        { value: "F2", label: "倾向于妥协以维护关系" }
+      ]
+    },
+    {
+      id: 17,
+      question: "选择朋友时，你更看重：",
+      options: [
+        { value: "T2", label: "对方的能力和可靠性" },
+        { value: "T1", label: "共同的兴趣和话题" },
+        { value: "F1", label: "相处时的感觉和默契" },
+        { value: "F2", label: "对方的善良和真诚" }
+      ]
+    },
+    // J/P 维度（判断/知觉）- 6题
+    {
+      id: 18,
+      question: "对待计划和时间，你更喜欢：",
+      options: [
+        { value: "J2", label: "提前详细规划，严格执行" },
+        { value: "J1", label: "有大致计划，按时完成" },
+        { value: "P1", label: "保持灵活，根据情况调整" },
+        { value: "P2", label: "随性而为，享受意外惊喜" }
+      ]
+    },
+    {
+      id: 19,
+      question: "完成作业时，你通常：",
+      options: [
+        { value: "J2", label: "收到任务就开始做，提前完成" },
+        { value: "J1", label: "制定计划，按时间节点推进" },
+        { value: "P1", label: "看心情和状态，但会按时完成" },
+        { value: "P2", label: "临近截止日期才有动力完成" }
+      ]
+    },
+    {
+      id: 20,
+      question: "整理书包或房间时，你：",
+      options: [
+        { value: "J2", label: "定期整理，物品分类有序" },
+        { value: "J1", label: "基本整洁，找东西比较方便" },
+        { value: "P1", label: "有点乱但自己知道在哪" },
+        { value: "P2", label: "比较随意，找不到就再买" }
+      ]
+    },
+    {
+      id: 21,
       question: "面对突发变化时，你：",
       options: [
-        { value: "J", label: "A. 感到不安，希望按原计划进行" },
-        { value: "P", label: "B. 觉得无所谓，反而有新鲜感" }
+        { value: "J2", label: "感到不安，希望尽快恢复计划" },
+        { value: "J1", label: "有些困扰，但会重新安排" },
+        { value: "P1", label: "觉得无所谓，灵活应对" },
+        { value: "P2", label: "反而觉得有趣，享受变化" }
+      ]
+    },
+    {
+      id: 22,
+      question: "旅行时，你更喜欢：",
+      options: [
+        { value: "J2", label: "提前规划好每个景点和时间" },
+        { value: "J1", label: "有大致行程，留些自由时间" },
+        { value: "P1", label: "只定住宿，其他随心而定" },
+        { value: "P2", label: "完全不做计划，走到哪算哪" }
+      ]
+    },
+    {
+      id: 23,
+      question: "对于规则和截止日期，你：",
+      options: [
+        { value: "J2", label: "严格遵守，从不拖延" },
+        { value: "J1", label: "基本遵守，偶尔灵活处理" },
+        { value: "P1", label: "觉得可以商量和调整" },
+        { value: "P2", label: "经常拖到最后一刻" }
       ]
     }
   ];
@@ -172,7 +284,6 @@ const MBTITest = () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
-      // Save test result before showing results
       if (userId) {
         const result = getResult();
         try {
@@ -200,7 +311,9 @@ const MBTITest = () => {
   const getResult = () => {
     const counts = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
     Object.values(answers).forEach((answer) => {
-      counts[answer as keyof typeof counts]++;
+      const dimension = answer.charAt(0) as keyof typeof counts;
+      const weight = parseInt(answer.charAt(1));
+      counts[dimension] += weight;
     });
 
     const type = 
@@ -210,25 +323,32 @@ const MBTITest = () => {
       (counts.J > counts.P ? "J" : "P");
 
     const results: Record<string, any> = {
-      ISTJ: { name: "物流师", desc: "实际、有责任心的组织者", color: "bg-primary", traits: ["可靠", "有条理", "注重细节", "务实"] },
-      ISFJ: { name: "守卫者", desc: "温暖、体贴的保护者", color: "bg-primary", traits: ["忠诚", "有耐心", "细心", "支持他人"] },
-      INFJ: { name: "提倡者", desc: "理想主义的倡导者", color: "bg-primary", traits: ["有洞察力", "理想主义", "富有同情心", "有创造力"] },
-      INTJ: { name: "建筑师", desc: "富有想象力的战略家", color: "bg-primary", traits: ["独立", "战略性思维", "追求知识", "高标准"] },
-      ISTP: { name: "鉴赏家", desc: "大胆灵活的实践者", color: "bg-success", traits: ["冷静", "善于分析", "动手能力强", "适应力强"] },
-      ISFP: { name: "探险家", desc: "灵活友善的艺术家", color: "bg-success", traits: ["温和", "敏感", "艺术天赋", "活在当下"] },
-      INFP: { name: "调停者", desc: "诗意般的理想主义者", color: "bg-primary", traits: ["理想主义", "忠于价值观", "富有创造力", "善解人意"] },
-      INTP: { name: "逻辑学家", desc: "创新的理论家", color: "bg-primary", traits: ["好奇", "善于分析", "客观", "创新思维"] },
-      ESTP: { name: "企业家", desc: "精明大胆的实干家", color: "bg-accent", traits: ["大胆", "行动派", "观察敏锐", "灵活应变"] },
-      ESFP: { name: "表演者", desc: "活力四射的娱乐者", color: "bg-accent", traits: ["热情", "友善", "自发性", "享受生活"] },
-      ENFP: { name: "竞选者", desc: "热情自由的激励者", color: "bg-accent", traits: ["热情", "有创造力", "善于社交", "乐观"] },
-      ENTP: { name: "辩论家", desc: "聪明好辩的思想家", color: "bg-accent", traits: ["聪明", "好奇", "善于辩论", "创新"] },
-      ESTJ: { name: "总经理", desc: "出色的管理者", color: "bg-accent", traits: ["高效", "有组织力", "负责任", "务实"] },
-      ESFJ: { name: "执政官", desc: "热心助人的主人", color: "bg-accent", traits: ["友善", "有责任心", "善于合作", "关心他人"] },
-      ENFJ: { name: "主人公", desc: "有魅力的领导者", color: "bg-accent", traits: ["有魅力", "善于鼓励", "有责任心", "善解人意"] },
-      ENTJ: { name: "指挥官", desc: "大胆果断的领导者", color: "bg-accent", traits: ["果断", "高效", "战略眼光", "天生领导"] }
+      ISTJ: { name: "物流师", desc: "实际、有责任心的组织者，注重传统和规则", color: "bg-primary", traits: ["可靠", "有条理", "注重细节", "务实", "责任心强", "一丝不苟"] },
+      ISFJ: { name: "守卫者", desc: "温暖、体贴的保护者，默默付出关爱他人", color: "bg-primary", traits: ["忠诚", "有耐心", "细心", "支持他人", "谦虚", "善良"] },
+      INFJ: { name: "提倡者", desc: "理想主义的倡导者，追求深层意义和价值", color: "bg-primary", traits: ["有洞察力", "理想主义", "富有同情心", "有创造力", "坚定", "有远见"] },
+      INTJ: { name: "建筑师", desc: "富有想象力的战略家，追求知识和完美", color: "bg-primary", traits: ["独立", "战略性思维", "追求知识", "高标准", "果断", "创新"] },
+      ISTP: { name: "鉴赏家", desc: "大胆灵活的实践者，善于解决实际问题", color: "bg-success", traits: ["冷静", "善于分析", "动手能力强", "适应力强", "好奇", "务实"] },
+      ISFP: { name: "探险家", desc: "灵活友善的艺术家，活在当下享受美好", color: "bg-success", traits: ["温和", "敏感", "艺术天赋", "活在当下", "友善", "谦虚"] },
+      INFP: { name: "调停者", desc: "诗意般的理想主义者，追求真实和意义", color: "bg-primary", traits: ["理想主义", "忠于价值观", "富有创造力", "善解人意", "开放", "富有想象力"] },
+      INTP: { name: "逻辑学家", desc: "创新的理论家，渴望理解宇宙的运作", color: "bg-primary", traits: ["好奇", "善于分析", "客观", "创新思维", "独立", "追求知识"] },
+      ESTP: { name: "企业家", desc: "精明大胆的实干家，喜欢冒险和刺激", color: "bg-accent", traits: ["大胆", "行动派", "观察敏锐", "灵活应变", "直接", "社交能力强"] },
+      ESFP: { name: "表演者", desc: "活力四射的娱乐者，享受生活的乐趣", color: "bg-accent", traits: ["热情", "友善", "自发性", "享受生活", "乐观", "充满活力"] },
+      ENFP: { name: "竞选者", desc: "热情自由的激励者，发现人生的可能性", color: "bg-accent", traits: ["热情", "有创造力", "善于社交", "乐观", "灵活", "富有想象力"] },
+      ENTP: { name: "辩论家", desc: "聪明好辩的思想家，喜欢挑战和创新", color: "bg-accent", traits: ["聪明", "好奇", "善于辩论", "创新", "精力充沛", "机智"] },
+      ESTJ: { name: "总经理", desc: "出色的管理者，高效务实注重秩序", color: "bg-accent", traits: ["高效", "有组织力", "负责任", "务实", "果断", "可靠"] },
+      ESFJ: { name: "执政官", desc: "热心助人的主人，关心他人福祉", color: "bg-accent", traits: ["友善", "有责任心", "善于合作", "关心他人", "忠诚", "传统"] },
+      ENFJ: { name: "主人公", desc: "有魅力的领导者，善于激励和引导他人", color: "bg-accent", traits: ["有魅力", "善于鼓励", "有责任心", "善解人意", "可靠", "热情"] },
+      ENTJ: { name: "指挥官", desc: "大胆果断的领导者，追求效率和成就", color: "bg-accent", traits: ["果断", "高效", "战略眼光", "天生领导", "自信", "有远见"] }
     };
 
-    return { ...results[type], type };
+    const dimensionScores = {
+      EI: { E: counts.E, I: counts.I },
+      SN: { S: counts.S, N: counts.N },
+      TF: { T: counts.T, F: counts.F },
+      JP: { J: counts.J, P: counts.P }
+    };
+
+    return { ...results[type], type, dimensionScores };
   };
 
   if (showResult) {
@@ -257,8 +377,39 @@ const MBTITest = () => {
           </Card>
 
           <Card className="p-6 shadow-card mb-6 animate-slide-up">
+            <h3 className="text-xl font-semibold text-foreground mb-4">维度得分</h3>
+            <div className="space-y-4">
+              {Object.entries(result.dimensionScores).map(([dimension, scores]) => {
+                const scoresObj = scores as { [key: string]: number };
+                const labels: Record<string, [string, string]> = {
+                  EI: ["外向(E)", "内向(I)"],
+                  SN: ["实感(S)", "直觉(N)"],
+                  TF: ["思考(T)", "情感(F)"],
+                  JP: ["判断(J)", "感知(P)"]
+                };
+                const [label1, label2] = labels[dimension];
+                const scoreValues = Object.values(scoresObj);
+                const total = scoreValues.reduce((a, b) => a + b, 0);
+                const firstPercent = total > 0 ? (scoreValues[0] / total) * 100 : 50;
+                return (
+                  <div key={dimension}>
+                    <div className="flex justify-between text-sm mb-1">
+                      <span>{label1}: {scoreValues[0]}</span>
+                      <span>{label2}: {scoreValues[1]}</span>
+                    </div>
+                    <div className="flex h-2 rounded-full overflow-hidden bg-muted">
+                      <div className="bg-primary transition-all" style={{ width: `${firstPercent}%` }} />
+                      <div className="bg-primary/40 flex-1" />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </Card>
+
+          <Card className="p-6 shadow-card mb-6 animate-slide-up" style={{ animationDelay: "0.1s" }}>
             <h3 className="text-xl font-semibold text-foreground mb-4">性格特点</h3>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {result.traits.map((trait: string, index: number) => (
                 <div key={index} className="flex items-center gap-2 text-muted-foreground">
                   <div className="w-2 h-2 rounded-full bg-primary" />
@@ -268,13 +419,14 @@ const MBTITest = () => {
             </div>
           </Card>
 
-          <Card className="p-6 shadow-card mb-6 animate-slide-up" style={{ animationDelay: "0.1s" }}>
+          <Card className="p-6 shadow-card mb-6 animate-slide-up" style={{ animationDelay: "0.2s" }}>
             <h3 className="text-xl font-semibold text-foreground mb-4">学习建议</h3>
             <div className="space-y-3 text-muted-foreground">
               <p>📝 尝试将抽象概念与具体例子结合</p>
               <p>🎯 设定明确的学习目标，保持专注</p>
               <p>👥 寻找学习伙伴，互相鼓励和支持</p>
               <p>⏰ 合理安排时间，避免拖延</p>
+              <p>💡 了解自己的优势，选择适合的学习方式</p>
             </div>
           </Card>
 
@@ -334,9 +486,9 @@ const MBTITest = () => {
             onValueChange={handleAnswer}
             className="space-y-4"
           >
-            {currentQ.options.map((option) => (
+            {currentQ.options.map((option, index) => (
               <div
-                key={option.value}
+                key={index}
                 className={`flex items-center space-x-3 p-4 rounded-xl border-2 transition-all cursor-pointer hover:border-primary hover:bg-primary/5 ${
                   answers[currentQuestion] === option.value
                     ? "border-primary bg-primary/5"
@@ -344,9 +496,9 @@ const MBTITest = () => {
                 }`}
                 onClick={() => handleAnswer(option.value)}
               >
-                <RadioGroupItem value={option.value} id={option.value} />
+                <RadioGroupItem value={option.value} id={`option-${index}`} />
                 <Label
-                  htmlFor={option.value}
+                  htmlFor={`option-${index}`}
                   className="flex-1 cursor-pointer text-base"
                 >
                   {option.label}
