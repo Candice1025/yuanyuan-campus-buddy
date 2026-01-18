@@ -44,7 +44,17 @@ const Chat = () => {
           ascending: true
         }).limit(50);
         if (chatHistory && chatHistory.length > 0) {
-          const historicalMessages = chatHistory.map(msg => ({
+          // 按时间排序，同时间戳时user先于assistant
+          const sortedHistory = [...chatHistory].sort((a, b) => {
+            const timeA = new Date(a.created_at).getTime();
+            const timeB = new Date(b.created_at).getTime();
+            if (timeA !== timeB) return timeA - timeB;
+            // 同时间戳时，user消息应该在assistant消息之前
+            if (a.sender === 'user' && b.sender === 'assistant') return -1;
+            if (a.sender === 'assistant' && b.sender === 'user') return 1;
+            return 0;
+          });
+          const historicalMessages = sortedHistory.map(msg => ({
             id: msg.id,
             content: msg.content,
             sender: msg.sender as "user" | "assistant",
@@ -91,7 +101,12 @@ const Chat = () => {
       const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
 
       // 只发送最近的对话历史（最多10条消息），排除第一条欢迎消息
-      const recentMessages = [...messages.slice(1), userMessage].slice(-10);
+      // 确保消息按时间排序并且user/assistant交替正确
+      const allMessagesExceptWelcome = [...messages.slice(1), userMessage];
+      const sortedMessages = allMessagesExceptWelcome.sort((a, b) => 
+        a.timestamp.getTime() - b.timestamp.getTime()
+      );
+      const recentMessages = sortedMessages.slice(-10);
       const chatMessages = recentMessages.map(msg => ({
         role: msg.sender === "user" ? "user" : "assistant",
         content: msg.content
