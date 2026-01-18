@@ -125,7 +125,7 @@ const Home = () => {
           <div className="max-w-3xl mx-auto text-center">
             <div className="space-y-6 animate-fade-in">
             <div className="flex justify-center mb-8">
-                <img src={chatIcon} alt="守伴者" className="w-32 h-32 rounded-full shadow-float animate-float" />
+                <img alt="守伴者" className="w-32 h-32 rounded-full shadow-float animate-float" src="/lovable-uploads/5ea5249d-d43c-4d5b-9c8c-a1474573f409.png" />
               </div>
               <div className="inline-block">
                 <span className="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">你的自我探索空间</span>
