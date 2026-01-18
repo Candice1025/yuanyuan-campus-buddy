@@ -50,7 +50,7 @@ const Home = () => {
   }, {
     icon: MessageCircle,
     title: "守伴者",
-    description: "智能陪伴，学习好帮手",
+    description: "智能陪伴，情绪陪伴助手",
     color: "bg-gradient-warm",
     path: "/chat"
   }, {
