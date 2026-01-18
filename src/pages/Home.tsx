@@ -128,9 +128,7 @@ const Home = () => {
                 <img src={chatIcon} alt="守伴者" className="w-32 h-32 rounded-full shadow-float animate-float" />
               </div>
               <div className="inline-block">
-                <span className="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">
-                  你的校园生活小帮手
-                </span>
+                <span className="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">你的自我探索空间</span>
               </div>
               <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight min-h-[5rem]">
                 <span className="bg-gradient-primary bg-clip-text text-transparent">
