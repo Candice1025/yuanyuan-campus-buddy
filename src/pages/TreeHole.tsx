@@ -4,7 +4,8 @@ import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { ArrowLeft, Heart, MessageCircle, Send, TreePine } from "lucide-react";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { ArrowLeft, Heart, MessageCircle, Send, TreePine, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -17,6 +18,7 @@ interface Post {
   likes: number;
   comments: number;
   mood: string;
+  user_id: string | null;
 }
 
 interface Comment {
@@ -85,7 +87,8 @@ const TreeHole = () => {
       timestamp: new Date(post.created_at),
       likes: post.likes,
       comments: post.comments_count,
-      mood: post.mood
+      mood: post.mood,
+      user_id: post.user_id
     })));
 
     // 如果用户已登录，获取用户的点赞状态
@@ -255,6 +258,43 @@ const TreeHole = () => {
 
     setNewComment("");
     fetchComments(selectedPost.id);
+    fetchPosts();
+  };
+
+  const handleDeletePost = async (postId: string) => {
+    if (!user) {
+      toast({
+        title: "请先登录",
+        description: "需要登录才能删除帖子",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // 先删除相关的评论和点赞
+    await supabase.from('tree_hole_comments').delete().eq('post_id', postId);
+    await supabase.from('tree_hole_likes').delete().eq('post_id', postId);
+
+    const { error } = await supabase
+      .from('tree_hole_posts')
+      .delete()
+      .eq('id', postId)
+      .eq('user_id', user.id);
+
+    if (error) {
+      toast({
+        title: "删除失败",
+        description: error.message,
+        variant: "destructive"
+      });
+      return;
+    }
+
+    toast({
+      title: "删除成功",
+      description: "帖子已被删除"
+    });
+
     fetchPosts();
   };
 
@@ -456,6 +496,38 @@ const TreeHole = () => {
                       </div>
                     </DialogContent>
                   </Dialog>
+                  
+                  {/* 删除按钮 - 仅对自己的帖子显示 */}
+                  {user && post.user_id === user.id && (
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 ml-auto"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>确认删除</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            确定要删除这条帖子吗？删除后将无法恢复，相关的评论和点赞也会被一并删除。
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>取消</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => handleDeletePost(post.id)}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                          >
+                            确认删除
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  )}
                 </div>
               </div>
             </Card>
