@@ -23,6 +23,7 @@ import SandTray from "./pages/SandTray";
 import Auth from "./pages/Auth";
 import KnowledgeSearch from "./pages/KnowledgeSearch";
 import Entertainment from "./pages/Entertainment";
+import About from "./pages/About";
 
 import NotFound from "./pages/NotFound";
 
@@ -54,6 +55,7 @@ const App = () => (
           <Route path="/sandtray" element={<SandTray />} />
           <Route path="/knowledge-search" element={<KnowledgeSearch />} />
           <Route path="/entertainment" element={<Entertainment />} />
+          <Route path="/about" element={<About />} />
           
           <Route path="/auth" element={<Auth />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
