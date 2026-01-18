@@ -25,6 +25,7 @@ interface Comment {
   id: string;
   content: string;
   created_at: string;
+  user_id: string | null;
 }
 
 const TreeHole = () => {
@@ -261,6 +262,46 @@ const TreeHole = () => {
     fetchPosts();
   };
 
+  const handleDeleteComment = async (commentId: string, postId: string) => {
+    if (!user) {
+      toast({
+        title: "请先登录",
+        description: "需要登录才能删除评论",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const { error } = await supabase
+      .from('tree_hole_comments')
+      .delete()
+      .eq('id', commentId)
+      .eq('user_id', user.id);
+
+    if (error) {
+      toast({
+        title: "删除失败",
+        description: error.message,
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // 更新帖子的评论数
+    await supabase
+      .from('tree_hole_posts')
+      .update({ comments_count: Math.max(0, (posts.find(p => p.id === postId)?.comments || 1) - 1) })
+      .eq('id', postId);
+
+    toast({
+      title: "删除成功",
+      description: "评论已被删除"
+    });
+
+    fetchComments(postId);
+    fetchPosts();
+  };
+
   const handleDeletePost = async (postId: string) => {
     if (!user) {
       toast({
@@ -462,14 +503,46 @@ const TreeHole = () => {
                                   </div>
                                   <div className="flex-1">
                                     <p className="text-sm text-foreground">{comment.content}</p>
-                                    <span className="text-xs text-muted-foreground">
-                                      {new Date(comment.created_at).toLocaleString("zh-CN", {
-                                        month: "numeric",
-                                        day: "numeric",
-                                        hour: "2-digit",
-                                        minute: "2-digit"
-                                      })}
-                                    </span>
+                                    <div className="flex items-center justify-between mt-1">
+                                      <span className="text-xs text-muted-foreground">
+                                        {new Date(comment.created_at).toLocaleString("zh-CN", {
+                                          month: "numeric",
+                                          day: "numeric",
+                                          hour: "2-digit",
+                                          minute: "2-digit"
+                                        })}
+                                      </span>
+                                      {user && comment.user_id === user.id && (
+                                        <AlertDialog>
+                                          <AlertDialogTrigger asChild>
+                                            <Button
+                                              variant="ghost"
+                                              size="sm"
+                                              className="h-6 px-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                                            >
+                                              <Trash2 className="w-3 h-3" />
+                                            </Button>
+                                          </AlertDialogTrigger>
+                                          <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                              <AlertDialogTitle>确认删除</AlertDialogTitle>
+                                              <AlertDialogDescription>
+                                                确定要删除这条评论吗？删除后将无法恢复。
+                                              </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                              <AlertDialogCancel>取消</AlertDialogCancel>
+                                              <AlertDialogAction
+                                                onClick={() => handleDeleteComment(comment.id, post.id)}
+                                                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                              >
+                                                确认删除
+                                              </AlertDialogAction>
+                                            </AlertDialogFooter>
+                                          </AlertDialogContent>
+                                        </AlertDialog>
+                                      )}
+                                    </div>
                                   </div>
                                 </div>
                               </Card>
