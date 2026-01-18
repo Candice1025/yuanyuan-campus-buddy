@@ -19,9 +19,9 @@ const Chat = () => {
     toast
   } = useToast();
   const [user, setUser] = useState<any>(null);
-const [messages, setMessages] = useState<Message[]>([{
+  const [messages, setMessages] = useState<Message[]>([{
     id: "1",
-    content: "你好呀，我是守伴者 🌿\n一个在你身边、愿意慢慢听你说话的情绪陪伴者。\n\n在这里，你可以安心表达、整理思绪、和我一起想清楚当下的感受与选择。\n无论是情绪、学习、生活上的困惑，还是只是想找个安静的地方聊聊，我都会在。\n\n你想从哪里开始呢？",
+    content: "你好呀！我是守伴者，你的校园生活小帮手 🌟\n\n我可以帮你：\n✨ 解答学习问题（但不会直接给答案哦）\n💭 倾听你的烦恼\n📚 分享学习方法\n💡 激发学习灵感\n\n有什么我可以帮你的吗？",
     sender: "assistant",
     timestamp: new Date()
   }]);
@@ -245,7 +245,7 @@ const [messages, setMessages] = useState<Message[]>([{
       // 清空UI中的所有消息，保留初始欢迎消息
       setMessages([{
         id: "1",
-        content: "你好呀，我是守伴者 🌿\n一个在你身边、愿意慢慢听你说话的情绪陪伴者。\n\n在这里，你可以安心表达、整理思绪、和我一起想清楚当下的感受与选择。\n无论是情绪、学习、生活上的困惑，还是只是想找个安静的地方聊聊，我都会在。\n\n你想从哪里开始呢？",
+        content: "你好呀！我是守伴者，你的校园生活小帮手 🌟\n\n我可以帮你：\n✨ 解答学习问题（但不会直接给答案哦）\n💭 倾听你的烦恼\n📚 分享学习方法\n💡 激发学习灵感\n\n有什么我可以帮你的吗？",
         sender: "assistant",
         timestamp: new Date()
       }]);
@@ -334,12 +334,7 @@ const [messages, setMessages] = useState<Message[]>([{
           <div className="flex gap-2 overflow-x-auto pb-2">
             {quickActions.map(action => {
             const Icon = action.icon;
-            return <Button key={action.text} variant="outline" size="sm" className="flex-shrink-0" onClick={() => setInput(action.text)}>
-                  <div className={`w-4 h-4 rounded ${action.color} flex items-center justify-center mr-2`}>
-                    <Icon className="w-3 h-3 text-white" />
-                  </div>
-                  {action.text}
-                </Button>;
+            return;
           })}
           </div>
         </div>
