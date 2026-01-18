@@ -90,7 +90,6 @@ const Home = () => {
     color: "bg-gradient-warm",
     path: "/entertainment"
   }];
-
   return <div className="min-h-screen bg-gradient-subtle">
       {/* Hero Section */}
       <section className="relative overflow-hidden px-4 pt-12 pb-20">
@@ -157,7 +156,7 @@ const Home = () => {
             <Card className="p-6 text-center border-0 shadow-card hover:shadow-float transition-all duration-300">
               <Brain className="w-8 h-8 text-primary mx-auto mb-2" />
               <div className="text-2xl font-bold text-foreground mb-1">7+</div>
-              <div className="text-sm text-muted-foreground">实用功能</div>
+              <div className="text-sm text-muted-foreground">适用年龄</div>
             </Card>
             <Card className="p-6 text-center border-0 shadow-card hover:shadow-float transition-all duration-300">
               <MessageCircle className="w-8 h-8 text-accent mx-auto mb-2" />
