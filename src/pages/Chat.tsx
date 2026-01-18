@@ -332,10 +332,21 @@ const Chat = () => {
       <div className="border-t border-border bg-card/50 backdrop-blur-sm">
         <div className="max-w-4xl mx-auto px-4 py-3">
           <div className="flex gap-2 overflow-x-auto pb-2">
-            {quickActions.map(action => {
-            const Icon = action.icon;
-            return;
-          })}
+            {quickActions.map((action, index) => {
+              const Icon = action.icon;
+              return (
+                <Button
+                  key={index}
+                  variant="outline"
+                  size="sm"
+                  className={`${action.color} text-white border-0 whitespace-nowrap`}
+                  onClick={() => setInput(action.text)}
+                >
+                  <Icon className="w-4 h-4 mr-1" />
+                  {action.text}
+                </Button>
+              );
+            })}
           </div>
         </div>
       </div>
