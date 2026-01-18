@@ -31,6 +31,10 @@ const Profile = () => {
     }>
   >([]);
   const [totalTests, setTotalTests] = useState(0);
+  const [moodCount, setMoodCount] = useState(0);
+  const [consecutiveDays, setConsecutiveDays] = useState(0);
+  const [treeHolePostsCount, setTreeHolePostsCount] = useState(0);
+  const [uniqueTestTypes, setUniqueTestTypes] = useState(0);
 
   useEffect(() => {
     checkAuth();
@@ -76,10 +80,73 @@ const Profile = () => {
     if (!testError && testData) {
       setRecentTests(testData);
       setTotalTests(count ?? testData.length);
+      
+      // Calculate unique test types
+      const uniqueTypes = new Set(testData.map(t => t.test_type));
+      // Need to fetch all test types for accurate count
+      const { data: allTests } = await supabase
+        .from("test_results")
+        .select("test_type")
+        .eq("user_id", userId);
+      if (allTests) {
+        const allUniqueTypes = new Set(allTests.map(t => t.test_type));
+        setUniqueTestTypes(allUniqueTypes.size);
+      }
     } else {
       setRecentTests([]);
       setTotalTests(0);
     }
+
+    // Load mood entries count
+    const { count: moodEntriesCount } = await supabase
+      .from("mood_entries")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", userId);
+    setMoodCount(moodEntriesCount ?? 0);
+
+    // Calculate consecutive days from mood entries
+    const { data: moodData } = await supabase
+      .from("mood_entries")
+      .select("created_at")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
+    
+    if (moodData && moodData.length > 0) {
+      let streak = 0;
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      // Get unique dates
+      const uniqueDates = [...new Set(moodData.map(m => {
+        const d = new Date(m.created_at);
+        d.setHours(0, 0, 0, 0);
+        return d.getTime();
+      }))].sort((a, b) => b - a);
+      
+      // Check if today or yesterday has entry
+      const todayTime = today.getTime();
+      const yesterdayTime = todayTime - 24 * 60 * 60 * 1000;
+      
+      if (uniqueDates[0] === todayTime || uniqueDates[0] === yesterdayTime) {
+        streak = 1;
+        for (let i = 1; i < uniqueDates.length; i++) {
+          const expectedDate = uniqueDates[i - 1] - 24 * 60 * 60 * 1000;
+          if (uniqueDates[i] === expectedDate) {
+            streak++;
+          } else {
+            break;
+          }
+        }
+      }
+      setConsecutiveDays(streak);
+    }
+
+    // Load tree hole posts count
+    const { count: postsCount } = await supabase
+      .from("tree_hole_posts")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", userId);
+    setTreeHolePostsCount(postsCount ?? 0);
   };
 
   const handleUpdateProfile = async () => {
@@ -165,8 +232,8 @@ const Profile = () => {
 
   const stats = [
     { label: "完成测试", value: totalTests, icon: Brain, color: "text-primary" },
-    { label: "心情记录", value: 45, icon: Heart, color: "text-accent" },
-    { label: "连续打卡", value: 7, icon: Calendar, color: "text-success" },
+    { label: "心情记录", value: moodCount, icon: Heart, color: "text-accent" },
+    { label: "连续打卡", value: consecutiveDays, icon: Calendar, color: "text-success" },
   ];
 
   const getTestColor = (testType: string) => {
@@ -234,10 +301,10 @@ const Profile = () => {
   };
 
   const achievements = [
-    { title: "初心者", desc: "完成首次测试", unlocked: true },
-    { title: "探索家", desc: "完成5个不同测试", unlocked: true },
-    { title: "坚持者", desc: "连续7天打卡", unlocked: true },
-    { title: "分享达人", desc: "发布10条树洞", unlocked: false },
+    { title: "初心者", desc: "完成首次测试", unlocked: totalTests >= 1 },
+    { title: "探索家", desc: "完成5个不同类型测试", unlocked: uniqueTestTypes >= 5 },
+    { title: "坚持者", desc: "连续7天打卡", unlocked: consecutiveDays >= 7 },
+    { title: "分享达人", desc: "发布10条树洞", unlocked: treeHolePostsCount >= 10 },
   ];
 
   return (
