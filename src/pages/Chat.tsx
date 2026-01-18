@@ -19,9 +19,9 @@ const Chat = () => {
     toast
   } = useToast();
   const [user, setUser] = useState<any>(null);
-  const [messages, setMessages] = useState<Message[]>([{
+const [messages, setMessages] = useState<Message[]>([{
     id: "1",
-    content: "你好呀！我是元元，你的校园生活小帮手 🌟\n\n我可以帮你：\n✨ 解答学习问题（但不会直接给答案哦）\n💭 倾听你的烦恼\n📚 分享学习方法\n💡 激发学习灵感\n\n有什么我可以帮你的吗？",
+    content: "你好呀！我是守伴者，你的校园生活小帮手 🌟\n\n我可以帮你：\n✨ 解答学习问题（但不会直接给答案哦）\n💭 倾听你的烦恼\n📚 分享学习方法\n💡 激发学习灵感\n\n有什么我可以帮你的吗？",
     sender: "assistant",
     timestamp: new Date()
   }]);
@@ -245,7 +245,7 @@ const Chat = () => {
       // 清空UI中的所有消息，保留初始欢迎消息
       setMessages([{
         id: "1",
-        content: "你好呀！我是元元，你的校园生活小帮手 🌟\n\n我可以帮你：\n✨ 解答学习问题（但不会直接给答案哦）\n💭 倾听你的烦恼\n📚 分享学习方法\n💡 激发学习灵感\n\n有什么我可以帮你的吗？",
+        content: "你好呀！我是守伴者，你的校园生活小帮手 🌟\n\n我可以帮你：\n✨ 解答学习问题（但不会直接给答案哦）\n💭 倾听你的烦恼\n📚 分享学习方法\n💡 激发学习灵感\n\n有什么我可以帮你的吗？",
         sender: "assistant",
         timestamp: new Date()
       }]);
@@ -269,7 +269,7 @@ const Chat = () => {
           <Button variant="ghost" size="icon" onClick={() => navigate("/")}>
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <img src={chatIcon} alt="元元" className="w-10 h-10 rounded-full" />
+          <img src={chatIcon} alt="守伴者" className="w-10 h-10 rounded-full" />
           <div className="flex-1">
             <h1 className="text-lg font-bold text-foreground">守伴者</h1>
             <p className="text-xs text-muted-foreground">在线 · 随时为你服务</p>
@@ -285,7 +285,7 @@ const Chat = () => {
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
           {messages.map(message => <div key={message.id} className={`flex gap-3 animate-slide-up group ${message.sender === "user" ? "flex-row-reverse" : ""}`}>
-              {message.sender === "assistant" && <img src={chatIcon} alt="元元" className="w-10 h-10 rounded-full flex-shrink-0" />}
+              {message.sender === "assistant" && <img src={chatIcon} alt="守伴者" className="w-10 h-10 rounded-full flex-shrink-0" />}
               {message.sender === "user" && <div className="w-10 h-10 rounded-full bg-gradient-primary flex items-center justify-center text-white font-semibold flex-shrink-0">
                   我
                 </div>}
@@ -310,7 +310,7 @@ const Chat = () => {
             </div>)}
           
           {isTyping && <div className="flex gap-3 animate-slide-up">
-              <img src={chatIcon} alt="元元" className="w-10 h-10 rounded-full" />
+              <img src={chatIcon} alt="守伴者" className="w-10 h-10 rounded-full" />
               <Card className="p-4 bg-card">
                 <div className="flex gap-1">
                   <span className="w-2 h-2 bg-primary rounded-full animate-bounce"></span>
@@ -355,7 +355,7 @@ const Chat = () => {
             </Button>
           </div>
           <p className="text-xs text-muted-foreground mt-2 text-center">
-            💡 元元会引导你思考，但不会直接给出作业答案哦
+            💡 守伴者会引导你思考，但不会直接给出作业答案哦
           </p>
         </div>
       </div>
