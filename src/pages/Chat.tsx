@@ -269,7 +269,7 @@ const Chat = () => {
           <Button variant="ghost" size="icon" onClick={() => navigate("/")}>
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <img src={chatIcon} alt="守伴者" className="w-10 h-10 rounded-full" />
+          <img alt="守伴者" className="w-10 h-10 rounded-full" src="/lovable-uploads/13596dfb-03e4-4a77-9d00-291296284c03.png" />
           <div className="flex-1">
             <h1 className="text-lg font-bold text-foreground">守伴者</h1>
             <p className="text-xs text-muted-foreground">在线 · 随时为你服务</p>
