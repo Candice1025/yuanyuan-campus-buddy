@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Laugh, Lightbulb, RefreshCw } from "lucide-react";
+import { ArrowLeft, Laugh, Lightbulb, RefreshCw, Calendar } from "lucide-react";
 
 const jokes = [
   "为什么程序员总是分不清万圣节和圣诞节？\n因为 Oct 31 == Dec 25！",
@@ -25,124 +25,83 @@ const jokes = [
   "小明：'爸爸，为什么白天看不见星星？'\n爸爸：'因为星星去上班了。'\n小明：'那月亮呢？'\n爸爸：'月亮是夜班的。'",
   "老师：'小明，你的作文怎么和小红的一模一样？'\n小明：'因为我们写的是同一件事啊！'\n老师：'什么事？'\n小明：'抄作业这件事。'",
   "为什么猴子不喜欢平行线？\n因为平行线没有相交（香蕉）！",
-  "问：什么老鼠用两只脚走路？\n答：米老鼠！\n问：什么鸭子用两只脚走路？\n答：所有的鸭子都用两只脚走路！"
+  "问：什么老鼠用两只脚走路？\n答：米老鼠！\n问：什么鸭子用两只脚走路？\n答：所有的鸭子都用两只脚走路！",
+  "我问同桌：'你知道懒羊羊为什么那么懒吗？'\n同桌：'为什么？'\n我：'因为它懒得告诉你。'",
+  "老板：'你迟到的理由是什么？'\n员工：'我的闹钟坏了。'\n老板：'那你为什么不修？'\n员工：'我还没起床呢，怎么修？'",
+  "问：什么东西越擦越脏？\n答：黑板！",
+  "小明：'妈妈，我想养一只小狗。'\n妈妈：'你连自己都照顾不好。'\n小明：'所以我才需要一只狗来照顾我啊！'",
+  "问：什么东西你不需要它，它就来；你需要它，它就走？\n答：睡意！",
+  "老师：'小明，你长大想当什么？'\n小明：'当富二代。'\n老师：'那你爸呢？'\n小明：'他努力当富一代。'",
+  "为什么海是蓝色的？\n因为鱼在水里吐泡泡：blue blue blue...",
+  "问：什么动物天天熬夜？\n答：熊猫，因为它黑眼圈那么重！",
+  "我：'今天运动了吗？'\n朋友：'运动了！'\n我：'做什么运动？'\n朋友：'翻身。'",
+  "老师：'小明，你这次考试怎么又不及格？'\n小明：'老师，这叫稳定发挥。'"
 ];
 
 const riddles = [
-  {
-    question: "什么东西越洗越脏？",
-    answer: "水"
-  },
-  {
-    question: "什么门永远关不上？",
-    answer: "球门"
-  },
-  {
-    question: "什么车可以不用加油？",
-    answer: "风车"
-  },
-  {
-    question: "什么书谁也没见过？",
-    answer: "天书"
-  },
-  {
-    question: "什么动物的屁股杀伤力最大？",
-    answer: "臭鼬"
-  },
-  {
-    question: "铅笔姓什么？",
-    answer: "萧，因为削（萧）铅笔"
-  },
-  {
-    question: "什么东西天气越热，它爬得越高？",
-    answer: "温度计"
-  },
-  {
-    question: "什么东西有头无脚？",
-    answer: "砖头"
-  },
-  {
-    question: "什么东西越多越便宜？",
-    answer: "照相（相片多了就不值钱了）"
-  },
-  {
-    question: "一个人从飞机上掉下来，为什么没摔死？",
-    answer: "飞机还没起飞"
-  },
-  {
-    question: "什么东西最喜欢晒太阳？",
-    answer: "太阳镜"
-  },
-  {
-    question: "什么动物被打死后还会跳？",
-    answer: "跳蚤"
-  },
-  {
-    question: "一只鸡，一只鹅，放冰箱里，鸡冻死了，鹅却活着，为什么？",
-    answer: "是企鹅"
-  },
-  {
-    question: "什么东西往上升永远不会下降？",
-    answer: "年龄"
-  },
-  {
-    question: "用什么可以解开所有的谜？",
-    answer: "答案"
-  },
-  {
-    question: "什么英文字母最多人喜欢听？",
-    answer: "CD"
-  },
-  {
-    question: "什么东西每天都会来，却永远不会到？",
-    answer: "明天"
-  },
-  {
-    question: "小王与父母头一次出国旅行，由于语言不通，他的父母显得不知所措，小王也不懂外语，却象在自己国家里一样未曾感到丝毫不便，为什么？",
-    answer: "小王是婴儿"
-  },
-  {
-    question: "什么东西放在火中不会燃烧，放在水中不会下沉？",
-    answer: "冰块"
-  },
-  {
-    question: "一个不会游泳的人掉进了水里却没有淹死，为什么？",
-    answer: "穿着救生衣"
-  },
-  {
-    question: "什么动物的屁最臭？",
-    answer: "黄鼠狼，因为黄鼠狼放屁（放臭屁）"
-  },
-  {
-    question: "什么事每人每天都必须认真地做？",
-    answer: "睡觉"
-  },
-  {
-    question: "什么人始终不敢洗澡？",
-    answer: "泥人"
-  },
-  {
-    question: "小明的爸爸找了人座位坐下，小明也在同一个房间找个地方坐下来，小明的爸爸却不能坐在小明的位置上，小明坐在哪儿，为什么？",
-    answer: "小明坐在爸爸的腿上"
-  },
-  {
-    question: "什么官不仅不领工资，还要自掏腰包？",
-    answer: "新郎官"
-  }
+  { question: "什么东西越洗越脏？", answer: "水" },
+  { question: "什么门永远关不上？", answer: "球门" },
+  { question: "什么车可以不用加油？", answer: "风车" },
+  { question: "什么书谁也没见过？", answer: "天书" },
+  { question: "什么动物的屁股杀伤力最大？", answer: "臭鼬" },
+  { question: "铅笔姓什么？", answer: "萧，因为削（萧）铅笔" },
+  { question: "什么东西天气越热，它爬得越高？", answer: "温度计" },
+  { question: "什么东西有头无脚？", answer: "砖头" },
+  { question: "什么东西越多越便宜？", answer: "照相（相片多了就不值钱了）" },
+  { question: "一个人从飞机上掉下来，为什么没摔死？", answer: "飞机还没起飞" },
+  { question: "什么东西最喜欢晒太阳？", answer: "太阳镜" },
+  { question: "什么动物被打死后还会跳？", answer: "跳蚤" },
+  { question: "一只鸡，一只鹅，放冰箱里，鸡冻死了，鹅却活着，为什么？", answer: "是企鹅" },
+  { question: "什么东西往上升永远不会下降？", answer: "年龄" },
+  { question: "用什么可以解开所有的谜？", answer: "答案" },
+  { question: "什么英文字母最多人喜欢听？", answer: "CD" },
+  { question: "什么东西每天都会来，却永远不会到？", answer: "明天" },
+  { question: "小王与父母头一次出国旅行，由于语言不通，他的父母显得不知所措，小王也不懂外语，却象在自己国家里一样未曾感到丝毫不便，为什么？", answer: "小王是婴儿" },
+  { question: "什么东西放在火中不会燃烧，放在水中不会下沉？", answer: "冰块" },
+  { question: "一个不会游泳的人掉进了水里却没有淹死，为什么？", answer: "穿着救生衣" },
+  { question: "什么动物的屁最臭？", answer: "黄鼠狼，因为黄鼠狼放屁（放臭屁）" },
+  { question: "什么事每人每天都必须认真地做？", answer: "睡觉" },
+  { question: "什么人始终不敢洗澡？", answer: "泥人" },
+  { question: "小明的爸爸找了人座位坐下，小明也在同一个房间找个地方坐下来，小明的爸爸却不能坐在小明的位置上，小明坐在哪儿，为什么？", answer: "小明坐在爸爸的腿上" },
+  { question: "什么官不仅不领工资，还要自掏腰包？", answer: "新郎官" },
+  { question: "什么东西你越生气，它就越大？", answer: "脾气" },
+  { question: "什么桥下没有水？", answer: "立交桥" },
+  { question: "什么东西能载得动一百捆干草却托不起一粒沙子？", answer: "水（沙子会沉下去）" },
+  { question: "盆里有6只馒头，6个小朋友每人分到1只，但盆里还留着1只，为什么？", answer: "最后一个小朋友把盆一起拿走了" },
+  { question: "老王一天吃一个鸡蛋，一年吃多少个？", answer: "365个或366个" }
 ];
+
+// 根据日期生成每日内容索引
+const getDailyIndex = (totalItems: number, offset: number = 0) => {
+  const today = new Date();
+  const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24));
+  return (dayOfYear + offset) % totalItems;
+};
+
+// 获取今日日期字符串
+const getTodayString = () => {
+  const today = new Date();
+  return `${today.getMonth() + 1}月${today.getDate()}日`;
+};
 
 const Entertainment = () => {
   const navigate = useNavigate();
-  const [currentJoke, setCurrentJoke] = useState(0);
-  const [currentRiddle, setCurrentRiddle] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [extraJokeOffset, setExtraJokeOffset] = useState(0);
+  const [extraRiddleOffset, setExtraRiddleOffset] = useState(0);
+
+  // 每日推荐的笑话和脑筋急转弯
+  const dailyJokeIndex = useMemo(() => getDailyIndex(jokes.length, extraJokeOffset), [extraJokeOffset]);
+  const dailyRiddleIndex = useMemo(() => getDailyIndex(riddles.length, extraRiddleOffset), [extraRiddleOffset]);
+
+  const todayString = useMemo(() => getTodayString(), []);
 
   const nextJoke = () => {
-    setCurrentJoke((prev) => (prev + 1) % jokes.length);
+    setExtraJokeOffset((prev) => prev + 1);
   };
 
   const nextRiddle = () => {
-    setCurrentRiddle((prev) => (prev + 1) % riddles.length);
+    setExtraRiddleOffset((prev) => prev + 1);
     setShowAnswer(false);
   };
 
@@ -187,13 +146,19 @@ const Entertainment = () => {
                     <Laugh className="w-8 h-8 text-accent" />
                   </div>
                 </div>
-                <CardTitle>每日笑话</CardTitle>
+                <CardTitle className="flex items-center justify-center gap-2">
+                  每日笑话
+                  <span className="inline-flex items-center gap-1 text-sm font-normal text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
+                    <Calendar className="w-3 h-3" />
+                    {todayString}
+                  </span>
+                </CardTitle>
                 <CardDescription>让我们开怀一笑吧！</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="min-h-[200px] flex items-center justify-center">
                   <p className="text-lg text-foreground text-center whitespace-pre-line leading-relaxed px-4">
-                    {jokes[currentJoke]}
+                    {jokes[dailyJokeIndex]}
                   </p>
                 </div>
                 <div className="flex justify-center">
@@ -218,7 +183,13 @@ const Entertainment = () => {
                     <Lightbulb className="w-8 h-8 text-primary" />
                   </div>
                 </div>
-                <CardTitle>脑筋急转弯</CardTitle>
+                <CardTitle className="flex items-center justify-center gap-2">
+                  脑筋急转弯
+                  <span className="inline-flex items-center gap-1 text-sm font-normal text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
+                    <Calendar className="w-3 h-3" />
+                    {todayString}
+                  </span>
+                </CardTitle>
                 <CardDescription>动动脑筋，开发智力！</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -226,14 +197,14 @@ const Entertainment = () => {
                   <div className="text-center space-y-4">
                     <div className="bg-muted/50 rounded-lg p-6">
                       <p className="text-xl font-semibold text-foreground">
-                        {riddles[currentRiddle].question}
+                        {riddles[dailyRiddleIndex].question}
                       </p>
                     </div>
                     
                     {showAnswer ? (
                       <div className="bg-primary/10 rounded-lg p-6 animate-fade-in">
                         <p className="text-lg text-primary font-semibold">
-                          答案：{riddles[currentRiddle].answer}
+                          答案：{riddles[dailyRiddleIndex].answer}
                         </p>
                       </div>
                     ) : (
