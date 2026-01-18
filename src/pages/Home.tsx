@@ -136,9 +136,7 @@ const Home = () => {
                   <span className="animate-pulse block">陪伴你成长的每一步，了解自己、管理情绪、轻松生活</span>
                 </span>
               </h1>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                陪伴你成长的每一步，了解自己、管理情绪、快乐学习
-              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed">陪伴你成长的每一步，了解自己、管理情绪、轻松生活</p>
               <div className="flex gap-4 justify-center">
             {!isAuthenticated ? <Button size="lg" className="flex-1 max-w-xs bg-gradient-primary hover:opacity-90 transition-opacity shadow-elegant text-white" onClick={() => navigate("/auth")}>
                 <User className="mr-2 h-5 w-5" />
