@@ -9,12 +9,14 @@ import { Input } from "@/components/ui/input";
 import { ChevronLeft, Home, RotateCcw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import PaymentConfirmation from "@/components/PaymentConfirmation";
 
 export default function MentalAgeTest() {
   const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
   const [showResult, setShowResult] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
   const [userId, setUserId] = useState<string>("");
   const [actualAge, setActualAge] = useState<number>(0);
   const [showAgeInput, setShowAgeInput] = useState(true);
@@ -245,24 +247,30 @@ export default function MentalAgeTest() {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
-      const result = getResult();
-      
-      if (userId) {
-        try {
-          await supabase.from("test_results").insert({
-            user_id: userId,
-            test_type: "age",
-            test_name: "心理年龄测评",
-            result: JSON.stringify(result),
-          });
-          toast.success("测试结果已保存");
-        } catch (error) {
-          console.error("保存测试结果失败:", error);
-        }
-      }
-      
-      setShowResult(true);
+      // 先显示付款页面
+      setShowPayment(true);
     }
+  };
+
+  const handlePaymentConfirm = async () => {
+    const result = getResult();
+    
+    if (userId) {
+      try {
+        await supabase.from("test_results").insert({
+          user_id: userId,
+          test_type: "age",
+          test_name: "心理年龄测评",
+          result: JSON.stringify(result),
+        });
+        toast.success("测试结果已保存");
+      } catch (error) {
+        console.error("保存测试结果失败:", error);
+      }
+    }
+    
+    setShowPayment(false);
+    setShowResult(true);
   };
 
   const handlePrevious = () => {
@@ -365,6 +373,15 @@ export default function MentalAgeTest() {
           </Card>
         </div>
       </div>
+    );
+  }
+
+  if (showPayment) {
+    return (
+      <PaymentConfirmation 
+        testName="心理年龄测评" 
+        onConfirm={handlePaymentConfirm} 
+      />
     );
   }
 
