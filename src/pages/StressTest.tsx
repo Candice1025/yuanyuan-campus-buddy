@@ -8,14 +8,12 @@ import { ArrowLeft, ArrowRight, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import PaymentConfirmation from "@/components/PaymentConfirmation";
 
 const StressTest = () => {
   const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [showResult, setShowResult] = useState(false);
-  const [showPayment, setShowPayment] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -68,28 +66,22 @@ const StressTest = () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
-      // 先显示付款页面
-      setShowPayment(true);
-    }
-  };
-
-  const handlePaymentConfirm = async () => {
-    if (userId) {
-      const result = getResult();
-      try {
-        await supabase.from("test_results").insert({
-          user_id: userId,
-          test_type: "stress",
-          test_name: "压力值测试",
-          result: result.level
-        });
-      } catch (error) {
-        console.error("Error saving test result:", error);
-        toast.error("保存测试结果失败");
+      if (userId) {
+        const result = getResult();
+        try {
+          await supabase.from("test_results").insert({
+            user_id: userId,
+            test_type: "stress",
+            test_name: "压力值测试",
+            result: result.level
+          });
+        } catch (error) {
+          console.error("Error saving test result:", error);
+          toast.error("保存测试结果失败");
+        }
       }
+      setShowResult(true);
     }
-    setShowPayment(false);
-    setShowResult(true);
   };
 
   const handlePrevious = () => {
@@ -292,15 +284,6 @@ const StressTest = () => {
       detailedAnalysis, symptoms, copingStrategies, resources, dimensionResults, stressManagement 
     };
   };
-
-  if (showPayment) {
-    return (
-      <PaymentConfirmation 
-        testName="压力测试" 
-        onConfirm={handlePaymentConfirm} 
-      />
-    );
-  }
 
   if (showResult) {
     const result = getResult();

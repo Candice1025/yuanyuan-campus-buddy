@@ -8,14 +8,12 @@ import { Label } from "@/components/ui/label";
 import { ChevronLeft, Home, RotateCcw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import PaymentConfirmation from "@/components/PaymentConfirmation";
 
 export default function AnimalPersonalityTest() {
   const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
   const [showResult, setShowResult] = useState(false);
-  const [showPayment, setShowPayment] = useState(false);
   const [userId, setUserId] = useState<string>("");
 
   useEffect(() => {
@@ -226,30 +224,24 @@ export default function AnimalPersonalityTest() {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
-      // 先显示付款页面
-      setShowPayment(true);
-    }
-  };
-
-  const handlePaymentConfirm = async () => {
-    const result = getResult();
-    
-    if (userId) {
-      try {
-        await supabase.from("test_results").insert({
-          user_id: userId,
-          test_type: "personality",
-          test_name: "动物性格测试",
-          result: JSON.stringify(result),
-        });
-        toast.success("测试结果已保存");
-      } catch (error) {
-        console.error("保存测试结果失败:", error);
+      const result = getResult();
+      
+      if (userId) {
+        try {
+          await supabase.from("test_results").insert({
+            user_id: userId,
+            test_type: "personality",
+            test_name: "动物性格测试",
+            result: JSON.stringify(result),
+          });
+          toast.success("测试结果已保存");
+        } catch (error) {
+          console.error("保存测试结果失败:", error);
+        }
       }
+      
+      setShowResult(true);
     }
-    
-    setShowPayment(false);
-    setShowResult(true);
   };
 
   const handlePrevious = () => {
@@ -289,15 +281,6 @@ export default function AnimalPersonalityTest() {
       } : null,
     };
   };
-
-  if (showPayment) {
-    return (
-      <PaymentConfirmation 
-        testName="动物性格测试" 
-        onConfirm={handlePaymentConfirm} 
-      />
-    );
-  }
 
   if (showResult) {
     const result = getResult();
