@@ -8,12 +8,14 @@ import { Label } from "@/components/ui/label";
 import { ChevronLeft, Home, RotateCcw, Trophy } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import PaymentConfirmation from "@/components/PaymentConfirmation";
 
 export default function StrengthsFinderTest() {
   const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
   const [showResult, setShowResult] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
   const [userId, setUserId] = useState<string>("");
 
   useEffect(() => {
@@ -259,24 +261,30 @@ export default function StrengthsFinderTest() {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
-      const result = getResult();
-      
-      if (userId) {
-        try {
-          await supabase.from("test_results").insert({
-            user_id: userId,
-            test_type: "strengths",
-            test_name: "盖洛普优势识别",
-            result: JSON.stringify(result),
-          });
-          toast.success("测试结果已保存");
-        } catch (error) {
-          console.error("保存测试结果失败:", error);
-        }
-      }
-      
-      setShowResult(true);
+      // 先显示付款页面
+      setShowPayment(true);
     }
+  };
+
+  const handlePaymentConfirm = async () => {
+    const result = getResult();
+    
+    if (userId) {
+      try {
+        await supabase.from("test_results").insert({
+          user_id: userId,
+          test_type: "strengths",
+          test_name: "盖洛普优势识别",
+          result: JSON.stringify(result),
+        });
+        toast.success("测试结果已保存");
+      } catch (error) {
+        console.error("保存测试结果失败:", error);
+      }
+    }
+    
+    setShowPayment(false);
+    setShowResult(true);
   };
 
   const handlePrevious = () => {
@@ -308,6 +316,15 @@ export default function StrengthsFinderTest() {
 
     return { topThemes, categories };
   };
+
+  if (showPayment) {
+    return (
+      <PaymentConfirmation 
+        testName="盖洛普优势识别测试" 
+        onConfirm={handlePaymentConfirm} 
+      />
+    );
+  }
 
   if (showResult) {
     const result = getResult();
