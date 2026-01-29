@@ -39,6 +39,8 @@ const TreeHole = () => {
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
+  const [userPostIds, setUserPostIds] = useState<Set<string>>(new Set());
+  const [userCommentIds, setUserCommentIds] = useState<Set<string>>(new Set());
   useEffect(() => {
     // 检查用户登录状态
     supabase.auth.getUser().then(({
@@ -86,13 +88,18 @@ const TreeHole = () => {
       user_id: null // 公开视图不暴露user_id
     })));
 
-    // 如果用户已登录，获取用户的点赞状态
+    // 如果用户已登录，获取用户的点赞状态和自己的帖子ID
     if (user) {
-      const {
-        data: likes
-      } = await supabase.from('tree_hole_likes').select('post_id').eq('user_id', user.id);
-      if (likes) {
-        setLikedPosts(new Set(likes.map(like => like.post_id)));
+      const [likesRes, userPostsRes] = await Promise.all([
+        supabase.from('tree_hole_likes').select('post_id').eq('user_id', user.id),
+        supabase.from('tree_hole_posts').select('id').eq('user_id', user.id)
+      ]);
+      
+      if (likesRes.data) {
+        setLikedPosts(new Set(likesRes.data.map(like => like.post_id)));
+      }
+      if (userPostsRes.data) {
+        setUserPostIds(new Set(userPostsRes.data.map(post => post.id)));
       }
     }
   };
@@ -200,6 +207,18 @@ const TreeHole = () => {
       created_at: c.created_at,
       user_id: null
     })));
+    
+    // 如果用户已登录，获取用户自己的评论ID
+    if (user) {
+      const { data: userComments } = await supabase
+        .from('tree_hole_comments')
+        .select('id')
+        .eq('post_id', postId)
+        .eq('user_id', user.id);
+      if (userComments) {
+        setUserCommentIds(new Set(userComments.map(c => c.id)));
+      }
+    }
   };
   const handleComment = async () => {
     if (!newComment.trim() || !selectedPost) return;
@@ -427,7 +446,7 @@ const TreeHole = () => {
                                   minute: "2-digit"
                                 })}
                                       </span>
-                                      {user && comment.user_id === user.id && <AlertDialog>
+                                      {user && userCommentIds.has(comment.id) && <AlertDialog>
                                           <AlertDialogTrigger asChild>
                                             <Button variant="ghost" size="sm" className="h-6 px-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10">
                                               <Trash2 className="w-3 h-3" />
@@ -466,7 +485,7 @@ const TreeHole = () => {
                   </Dialog>
                   
                   {/* 删除按钮 - 仅对自己的帖子显示 */}
-                  {user && post.user_id === user.id && <AlertDialog>
+                  {user && userPostIds.has(post.id) && <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 ml-auto">
                           <Trash2 className="w-4 h-4" />
