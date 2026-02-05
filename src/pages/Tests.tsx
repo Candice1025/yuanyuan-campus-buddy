@@ -56,7 +56,7 @@ const Tests = () => {
     path: "/test/learning"
   }, {
     id: "animal",
-    title: "动物性格测试",
+    title: "动物塑测试",
     description: "测试你像哪种动物，发现性格特质",
     icon: Heart,
     duration: "约6分钟",
