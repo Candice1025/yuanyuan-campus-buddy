@@ -62,6 +62,7 @@ const JungAssistant = () => {
       <button
         onClick={() => setOpen(true)}
         className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-primary shadow-float flex items-center justify-center hover:scale-110 transition-transform duration-300"
+        style={{ animation: "slow-float 4s ease-in-out infinite" }}
         aria-label="荣格助手"
       >
         <HelpCircle className="w-7 h-7 text-white" />
