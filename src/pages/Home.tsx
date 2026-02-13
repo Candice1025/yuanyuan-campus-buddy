@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Brain, MessageCircle, TreePine, Heart, Sparkles, User, Search, Star, Smile, Book, Lightbulb, Laugh } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import chatIcon from "@/assets/chat-icon.png";
+import JungAssistant from "@/components/JungAssistant";
 const Home = () => {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -230,6 +231,7 @@ const Home = () => {
           </Card>
         </div>
       </section>
+      <JungAssistant />
     </div>;
 };
 export default Home;
