@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { HelpCircle, Brain, MessageCircle, TreePine, Heart, Sparkles, Search, Laugh, User, Send, Loader2, ChevronDown, ChevronUp } from "lucide-react";
+import { HelpCircle, Brain, MessageCircle, TreePine, Heart, Sparkles, Search, Laugh, User, Send, Loader2, ChevronDown, ChevronUp, Shield, BookOpen, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -11,15 +11,20 @@ import {
 } from "@/components/ui/drawer";
 import { toast } from "@/hooks/use-toast";
 
+
+
 const guides = [
-  { icon: Brain, title: "心理测试", desc: "包含MBTI、九型人格、霍兰德等10+专业测试，帮助你深入了解自己的性格与潜能。" },
-  { icon: MessageCircle, title: "守伴者聊天", desc: "AI情绪陪伴助手，随时倾听你的心声，提供温暖的回应与建议。" },
-  { icon: Search, title: "知识检索", desc: "搜索心理学相关知识，获取权威、专业的信息。" },
-  { icon: TreePine, title: "心灵树洞", desc: "匿名发布心情，与他人互相倾听、点赞和评论，释放内心压力。" },
-  { icon: Heart, title: "心情日记", desc: "每天记录情绪变化，形成情绪趋势图，更好地觉察自己。" },
-  { icon: Sparkles, title: "心灵沙盘", desc: "通过互动沙盘游戏，以直觉摆放物件，AI帮你解读内心世界。" },
-  { icon: Laugh, title: "娱乐中心", desc: "笑话和脑筋急转弯，在轻松的氛围中放松心情。" },
-  { icon: User, title: "个人中心", desc: "管理你的数字形象、查看测试记录和历史数据。" },
+  { icon: Brain, title: "心理测试", desc: "包含MBTI、九型人格、霍兰德等10+专业测试。所有题目均为4选1，完成后自动生成详细报告并保存勋章。" },
+  { icon: MessageCircle, title: "守伴者聊天", desc: "24/7在线的AI情绪陪伴助手，随时倾听你的心声。聊天记录自动保存，需登录使用。" },
+  { icon: Search, title: "知识检索", desc: "输入关键词即可搜索心理学相关知识，AI智能排序结果，获取权威专业信息。" },
+  { icon: TreePine, title: "心灵树洞", desc: "匿名发布心情想法，所有人可见但身份完全保密。支持点赞和评论互动，浏览无需登录。" },
+  { icon: Heart, title: "心情日记", desc: "选择心情类型和强度，写下当天感受。系统会生成情绪趋势变化图，帮你觉察情绪规律。" },
+  { icon: Sparkles, title: "心灵沙盘", desc: "凭直觉在沙盘上摆放物件，AI会根据你的摆放位置和选择深度解读你的内心世界。" },
+  { icon: Laugh, title: "娱乐中心", desc: "收录笑话和脑筋急转弯，帮你在紧张学习或工作之余放松心情，无需登录即可使用。" },
+  { icon: User, title: "个人中心", desc: "自定义虚拟头像形象，查看所有历史测试记录，已完成的测试会以勋章形式展示成就。" },
+  { icon: Shield, title: "隐私与安全", desc: "所有数据严格加密存储，树洞发布完全匿名。你的个人信息和测试结果仅自己可见。" },
+  { icon: BookOpen, title: "新手入门", desc: "首次使用建议：先注册登录 → 做一个心理测试了解自己 → 去树洞看看大家的分享 → 和守伴者聊聊天。" },
+  { icon: Clock, title: "使用小贴士", desc: "测试不限次数可重复做；心情日记坚持记录效果更好；遇到困扰随时找守伴者倾诉，它不会评判你。" },
 ];
 
 type Msg = { role: "user" | "assistant"; content: string };
