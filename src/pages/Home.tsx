@@ -6,6 +6,40 @@ import { Brain, MessageCircle, TreePine, Heart, Sparkles, User, Search, Star, Sm
 import { supabase } from "@/integrations/supabase/client";
 import chatIcon from "@/assets/chat-icon.png";
 import JungAssistant from "@/components/JungAssistant";
+const dailyQuotes = [
+  "每一天都是新的开始，相信自己的力量",
+  "你比你想象中更勇敢、更坚强",
+  "允许自己慢下来，也是一种成长",
+  "情绪没有对错，接纳它就是善待自己",
+  "你值得被温柔以待，包括被自己",
+  "勇敢不是不害怕，而是带着害怕前行",
+  "每一次低谷，都是为了遇见更好的自己",
+  "今天的你，已经很棒了",
+  "不必完美，做真实的自己就好",
+  "休息不是偷懒，是为了走更远的路",
+  "你的感受很重要，不要忽略它",
+  "成长是一场温柔的冒险",
+  "阳光总在风雨后，请再坚持一下",
+  "学会和自己和解，是最大的智慧",
+  "每个人都有自己的节奏，不必比较",
+  "今天也要好好照顾自己哦",
+  "你的存在本身就是一种力量",
+  "生活不会辜负每一个认真的人",
+  "拥抱不确定，才能遇见惊喜",
+  "温柔地对待世界，世界也会温柔待你",
+  "不要害怕犯错，那是成长的痕迹",
+  "你已经走了很远，别忘了为自己鼓掌",
+  "心若向阳，处处都是温暖",
+  "接受帮助不是软弱，是勇敢的表现",
+  "每一个微笑都是送给自己的礼物",
+  "慢慢来，比较快",
+  "你的内心比你以为的更有力量",
+  "今天的小进步，是明天的大成就",
+  "善待自己，从此刻开始",
+  "你不需要取悦所有人，做自己就够了",
+  "深呼吸，一切都会好起来的",
+];
+
 const Home = () => {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -222,7 +256,7 @@ const Home = () => {
             <div className="text-center space-y-4">
               <Sparkles className="w-10 h-10 text-white mx-auto animate-bounce-soft" />
               <blockquote className="text-2xl font-medium text-white">
-                "每一天都是新的开始，相信自己的力量"
+                "{dailyQuotes[Math.floor((Date.now() / 86400000)) % dailyQuotes.length]}"
               </blockquote>
               <p className="text-primary-light">
                 — 守伴者今日寄语
