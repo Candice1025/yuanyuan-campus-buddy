@@ -197,6 +197,42 @@ export type Database = {
         }
         Relationships: []
       }
+      test_purchases: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          order_no: string | null
+          paid_at: string | null
+          status: string
+          test_type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          id?: string
+          order_no?: string | null
+          paid_at?: string | null
+          status?: string
+          test_type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          order_no?: string | null
+          paid_at?: string | null
+          status?: string
+          test_type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       test_results: {
         Row: {
           created_at: string
