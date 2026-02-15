@@ -99,10 +99,9 @@ const DepressionTest = () => {
     
     // 维度分析
     const dimensions = {
-      emotional: { name: "情绪症状", score: 0, max: 0, questions: [0, 2, 14] },
-      somatic: { name: "躯体症状", score: 0, max: 0, questions: [3, 4, 5, 6, 7, 8, 9, 12, 13] },
-      cognitive: { name: "认知症状", score: 0, max: 0, questions: [10, 11, 15, 16, 17, 18, 19] },
-      positive: { name: "积极情感", score: 0, max: 0, questions: [1] }
+      emotional: { name: "情绪症状", score: 0, max: 0, questions: [0, 1, 2, 14] },
+      somatic: { name: "躯体症状", score: 0, max: 0, questions: [3, 4, 5, 6, 7, 8, 9, 12] },
+      cognitive: { name: "认知症状", score: 0, max: 0, questions: [10, 11, 13, 15, 16, 17, 18, 19] }
     };
     
     Object.entries(answers).forEach(([questionIndex, answer]) => {
