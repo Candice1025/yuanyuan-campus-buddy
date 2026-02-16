@@ -211,9 +211,9 @@ export default function EnneagramTest() {
     newAnswers[currentQuestion] = typeNum.toString();
     setAnswers(newAnswers);
     setTimeout(() => {
-      if (currentQuestion < questions.length - 1) {
-        setCurrentQuestion(prev => prev + 1);
-      }
+      setCurrentQuestion(prev =>
+        prev < questions.length - 1 ? prev + 1 : prev
+      );
     }, 300);
   };
 

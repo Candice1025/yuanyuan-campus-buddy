@@ -66,9 +66,9 @@ const DepressionTest = () => {
     const updated = { ...answers, [currentQuestion]: value };
     setAnswers(updated);
     setTimeout(() => {
-      if (currentQuestion < questions.length - 1) {
-        setCurrentQuestion(prev => prev + 1);
-      }
+      setCurrentQuestion(prev =>
+        prev < questions.length - 1 ? prev + 1 : prev
+      );
     }, 300);
   };
 
