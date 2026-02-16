@@ -291,7 +291,7 @@ const MBTITest = () => {
             user_id: userId,
             test_type: "mbti",
             test_name: "MBTI人格测试",
-            result: `${result.type} - ${result.name}`
+            result: JSON.stringify(result)
           });
         } catch (error) {
           console.error("Error saving test result:", error);

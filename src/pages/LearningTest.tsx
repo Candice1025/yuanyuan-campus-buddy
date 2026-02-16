@@ -168,7 +168,7 @@ const LearningTest = () => {
             user_id: userId,
             test_type: "learning",
             test_name: "学习风格测试",
-            result: result.name
+            result: JSON.stringify(result)
           });
         } catch (error) {
           console.error("Error saving test result:", error);
