@@ -383,10 +383,11 @@ export default function MentalAgeTest() {
             <Button variant="ghost" size="icon" onClick={() => navigate("/tests")}>
               <ChevronLeft className="h-5 w-5" />
             </Button>
-            <h1 className="text-2xl font-bold">测试结果</h1>
+            <h1 className="text-2xl font-bold">心理年龄测试报告</h1>
           </div>
 
-          <Card className="p-6 space-y-6">
+          {/* 主要结果 */}
+          <Card className="p-6 space-y-4">
             <div className="text-center space-y-4">
               <div className="text-6xl">
                 {result.difference < -5 ? "🧒" : result.difference > 5 ? "🧓" : "😊"}
@@ -397,56 +398,130 @@ export default function MentalAgeTest() {
                 <p className="text-muted-foreground">您的心理年龄</p>
               </div>
             </div>
+          </Card>
 
-            <div className="space-y-4">
-              <div className="bg-muted/50 p-4 rounded-lg">
-                <div className="grid grid-cols-3 gap-4 text-center">
-                  <div>
-                    <p className="text-2xl font-bold">{result.actualAge}</p>
-                    <p className="text-sm text-muted-foreground">实际年龄</p>
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold">{result.mentalAge}</p>
-                    <p className="text-sm text-muted-foreground">心理年龄</p>
-                  </div>
-                  <div>
-                    <p className={`text-2xl font-bold ${result.difference > 0 ? 'text-orange-600' : 'text-green-600'}`}>
-                      {result.difference > 0 ? '+' : ''}{result.difference}
-                    </p>
-                    <p className="text-sm text-muted-foreground">年龄差</p>
-                  </div>
+          {/* 年龄对比 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">📊 年龄对比</h3>
+            <div className="bg-muted/50 p-4 rounded-lg">
+              <div className="grid grid-cols-3 gap-4 text-center">
+                <div>
+                  <p className="text-2xl font-bold">{result.actualAge}</p>
+                  <p className="text-sm text-muted-foreground">实际年龄</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-primary">{result.mentalAge}</p>
+                  <p className="text-sm text-muted-foreground">心理年龄</p>
+                </div>
+                <div>
+                  <p className={`text-2xl font-bold ${result.difference > 0 ? 'text-destructive' : 'text-primary'}`}>
+                    {result.difference > 0 ? '+' : ''}{result.difference}
+                  </p>
+                  <p className="text-sm text-muted-foreground">年龄差</p>
                 </div>
               </div>
-
-              <div>
-                <h3 className="font-semibold mb-2">分析说明</h3>
-                <p className="text-muted-foreground">{result.description}</p>
-              </div>
-
-              <div>
-                <h3 className="font-semibold mb-3">建议</h3>
-                <ul className="space-y-2">
-                  {result.suggestions.map((suggestion, index) => (
-                    <li key={index} className="flex items-start gap-2 text-sm text-muted-foreground">
-                      <span className="text-primary mt-1">•</span>
-                      <span>{suggestion}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            <div className="flex gap-3">
-              <Button onClick={() => navigate("/tests")} variant="outline" className="flex-1">
-                <RotateCcw className="mr-2 h-4 w-4" />
-                返回测试中心
-              </Button>
-              <Button onClick={() => navigate("/")} className="flex-1">
-                <Home className="mr-2 h-4 w-4" />
-                返回首页
-              </Button>
             </div>
           </Card>
+
+          {/* 详细分析 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">🔍 详细分析</h3>
+            <p className="text-muted-foreground leading-relaxed">{result.description}</p>
+            <div className="space-y-2 text-muted-foreground text-sm mt-4">
+              {result.difference < -10 && (
+                <>
+                  <p>• 你的心态比同龄人更加年轻和活跃</p>
+                  <p>• 你对新事物保持着强烈的好奇心和热情</p>
+                  <p>• 你可能在某些方面需要增加更多的深度思考</p>
+                </>
+              )}
+              {result.difference >= -10 && result.difference <= 10 && (
+                <>
+                  <p>• 你的心理发展与实际年龄相当匹配</p>
+                  <p>• 你在活力和成熟之间保持了良好的平衡</p>
+                  <p>• 你能够适当地应对年龄阶段的各种挑战</p>
+                </>
+              )}
+              {result.difference > 10 && (
+                <>
+                  <p>• 你的思维方式和行为模式比同龄人更加成熟</p>
+                  <p>• 你可能承担了较多的责任和压力</p>
+                  <p>• 适当放松和享受生活同样重要</p>
+                </>
+              )}
+            </div>
+          </Card>
+
+          {/* 心理年龄参考标准 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">📋 参考标准</h3>
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              <div className="flex items-center gap-2 p-2 rounded-lg bg-primary/10">
+                <div className="w-3 h-3 rounded-full bg-primary"></div>
+                <span className="text-muted-foreground">差值≤5：年龄匹配</span>
+              </div>
+              <div className="flex items-center gap-2 p-2 rounded-lg bg-primary/10">
+                <div className="w-3 h-3 rounded-full bg-accent"></div>
+                <span className="text-muted-foreground">差值5-10：略有偏差</span>
+              </div>
+              <div className="flex items-center gap-2 p-2 rounded-lg bg-primary/10">
+                <div className="w-3 h-3 rounded-full bg-destructive"></div>
+                <span className="text-muted-foreground">差值&gt;10：明显偏差</span>
+              </div>
+              <div className="flex items-center gap-2 p-2 rounded-lg bg-muted/30">
+                <span className="text-muted-foreground text-xs">偏差方向决定倾向类型</span>
+              </div>
+            </div>
+          </Card>
+
+          {/* 生活方式建议 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">💡 生活方式建议</h3>
+            <div className="space-y-3">
+              {result.suggestions.map((suggestion: string, index: number) => (
+                <div key={index} className="flex items-start gap-3 text-muted-foreground">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary text-xs flex items-center justify-center font-medium">
+                    {index + 1}
+                  </span>
+                  <span>{suggestion}</span>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          {/* 心理健康小贴士 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">🧠 心理健康小贴士</h3>
+            <div className="space-y-2 text-muted-foreground">
+              <p>🏃 保持适度运动，有助于维持年轻心态</p>
+              <p>📚 持续学习新知识，保持大脑活力</p>
+              <p>🤗 维护积极的社交关系，增强心理韧性</p>
+              <p>🧘 练习正念冥想，培养内在平静</p>
+              <p>😴 保证充足的睡眠，让身心充分休息</p>
+            </div>
+          </Card>
+
+          {/* 重要提示 */}
+          <Card className="p-6 space-y-4 border-l-4 border-l-primary">
+            <h3 className="text-xl font-semibold flex items-center gap-2">⚠️ 重要提示</h3>
+            <div className="space-y-2 text-muted-foreground text-sm">
+              <p>• 心理年龄受多种因素影响，包括生活经历、文化背景和当前心境</p>
+              <p>• 没有"正确"的心理年龄，重要的是找到适合自己的生活节奏</p>
+              <p>• 心理年龄会随着时间和经历而变化</p>
+              <p>• 本测试仅供自我探索参考，不具有医学诊断意义</p>
+            </div>
+          </Card>
+
+          <div className="flex gap-3">
+            <Button onClick={() => navigate("/tests")} variant="outline" className="flex-1">
+              <RotateCcw className="mr-2 h-4 w-4" />
+              返回测试中心
+            </Button>
+            <Button onClick={() => navigate("/")} className="flex-1">
+              <Home className="mr-2 h-4 w-4" />
+              返回首页
+            </Button>
+          </div>
         </div>
       </div>
     );
