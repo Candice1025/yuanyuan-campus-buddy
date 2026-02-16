@@ -457,6 +457,7 @@ const MBTITest = () => {
   }
 
   const currentQ = questions[currentQuestion];
+  if (!currentQ) return null;
 
   return (
     <div className="min-h-screen bg-gradient-subtle">
