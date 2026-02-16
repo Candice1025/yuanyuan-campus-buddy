@@ -277,7 +277,13 @@ const MBTITest = () => {
   const progress = ((currentQuestion + 1) / questions.length) * 100;
 
   const handleAnswer = (value: string) => {
-    setAnswers({ ...answers, [currentQuestion]: value });
+    const updated = { ...answers, [currentQuestion]: value };
+    setAnswers(updated);
+    setTimeout(() => {
+      if (currentQuestion < questions.length - 1) {
+        setCurrentQuestion(prev => prev + 1);
+      }
+    }, 300);
   };
 
   const handleNext = async () => {

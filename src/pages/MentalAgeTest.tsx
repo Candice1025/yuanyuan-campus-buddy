@@ -239,6 +239,11 @@ export default function MentalAgeTest() {
     const newAnswers = [...answers];
     newAnswers[currentQuestion] = value;
     setAnswers(newAnswers);
+    setTimeout(() => {
+      if (currentQuestion < questions.length - 1) {
+        setCurrentQuestion(prev => prev + 1);
+      }
+    }, 300);
   };
 
   const handleNext = async () => {
