@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -275,14 +275,18 @@ export default function HollandTest() {
 
   const progress = ((currentQuestion + 1) / questions.length) * 100;
 
+  const autoAdvanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const handleAnswer = (value: string) => {
     const newAnswers = [...answers];
     newAnswers[currentQuestion] = value;
     setAnswers(newAnswers);
-    setTimeout(() => {
+    if (autoAdvanceTimer.current) clearTimeout(autoAdvanceTimer.current);
+    autoAdvanceTimer.current = setTimeout(() => {
       setCurrentQuestion(prev =>
         prev < questions.length - 1 ? prev + 1 : prev
       );
+      autoAdvanceTimer.current = null;
     }, 300);
   };
 
@@ -516,7 +520,7 @@ export default function HollandTest() {
             <h3 className="text-lg font-medium">{questions[currentQuestion].text}</h3>
             
             <RadioGroup 
-              value={answers[currentQuestion]} 
+              value={answers[currentQuestion] || ""} 
               onValueChange={handleAnswer}
             >
               <div className="space-y-3">
