@@ -253,6 +253,11 @@ export default function StrengthsFinderTest() {
     const newAnswers = [...answers];
     newAnswers[currentQuestion] = theme;
     setAnswers(newAnswers);
+    setTimeout(() => {
+      if (currentQuestion < questions.length - 1) {
+        setCurrentQuestion(prev => prev + 1);
+      }
+    }, 300);
   };
 
   const handleNext = async () => {
