@@ -351,11 +351,22 @@ const MBTITest = () => {
       ENTJ: { name: "指挥官", desc: "大胆果断的领导者，追求效率和成就", color: "bg-accent", traits: ["果断", "高效", "战略眼光", "天生领导", "自信", "有远见"], strengths: ["卓越的领导和决策能力", "战略性思维，高瞻远瞩", "高效的执行力", "善于组织和动员资源"], weaknesses: ["可能过于强势和专制", "对他人要求过高", "不善于处理情感", "可能不够耐心"], careers: ["CEO", "企业家", "政治家", "管理顾问", "大学校长", "军事指挥官"], relationships: "你是强大而可靠的伴侣，追求高质量的关系。注意不要在关系中过于掌控，学会倾听和妥协。情感表达和效率同样重要。", growth: "培养耐心和温柔，学会接受不同的节奏和方式。关注他人的情感需求，在效率和人情味之间找到平衡。", famousPeople: ["史蒂夫·乔布斯", "拿破仑", "玛格丽特·撒切尔"] }
     };
 
+    // 归一化每个维度得分，使每对总和为10
+    const normalize = (a: number, b: number): [number, number] => {
+      const total = a + b;
+      if (total === 0) return [5, 5];
+      return [Math.round((a / total) * 10), Math.round((b / total) * 10)];
+    };
+    const [eScore, iScore] = normalize(counts.E, counts.I);
+    const [sScore, nScore] = normalize(counts.S, counts.N);
+    const [tScore, fScore] = normalize(counts.T, counts.F);
+    const [jScore, pScore] = normalize(counts.J, counts.P);
+
     const dimensionScores = {
-      EI: { E: counts.E, I: counts.I },
-      SN: { S: counts.S, N: counts.N },
-      TF: { T: counts.T, F: counts.F },
-      JP: { J: counts.J, P: counts.P }
+      EI: { E: eScore, I: iScore },
+      SN: { S: sScore, N: nScore },
+      TF: { T: tScore, F: fScore },
+      JP: { J: jScore, P: pScore }
     };
 
     return { ...results[type], type, dimensionScores };
