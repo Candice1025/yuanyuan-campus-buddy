@@ -88,7 +88,7 @@ const TestHistory = () => {
               {tests.map((test) => {
                 const badgeText = formatTestResult(test.result);
                 return (
-                  <Card key={test.id} className="p-4 shadow-card hover:shadow-soft transition-all">
+                  <Card key={test.id} className="p-4 shadow-card hover:shadow-soft transition-all cursor-pointer" onClick={() => navigate(`/test-result/${test.id}`)}>
                     <div className="flex items-center gap-4">
                       <div className={`w-12 h-12 rounded-xl ${getTestColor(test.test_type)} flex items-center justify-center flex-shrink-0`}>
                         <Brain className="w-6 h-6 text-white" />

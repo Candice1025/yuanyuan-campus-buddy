@@ -521,6 +521,7 @@ const Profile = () => {
                   <Card
                     key={test.id}
                     className="p-4 shadow-card hover:shadow-soft transition-all cursor-pointer"
+                    onClick={() => navigate(`/test-result/${test.id}`)}
                   >
                     <div className="flex items-center gap-4">
                       <div
