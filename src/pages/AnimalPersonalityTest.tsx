@@ -219,9 +219,9 @@ export default function AnimalPersonalityTest() {
     newAnswers[currentQuestion] = value;
     setAnswers(newAnswers);
     setTimeout(() => {
-      if (currentQuestion < questions.length - 1) {
-        setCurrentQuestion(prev => prev + 1);
-      }
+      setCurrentQuestion(prev =>
+        prev < questions.length - 1 ? prev + 1 : prev
+      );
     }, 300);
   };
 
