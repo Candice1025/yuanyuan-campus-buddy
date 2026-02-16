@@ -24,6 +24,7 @@ import Auth from "./pages/Auth";
 import KnowledgeSearch from "./pages/KnowledgeSearch";
 import Entertainment from "./pages/Entertainment";
 import About from "./pages/About";
+import TestHistory from "./pages/TestHistory";
 
 import NotFound from "./pages/NotFound";
 
@@ -56,6 +57,7 @@ const App = () => (
           <Route path="/knowledge-search" element={<KnowledgeSearch />} />
           <Route path="/entertainment" element={<Entertainment />} />
           <Route path="/about" element={<About />} />
+          <Route path="/test-history" element={<TestHistory />} />
           
           <Route path="/auth" element={<Auth />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
