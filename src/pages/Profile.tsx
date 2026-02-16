@@ -507,7 +507,7 @@ const Profile = () => {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => navigate("/tests")}
+              onClick={() => navigate("/test-history")}
             >
               查看全部 →
             </Button>
