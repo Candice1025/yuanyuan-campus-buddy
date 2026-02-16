@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -276,13 +276,17 @@ const MBTITest = () => {
 
   const progress = ((currentQuestion + 1) / questions.length) * 100;
 
+  const autoAdvanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const handleAnswer = (value: string) => {
     const updated = { ...answers, [currentQuestion]: value };
     setAnswers(updated);
-    setTimeout(() => {
+    if (autoAdvanceTimer.current) clearTimeout(autoAdvanceTimer.current);
+    autoAdvanceTimer.current = setTimeout(() => {
       setCurrentQuestion(prev =>
         prev < questions.length - 1 ? prev + 1 : prev
       );
+      autoAdvanceTimer.current = null;
     }, 300);
   };
 
@@ -557,7 +561,7 @@ const MBTITest = () => {
           </h2>
           
           <RadioGroup
-            value={answers[currentQuestion]}
+            value={answers[currentQuestion] || ""}
             onValueChange={handleAnswer}
             className="space-y-4"
           >

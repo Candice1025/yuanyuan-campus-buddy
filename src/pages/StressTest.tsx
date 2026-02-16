@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -58,13 +58,17 @@ const StressTest = () => {
 
   const progress = ((currentQuestion + 1) / questions.length) * 100;
 
+  const autoAdvanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const handleAnswer = (value: number) => {
     const updated = { ...answers, [currentQuestion]: value };
     setAnswers(updated);
-    setTimeout(() => {
+    if (autoAdvanceTimer.current) clearTimeout(autoAdvanceTimer.current);
+    autoAdvanceTimer.current = setTimeout(() => {
       setCurrentQuestion(prev =>
         prev < questions.length - 1 ? prev + 1 : prev
       );
+      autoAdvanceTimer.current = null;
     }, 300);
   };
 
@@ -523,7 +527,7 @@ const StressTest = () => {
           </h2>
           
           <RadioGroup
-            value={answers[currentQuestion]?.toString()}
+            value={answers[currentQuestion]?.toString() || ""}
             onValueChange={(value) => handleAnswer(parseInt(value))}
             className="space-y-4"
           >
