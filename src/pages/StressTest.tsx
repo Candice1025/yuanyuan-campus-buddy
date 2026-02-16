@@ -73,7 +73,7 @@ const StressTest = () => {
             user_id: userId,
             test_type: "stress",
             test_name: "压力值测试",
-            result: result.level
+            result: JSON.stringify(result)
           });
         } catch (error) {
           console.error("Error saving test result:", error);

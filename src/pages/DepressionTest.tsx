@@ -77,7 +77,7 @@ const DepressionTest = () => {
             user_id: userId,
             test_type: "depression",
             test_name: "抑郁自评量表",
-            result: result.level
+            result: JSON.stringify(result)
           });
         } catch (error) {
           console.error("Error saving test result:", error);
