@@ -265,18 +265,15 @@ const LearningTest = () => {
       <div className="min-h-screen bg-gradient-subtle">
         <header className="sticky top-0 bg-card/80 backdrop-blur-lg border-b border-border z-10">
           <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate("/tests")}
-            >
+            <Button variant="ghost" size="icon" onClick={() => navigate("/tests")}>
               <ArrowLeft className="w-5 h-5" />
             </Button>
-            <h1 className="text-2xl font-bold text-foreground">测试结果</h1>
+            <h1 className="text-2xl font-bold text-foreground">学习风格测试报告</h1>
           </div>
         </header>
 
-        <div className="max-w-4xl mx-auto px-4 py-12">
+        <div className="max-w-4xl mx-auto px-4 py-8 space-y-6">
+          {/* 主要结果 */}
           <Card className={`p-8 ${result.color} border-0 shadow-float text-white text-center mb-8 animate-fade-in`}>
             <CheckCircle className="w-16 h-16 mx-auto mb-4" />
             <div className="text-6xl mb-4">{result.icon}</div>
@@ -284,19 +281,20 @@ const LearningTest = () => {
             <p className="text-xl opacity-90">{result.desc}</p>
           </Card>
 
-          <Card className="p-6 shadow-card mb-6 animate-slide-up">
-            <h3 className="text-xl font-semibold text-foreground mb-4">得分分布</h3>
+          {/* 得分分布 */}
+          <Card className="p-6 shadow-card animate-slide-up">
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">📊 得分分布</h3>
             <div className="space-y-3">
               {Object.entries(result.scores as Record<string, number>).map(([style, score]) => {
                 const percentage = (score / questions.length) * 100;
                 const styleNames: Record<string, string> = {
-                  V: "视觉", A: "听觉", R: "读写", K: "动觉"
+                  V: "视觉型", A: "听觉型", R: "读写型", K: "动觉型"
                 };
                 return (
                   <div key={style}>
                     <div className="flex justify-between text-sm mb-1">
-                      <span className="text-foreground">{styleNames[style]}</span>
-                      <span className="text-muted-foreground">{score}/{questions.length}</span>
+                      <span className="text-foreground font-medium">{styleNames[style]}</span>
+                      <span className="text-muted-foreground">{score}/{questions.length} ({Math.round(percentage)}%)</span>
                     </div>
                     <Progress value={percentage} className="h-2" />
                   </div>
@@ -305,8 +303,9 @@ const LearningTest = () => {
             </div>
           </Card>
 
-          <Card className="p-6 shadow-card mb-6 animate-slide-up" style={{ animationDelay: "0.1s" }}>
-            <h3 className="text-xl font-semibold text-foreground mb-4">你的优势</h3>
+          {/* 你的优势 */}
+          <Card className="p-6 shadow-card animate-slide-up" style={{ animationDelay: "0.05s" }}>
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">💪 你的学习优势</h3>
             <div className="grid grid-cols-2 gap-3">
               {result.strengths.map((strength: string, index: number) => (
                 <div key={index} className="flex items-center gap-2 text-muted-foreground">
@@ -317,27 +316,130 @@ const LearningTest = () => {
             </div>
           </Card>
 
-          <Card className="p-6 shadow-card mb-6 animate-slide-up" style={{ animationDelay: "0.2s" }}>
-            <h3 className="text-xl font-semibold text-foreground mb-4">学习建议</h3>
+          {/* 学习方法建议 */}
+          <Card className="p-6 shadow-card animate-slide-up" style={{ animationDelay: "0.1s" }}>
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">📝 高效学习方法</h3>
             <div className="space-y-3 text-muted-foreground">
               {result.tips.map((tip: string, index: number) => (
-                <p key={index}>{tip}</p>
+                <div key={index} className="p-2 rounded-lg bg-muted/30">{tip}</div>
               ))}
             </div>
           </Card>
 
-          <div className="flex gap-4">
-            <Button
-              variant="outline"
-              className="flex-1"
-              onClick={() => navigate("/tests")}
-            >
+          {/* 学习环境建议 */}
+          <Card className="p-6 shadow-card animate-slide-up" style={{ animationDelay: "0.15s" }}>
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">🏠 理想学习环境</h3>
+            <div className="space-y-2 text-muted-foreground text-sm">
+              {result.type === "V" && (
+                <>
+                  <p>• 选择光线充足、整洁有序的学习空间</p>
+                  <p>• 使用白板或大纸张绘制知识结构图</p>
+                  <p>• 准备多色笔和荧光笔做标注</p>
+                  <p>• 用视频和图形化工具辅助学习</p>
+                </>
+              )}
+              {result.type === "A" && (
+                <>
+                  <p>• 选择安静或有轻柔背景音乐的环境</p>
+                  <p>• 可以使用录音设备回放重点内容</p>
+                  <p>• 寻找学习伙伴进行讨论和复述</p>
+                  <p>• 听播客或音频课程作为补充学习</p>
+                </>
+              )}
+              {result.type === "R" && (
+                <>
+                  <p>• 准备充足的笔记本和文具</p>
+                  <p>• 图书馆是你最佳的学习场所</p>
+                  <p>• 整理个人的知识笔记和摘要本</p>
+                  <p>• 收集优质的文字资料和参考书</p>
+                </>
+              )}
+              {result.type === "K" && (
+                <>
+                  <p>• 选择可以自由走动的学习空间</p>
+                  <p>• 准备实物模型和操作材料</p>
+                  <p>• 每学习30分钟起来活动一下</p>
+                  <p>• 寻找实验室或工作坊进行实践</p>
+                </>
+              )}
+            </div>
+          </Card>
+
+          {/* 考试策略 */}
+          <Card className="p-6 shadow-card animate-slide-up" style={{ animationDelay: "0.2s" }}>
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">🎯 考试复习策略</h3>
+            <div className="space-y-3 text-muted-foreground">
+              {result.type === "V" && (
+                <>
+                  <p>📌 制作知识思维导图，用图形串联考点</p>
+                  <p>📌 使用颜色编码标记重点和难点</p>
+                  <p>📌 将公式和概念转化为图表记忆</p>
+                </>
+              )}
+              {result.type === "A" && (
+                <>
+                  <p>📌 将重点内容大声朗读和复述</p>
+                  <p>📌 组建学习小组互相提问和讨论</p>
+                  <p>📌 编口诀或故事帮助记忆复杂知识点</p>
+                </>
+              )}
+              {result.type === "R" && (
+                <>
+                  <p>📌 反复阅读和抄写关键笔记</p>
+                  <p>📌 整理知识要点清单，逐项复习</p>
+                  <p>📌 做大量练习题，通过文字巩固记忆</p>
+                </>
+              )}
+              {result.type === "K" && (
+                <>
+                  <p>📌 边走动边背诵，用身体记忆</p>
+                  <p>📌 用手指指着内容阅读，增加触觉参与</p>
+                  <p>📌 模拟考试场景进行实战练习</p>
+                </>
+              )}
+            </div>
+          </Card>
+
+          {/* 各风格说明 */}
+          <Card className="p-6 shadow-card animate-slide-up" style={{ animationDelay: "0.25s" }}>
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">📋 四种学习风格说明</h3>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="p-3 rounded-lg bg-muted/30 text-sm">
+                <p className="font-medium text-foreground mb-1">👁️ 视觉型 (V)</p>
+                <p className="text-muted-foreground">通过看图表、视频等视觉方式学习效果最好</p>
+              </div>
+              <div className="p-3 rounded-lg bg-muted/30 text-sm">
+                <p className="font-medium text-foreground mb-1">👂 听觉型 (A)</p>
+                <p className="text-muted-foreground">通过听讲解、讨论等听觉方式学习效果最好</p>
+              </div>
+              <div className="p-3 rounded-lg bg-muted/30 text-sm">
+                <p className="font-medium text-foreground mb-1">📖 读写型 (R)</p>
+                <p className="text-muted-foreground">通过阅读和书写等文字方式学习效果最好</p>
+              </div>
+              <div className="p-3 rounded-lg bg-muted/30 text-sm">
+                <p className="font-medium text-foreground mb-1">✋ 动觉型 (K)</p>
+                <p className="text-muted-foreground">通过实践操作、动手做等方式学习效果最好</p>
+              </div>
+            </div>
+          </Card>
+
+          {/* 重要提示 */}
+          <Card className="p-6 shadow-card border-l-4 border-l-primary animate-slide-up" style={{ animationDelay: "0.3s" }}>
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">⚠️ 重要提示</h3>
+            <div className="space-y-2 text-muted-foreground text-sm">
+              <p>• VARK学习风格测试帮助你了解最有效的学习方式</p>
+              <p>• 大多数人是多种学习风格的组合，而非单一类型</p>
+              <p>• 结合多种学习方式往往能取得更好的效果</p>
+              <p>• 学习风格会随着经验和练习而有所变化</p>
+              <p>• 了解自己的学习偏好，但不要被它限制</p>
+            </div>
+          </Card>
+
+          <div className="flex gap-4 pt-4">
+            <Button variant="outline" className="flex-1" onClick={() => navigate("/tests")}>
               返回测试中心
             </Button>
-            <Button
-              className="flex-1 bg-gradient-primary"
-              onClick={() => navigate("/")}
-            >
+            <Button className="flex-1 bg-gradient-primary" onClick={() => navigate("/")}>
               回到首页
             </Button>
           </div>

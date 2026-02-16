@@ -324,18 +324,23 @@ export default function StrengthsFinderTest() {
             <Button variant="ghost" size="icon" onClick={() => navigate("/tests")}>
               <ChevronLeft className="h-5 w-5" />
             </Button>
-            <h1 className="text-2xl font-bold">测试结果</h1>
+            <h1 className="text-2xl font-bold">优势识别测试报告</h1>
           </div>
 
-          <Card className="p-6 space-y-6">
+          {/* 主要结果 */}
+          <Card className="p-6 space-y-4">
             <div className="text-center space-y-4">
               <Trophy className="h-16 w-16 mx-auto text-primary" />
               <h2 className="text-3xl font-bold text-primary">你的五大优势主题</h2>
               <p className="text-muted-foreground">这些是你最突出的才干，充分发挥它们将帮助你取得成功</p>
             </div>
+          </Card>
 
+          {/* 五大优势详情 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">🏆 优势排名</h3>
             <div className="space-y-4">
-              {result.topThemes.map((theme, index) => (
+              {result.topThemes.map((theme: any, index: number) => (
                 <div key={theme.key} className="p-4 rounded-lg border bg-card">
                   <div className="flex items-start gap-3">
                     <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold">
@@ -343,7 +348,7 @@ export default function StrengthsFinderTest() {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-bold text-lg">{theme.name}</h3>
+                        <h4 className="font-bold text-lg">{theme.name}</h4>
                         <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary">
                           {theme.category}
                         </span>
@@ -354,42 +359,83 @@ export default function StrengthsFinderTest() {
                 </div>
               ))}
             </div>
+          </Card>
 
-            <div className="bg-muted/50 p-4 rounded-lg">
-              <h3 className="font-semibold mb-3">优势分布</h3>
-              <div className="space-y-2">
-                {Object.entries(result.categories).map(([category, count]) => (
-                  <div key={category} className="flex items-center gap-3">
-                    <span className="text-sm min-w-20">{category}</span>
-                    <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-primary transition-all"
-                        style={{ width: `${(count / 5) * 100}%` }}
-                      />
-                    </div>
-                    <span className="text-sm text-muted-foreground">{count}</span>
+          {/* 优势分布 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">📊 优势分布</h3>
+            <div className="space-y-2">
+              {Object.entries(result.categories).map(([category, count]) => (
+                <div key={category} className="flex items-center gap-3">
+                  <span className="text-sm min-w-20">{category}</span>
+                  <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-primary transition-all"
+                      style={{ width: `${((count as number) / 5) * 100}%` }}
+                    />
                   </div>
-                ))}
-              </div>
+                  <span className="text-sm text-muted-foreground">{count as number}</span>
+                </div>
+              ))}
             </div>
+            <p className="text-xs text-muted-foreground mt-2">* 四大类别：执行力、影响力、关系建立、战略思维</p>
+          </Card>
 
-            <div className="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-lg">
-              <p className="text-sm text-muted-foreground">
-                💡 盖洛普优势理论认为，专注于发展自己的优势比弥补弱点更有效。了解并运用这些优势，可以帮助你在工作和生活中获得更大的成就感和效能。
-              </p>
-            </div>
-
-            <div className="flex gap-3">
-              <Button onClick={() => navigate("/tests")} variant="outline" className="flex-1">
-                <RotateCcw className="mr-2 h-4 w-4" />
-                返回测试中心
-              </Button>
-              <Button onClick={() => navigate("/")} className="flex-1">
-                <Home className="mr-2 h-4 w-4" />
-                返回首页
-              </Button>
+          {/* 如何发挥优势 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">💡 如何发挥你的优势</h3>
+            <div className="space-y-3 text-muted-foreground">
+              <p>🎯 <strong>聚焦优势：</strong>把80%的精力投入到你的优势领域，而非弥补弱点</p>
+              <p>🤝 <strong>团队互补：</strong>寻找与你优势互补的伙伴，形成强大的组合</p>
+              <p>📈 <strong>持续精进：</strong>在优势领域不断深入学习和实践，追求精通</p>
+              <p>🔄 <strong>灵活运用：</strong>学会在不同场景中调用你的核心优势</p>
             </div>
           </Card>
+
+          {/* 可能的盲点 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">👁️ 可能的盲点</h3>
+            <div className="space-y-2 text-muted-foreground text-sm">
+              <p>• 过度依赖优势可能导致忽视其他重要能力的发展</p>
+              <p>• 在不熟悉的领域，你的优势可能变成弱点（如过度分析导致犹豫不决）</p>
+              <p>• 注意倾听不同优势类型的人的意见和建议</p>
+              <p>• 适当关注你较弱的类别，确保基本能力的均衡发展</p>
+            </div>
+          </Card>
+
+          {/* 学习与职业建议 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">📚 学习与职业建议</h3>
+            <div className="space-y-2 text-muted-foreground">
+              <p>📖 选择能发挥你核心优势的专业方向和课外活动</p>
+              <p>💼 在实习和兼职中寻找与优势匹配的角色</p>
+              <p>🌟 建立自己的"优势日记"，记录每天发挥优势的时刻</p>
+              <p>🎓 在学校社团和活动中担任与优势匹配的职责</p>
+            </div>
+          </Card>
+
+          {/* 重要提示 */}
+          <Card className="p-6 space-y-4 border-l-4 border-l-primary">
+            <h3 className="text-xl font-semibold flex items-center gap-2">⚠️ 重要提示</h3>
+            <div className="space-y-2 text-muted-foreground text-sm">
+              <p>• 盖洛普优势理论认为，专注于发展优势比弥补弱点更有效</p>
+              <p>• 每个人的优势组合都是独特的，没有好坏之分</p>
+              <p>• 优势是天赋+投入的结果，需要持续练习和应用</p>
+              <p>• 了解并运用这些优势，可以帮助你获得更大的成就感和效能</p>
+              <p>• 本测试为简化版本，建议结合正式评估获取更准确的结果</p>
+            </div>
+          </Card>
+
+          <div className="flex gap-3">
+            <Button onClick={() => navigate("/tests")} variant="outline" className="flex-1">
+              <RotateCcw className="mr-2 h-4 w-4" />
+              返回测试中心
+            </Button>
+            <Button onClick={() => navigate("/")} className="flex-1">
+              <Home className="mr-2 h-4 w-4" />
+              返回首页
+            </Button>
+          </div>
         </div>
       </div>
     );

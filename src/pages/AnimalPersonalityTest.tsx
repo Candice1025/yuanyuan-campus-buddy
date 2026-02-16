@@ -297,54 +297,108 @@ export default function AnimalPersonalityTest() {
             <Button variant="ghost" size="icon" onClick={() => navigate("/tests")}>
               <ChevronLeft className="h-5 w-5" />
             </Button>
-            <h1 className="text-2xl font-bold">测试结果</h1>
+            <h1 className="text-2xl font-bold">动物性格测试报告</h1>
           </div>
 
-          <Card className="p-6 space-y-6">
+          {/* 主要结果 */}
+          <Card className="p-6 space-y-4">
             <div className="text-center space-y-4">
               <div className="text-6xl">{result.primary.emoji}</div>
               <h2 className="text-3xl font-bold text-primary">你是：{result.primary.name}</h2>
               <p className="text-xl text-muted-foreground">{result.primary.desc}</p>
             </div>
+          </Card>
 
-            <div className="space-y-4">
-              <div>
-                <h3 className="font-semibold mb-2">性格特质</h3>
-                <p className="text-muted-foreground">{result.primary.traits}</p>
+          {/* 性格特质 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">🧩 性格特质</h3>
+            <p className="text-muted-foreground">{result.primary.traits}</p>
+          </Card>
+
+          {/* 行为风格分析 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">📊 行为风格分析</h3>
+            <div className="space-y-3 text-muted-foreground">
+              <div className="p-3 rounded-lg bg-muted/30">
+                <p className="font-medium text-foreground mb-1">🗣️ 沟通风格</p>
+                <p className="text-sm">作为{result.primary.name}型人格，你在沟通中倾向于{result.primary.traits.includes("热情") || result.primary.traits.includes("友善") ? "主动热情、善于表达" : result.primary.traits.includes("冷静") || result.primary.traits.includes("理性") ? "冷静理性、言简意赅" : "温和真诚、注重倾听"}。</p>
               </div>
+              <div className="p-3 rounded-lg bg-muted/30">
+                <p className="font-medium text-foreground mb-1">🤝 团队角色</p>
+                <p className="text-sm">在团队中你更适合担任{result.primary.traits.includes("领导") || result.primary.traits.includes("果断") || result.primary.traits.includes("自信") ? "领导者和决策者" : result.primary.traits.includes("团队") || result.primary.traits.includes("合作") ? "协调者和凝聚力核心" : result.primary.traits.includes("独立") || result.primary.traits.includes("专注") ? "独立执行者和专家" : "支持者和调和者"}的角色。</p>
+              </div>
+              <div className="p-3 rounded-lg bg-muted/30">
+                <p className="font-medium text-foreground mb-1">⚡ 面对压力</p>
+                <p className="text-sm">面对压力时，你可能会{result.primary.traits.includes("勇敢") || result.primary.traits.includes("果断") ? "更加果断和行动导向" : result.primary.traits.includes("冷静") || result.primary.traits.includes("理性") ? "倾向于独处和深入分析" : "寻求亲近之人的支持和陪伴"}。</p>
+              </div>
+            </div>
+          </Card>
 
-              {result.secondary && (
-                <div>
-                  <h3 className="font-semibold mb-2">次要特征：{result.secondary.name}</h3>
-                  <p className="text-sm text-muted-foreground">{result.secondary.desc}</p>
+          {/* 次要特征 */}
+          {result.secondary && (
+            <Card className="p-6 space-y-4">
+              <h3 className="text-xl font-semibold flex items-center gap-2">🔷 次要特征</h3>
+              <div className="p-4 rounded-lg border bg-card">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-2xl">{result.secondary.emoji}</span>
+                  <h4 className="font-semibold">{result.secondary.name}</h4>
                 </div>
-              )}
-
+                <p className="text-sm text-muted-foreground">{result.secondary.desc}</p>
+              </div>
               {result.tertiary && (
-                <div>
-                  <h3 className="font-semibold mb-2">潜在特征：{result.tertiary.name}</h3>
+                <div className="p-4 rounded-lg border bg-card">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">{result.tertiary.emoji}</span>
+                    <h4 className="font-semibold">{result.tertiary.name}</h4>
+                  </div>
                   <p className="text-sm text-muted-foreground">{result.tertiary.desc}</p>
                 </div>
               )}
+            </Card>
+          )}
 
-              <div className="bg-muted/50 p-4 rounded-lg">
-                <p className="text-sm text-muted-foreground">
-                  每个人都拥有多种动物特质的组合，这使你成为独一无二的个体。了解自己的性格特点，可以帮助你更好地发挥优势，改善人际关系。
-                </p>
-              </div>
-            </div>
-
-            <div className="flex gap-3">
-              <Button onClick={() => navigate("/tests")} variant="outline" className="flex-1">
-                <RotateCcw className="mr-2 h-4 w-4" />
-                返回测试中心
-              </Button>
-              <Button onClick={() => navigate("/")} className="flex-1">
-                <Home className="mr-2 h-4 w-4" />
-                返回首页
-              </Button>
+          {/* 人际关系建议 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">💕 人际关系</h3>
+            <div className="space-y-2 text-muted-foreground text-sm">
+              <p>• 你在友谊中{result.primary.traits.includes("忠诚") ? "非常忠诚，是可靠的朋友" : result.primary.traits.includes("社交") || result.primary.traits.includes("热情") ? "善于交友，朋友众多" : "倾向于建立少而精的深厚友谊"}</p>
+              <p>• 在亲密关系中{result.primary.traits.includes("温柔") || result.primary.traits.includes("善良") ? "温柔体贴，是贴心的伴侣" : result.primary.traits.includes("独立") ? "需要一定的个人空间和独立性" : "真诚投入，重视关系的质量"}</p>
+              <p>• 建议多{result.primary.traits.includes("独立") || result.primary.traits.includes("冷静") ? "主动表达情感，让身边人感受到你的关心" : result.primary.traits.includes("敏感") ? "培养情感韧性，不要过度在意他人的评价" : "保持真实的自我，同时学会理解不同性格的人"}</p>
             </div>
           </Card>
+
+          {/* 成长建议 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">🌱 成长建议</h3>
+            <div className="space-y-2 text-muted-foreground">
+              <p>🎯 发挥你{result.primary.traits.split("、")[0]}的核心优势，在擅长的领域深耕</p>
+              <p>💡 尝试走出舒适区，体验不同的社交和工作方式</p>
+              <p>📖 了解其他动物性格的优点，取长补短</p>
+              <p>🤗 接纳自己的独特性，每种性格都有不可替代的价值</p>
+            </div>
+          </Card>
+
+          {/* 重要提示 */}
+          <Card className="p-6 space-y-4 border-l-4 border-l-primary">
+            <h3 className="text-xl font-semibold flex items-center gap-2">⚠️ 重要提示</h3>
+            <div className="space-y-2 text-muted-foreground text-sm">
+              <p>• 每个人都拥有多种动物特质的组合，这使你成为独一无二的个体</p>
+              <p>• 了解自己的性格特点，可以帮助你更好地发挥优势，改善人际关系</p>
+              <p>• 性格没有好坏之分，关键是认识和善用自己的特点</p>
+              <p>• 本测试仅供娱乐和自我探索参考</p>
+            </div>
+          </Card>
+
+          <div className="flex gap-3">
+            <Button onClick={() => navigate("/tests")} variant="outline" className="flex-1">
+              <RotateCcw className="mr-2 h-4 w-4" />
+              返回测试中心
+            </Button>
+            <Button onClick={() => navigate("/")} className="flex-1">
+              <Home className="mr-2 h-4 w-4" />
+              返回首页
+            </Button>
+          </div>
         </div>
       </div>
     );

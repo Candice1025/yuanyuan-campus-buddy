@@ -27,15 +27,15 @@ export default function EnneagramTest() {
   }, []);
 
   const types = {
-    1: { name: "完美主义者", core: "追求完美和正确", fear: "害怕犯错、不完美", desire: "追求正确和改善", traits: "有原则、理想主义、自律、批判性思维" },
-    2: { name: "助人者", core: "帮助他人获得认可", fear: "害怕不被需要", desire: "被爱和被欣赏", traits: "关爱、慷慨、取悦他人、情感丰富" },
-    3: { name: "成就者", core: "追求成功和认可", fear: "害怕失败、无价值", desire: "有价值、被赞赏", traits: "适应力强、目标导向、有魅力、竞争力强" },
-    4: { name: "浪漫主义者", core: "寻找独特身份", fear: "害怕平凡、无身份", desire: "独特、表达自我", traits: "创造力强、敏感、情绪化、追求真实" },
-    5: { name: "观察者", core: "追求知识和理解", fear: "害怕无知、无能", desire: "理解世界", traits: "分析能力强、独立、好奇、保守能量" },
-    6: { name: "忠诚者", core: "寻求安全和支持", fear: "害怕没有支持、不安全", desire: "安全感、归属感", traits: "负责任、忠诚、焦虑、谨慎" },
-    7: { name: "享乐主义者", core: "追求快乐和自由", fear: "害怕痛苦、被束缚", desire: "快乐、满足", traits: "乐观、多才多艺、冲动、热情" },
-    8: { name: "领导者", core: "追求力量和控制", fear: "害怕被控制、软弱", desire: "保护自己和他人", traits: "自信、果断、保护性、对抗性" },
-    9: { name: "和平主义者", core: "追求和谐和平静", fear: "害怕冲突、失去连接", desire: "内心和平、和谐", traits: "包容、平和、顺从、逃避冲突" },
+    1: { name: "完美主义者", core: "追求完美和正确", fear: "害怕犯错、不完美", desire: "追求正确和改善", traits: "有原则、理想主义、自律、批判性思维", wing: "9号翼(理想主义者)或2号翼(倡导者)", growth: "成长方向→7号：学会放松享受，不必事事完美", stress: "压力方向→4号：变得情绪化、自我批评", strengths: ["高度自律和责任感", "追求卓越的品质", "公正正直的品格", "改善世界的使命感"], careers: ["质量管理", "审计师", "教师", "编辑", "法官", "研究员"], relationship: "你在关系中注重公平和原则，期望伴侣也能达到高标准。学会接受不完美，用鼓励代替批评。" },
+    2: { name: "助人者", core: "帮助他人获得认可", fear: "害怕不被需要", desire: "被爱和被欣赏", traits: "关爱、慷慨、取悦他人、情感丰富", wing: "1号翼(仆人)或3号翼(主人)", growth: "成长方向→4号：学会关注自己的内心需求", stress: "压力方向→8号：变得控制欲强、强势", strengths: ["极强的同理心", "温暖慷慨的天性", "善于建立关系", "敏锐感知他人需求"], careers: ["护士", "心理咨询师", "社会工作者", "教师", "客服经理", "人力资源"], relationship: "你是体贴入微的伴侣，但要注意不要过度付出而忽视自己。学会在给予和接受之间找到平衡。" },
+    3: { name: "成就者", core: "追求成功和认可", fear: "害怕失败、无价值", desire: "有价值、被赞赏", traits: "适应力强、目标导向、有魅力、竞争力强", wing: "2号翼(魅力者)或4号翼(专业者)", growth: "成长方向→6号：学会信任他人，放下虚荣", stress: "压力方向→9号：变得懒散、迷失自我", strengths: ["卓越的目标执行力", "强大的适应能力", "天生的领导魅力", "高效的工作能力"], careers: ["企业家", "销售总监", "市场营销", "演员", "政治家", "律师"], relationship: "你追求优质的关系，但要注意不要只展示光鲜的一面。真实地展现自己，包括脆弱的部分。" },
+    4: { name: "浪漫主义者", core: "寻找独特身份", fear: "害怕平凡、无身份", desire: "独特、表达自我", traits: "创造力强、敏感、情绪化、追求真实", wing: "3号翼(贵族)或5号翼(波西米亚)", growth: "成长方向→1号：学会客观看待事物，行动起来", stress: "压力方向→2号：变得过度依赖他人认可", strengths: ["深刻的情感理解力", "非凡的创造力", "对美的敏锐感知", "勇于追求真实自我"], careers: ["艺术家", "作家", "设计师", "心理治疗师", "音乐家", "摄影师"], relationship: "你渴望深层的情感连接，对平淡的关系缺乏耐心。学会在日常中发现美好，不要一味追求戏剧化的情感。" },
+    5: { name: "观察者", core: "追求知识和理解", fear: "害怕无知、无能", desire: "理解世界", traits: "分析能力强、独立、好奇、保守能量", wing: "4号翼(偶像破坏者)或6号翼(问题解决者)", growth: "成长方向→8号：学会果断行动，参与世界", stress: "压力方向→7号：变得分散注意力，逃避深入", strengths: ["卓越的分析思维", "深度学习能力", "独立客观的视角", "专注和沉静的力量"], careers: ["科学家", "程序员", "研究员", "大学教授", "作家", "战略分析师"], relationship: "你需要充足的个人空间，可能在情感表达上比较含蓄。学会向伴侣敞开心扉，分享你丰富的内心世界。" },
+    6: { name: "忠诚者", core: "寻求安全和支持", fear: "害怕没有支持、不安全", desire: "安全感、归属感", traits: "负责任、忠诚、焦虑、谨慎", wing: "5号翼(防御者)或7号翼(好伙伴)", growth: "成长方向→9号：学会信任、放下焦虑", stress: "压力方向→3号：变得过度竞争、虚伪", strengths: ["极度忠诚和可靠", "出色的风险评估", "强烈的团队意识", "负责任的态度"], careers: ["安全专家", "银行职员", "法律助理", "项目管理", "消防员", "行政管理"], relationship: "你是忠诚可靠的伴侣，但过度的担忧和猜疑可能给关系带来压力。学会信任，减少不必要的焦虑。" },
+    7: { name: "享乐主义者", core: "追求快乐和自由", fear: "害怕痛苦、被束缚", desire: "快乐、满足", traits: "乐观、多才多艺、冲动、热情", wing: "6号翼(娱乐者)或8号翼(现实主义者)", growth: "成长方向→5号：学会深入和专注", stress: "压力方向→1号：变得批判和完美主义", strengths: ["强大的乐观精神", "丰富的创意灵感", "出色的社交能力", "灵活的适应力"], careers: ["旅行策划", "广告创意", "主持人", "美食家", "创业者", "活动策划"], relationship: "你是有趣充满活力的伴侣，但要注意不要只追求新鲜感。学会在关系中沉淀，面对不愉快的情感。" },
+    8: { name: "领导者", core: "追求力量和控制", fear: "害怕被控制、软弱", desire: "保护自己和他人", traits: "自信、果断、保护性、对抗性", wing: "7号翼(独立者)或9号翼(熊)", growth: "成长方向→2号：学会温柔关怀，展示脆弱", stress: "压力方向→5号：变得退缩、多疑", strengths: ["强大的领导力", "保护弱者的正义感", "果断的决策力", "坚韧不拔的意志"], careers: ["CEO", "军事指挥", "企业家", "律师", "运动员", "导演"], relationship: "你是保护性很强的伴侣，但过度的控制欲可能让对方感到压迫。学会示弱和倾听，力量不等于控制。" },
+    9: { name: "和平主义者", core: "追求和谐和平静", fear: "害怕冲突、失去连接", desire: "内心和平、和谐", traits: "包容、平和、顺从、逃避冲突", wing: "8号翼(裁判)或1号翼(梦想家)", growth: "成长方向→3号：学会行动和自我表达", stress: "压力方向→6号：变得焦虑和多疑", strengths: ["卓越的调解能力", "包容和理解他人", "平和稳定的力量", "善于倾听和支持"], careers: ["调解员", "外交官", "图书管理员", "瑜伽教练", "人力资源", "兽医"], relationship: "你是温和包容的伴侣，但可能过度回避冲突。学会表达自己的需求和不满，健康的冲突是关系成长的机会。" },
   };
 
   // 27题，每题4选项
@@ -278,72 +278,139 @@ export default function EnneagramTest() {
             <Button variant="ghost" size="icon" onClick={() => navigate("/tests")}>
               <ChevronLeft className="h-5 w-5" />
             </Button>
-            <h1 className="text-2xl font-bold">测试结果</h1>
+            <h1 className="text-2xl font-bold">九型人格测试报告</h1>
           </div>
 
-          <Card className="p-6 space-y-6">
+          {/* 主要结果 */}
+          <Card className="p-6 space-y-4">
             <div className="text-center space-y-4">
-              <div className="text-6xl font-bold text-primary">
-                {result.primary.type}型
-              </div>
+              <div className="text-6xl font-bold text-primary">{result.primary.type}型</div>
               <h2 className="text-3xl font-bold">{result.primary.name}</h2>
               <p className="text-xl text-muted-foreground">{result.primary.core}</p>
             </div>
+          </Card>
 
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 rounded-lg bg-red-50 dark:bg-red-950/20">
-                  <p className="text-sm font-semibold text-red-600 dark:text-red-400 mb-1">核心恐惧</p>
-                  <p className="text-sm">{result.primary.fear}</p>
-                </div>
-                <div className="p-4 rounded-lg bg-green-50 dark:bg-green-950/20">
-                  <p className="text-sm font-semibold text-green-600 dark:text-green-400 mb-1">核心渴望</p>
-                  <p className="text-sm">{result.primary.desire}</p>
-                </div>
+          {/* 核心动机 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">🎯 核心动机</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="p-4 rounded-lg bg-destructive/10">
+                <p className="text-sm font-semibold text-destructive mb-1">核心恐惧</p>
+                <p className="text-sm text-muted-foreground">{result.primary.fear}</p>
               </div>
-
-              <div>
-                <h3 className="font-semibold mb-2">性格特质</h3>
-                <p className="text-muted-foreground">{result.primary.traits}</p>
+              <div className="p-4 rounded-lg bg-primary/10">
+                <p className="text-sm font-semibold text-primary mb-1">核心渴望</p>
+                <p className="text-sm text-muted-foreground">{result.primary.desire}</p>
               </div>
-
-              {result.secondary && (
-                <div className="bg-muted/50 p-4 rounded-lg">
-                  <h3 className="font-semibold mb-2">副型：{result.secondary.type}型 - {result.secondary.name}</h3>
-                  <p className="text-sm text-muted-foreground">{result.secondary.core}</p>
-                </div>
-              )}
-
-              <div className="bg-muted/50 p-4 rounded-lg">
-                <h3 className="font-semibold mb-3">九型得分分布</h3>
-                <div className="grid grid-cols-3 gap-2">
-                  {[1,2,3,4,5,6,7,8,9].map(type => (
-                    <div key={type} className="text-center p-2 rounded bg-card">
-                      <div className="font-bold text-primary">{type}型</div>
-                      <div className="text-sm text-muted-foreground">{result.allScores[type] || 0}分</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-lg">
-                <p className="text-sm text-muted-foreground">
-                  九型人格理论认为，每个人都有一个核心人格类型，了解自己的类型可以帮助你更好地理解自己的动机、恐惧和成长方向。没有任何一型比另一型更好，关键是认识和接纳真实的自己。
-                </p>
-              </div>
-            </div>
-
-            <div className="flex gap-3">
-              <Button onClick={() => navigate("/tests")} variant="outline" className="flex-1">
-                <RotateCcw className="mr-2 h-4 w-4" />
-                返回测试中心
-              </Button>
-              <Button onClick={() => navigate("/")} className="flex-1">
-                <Home className="mr-2 h-4 w-4" />
-                返回首页
-              </Button>
             </div>
           </Card>
+
+          {/* 性格特质 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">🧩 性格特质</h3>
+            <p className="text-muted-foreground">{result.primary.traits}</p>
+          </Card>
+
+          {/* 核心优势 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">💪 核心优势</h3>
+            <div className="space-y-2">
+              {result.primary.strengths.map((s: string, i: number) => (
+                <div key={i} className="flex items-start gap-2 text-muted-foreground">
+                  <span className="text-primary mt-1">✓</span>
+                  <span>{s}</span>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          {/* 成长与压力方向 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">🔄 成长与压力方向</h3>
+            <div className="space-y-3">
+              <div className="p-3 rounded-lg bg-primary/10">
+                <p className="text-sm font-medium text-primary mb-1">🌱 成长方向</p>
+                <p className="text-sm text-muted-foreground">{result.primary.growth}</p>
+              </div>
+              <div className="p-3 rounded-lg bg-destructive/10">
+                <p className="text-sm font-medium text-destructive mb-1">⚡ 压力方向</p>
+                <p className="text-sm text-muted-foreground">{result.primary.stress}</p>
+              </div>
+            </div>
+          </Card>
+
+          {/* 翼型 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">🦋 翼型</h3>
+            <p className="text-muted-foreground">{result.primary.wing}</p>
+            <p className="text-xs text-muted-foreground">* 翼型是与你主型相邻的类型，它会为你的性格增添额外的色彩</p>
+          </Card>
+
+          {/* 人际关系 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">💕 人际关系</h3>
+            <p className="text-muted-foreground leading-relaxed">{result.primary.relationship}</p>
+          </Card>
+
+          {/* 适合的职业 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">💼 适合的职业方向</h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {result.primary.careers.map((career: string, i: number) => (
+                <div key={i} className="p-2 rounded-lg bg-muted/30 text-muted-foreground text-sm text-center">
+                  {career}
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          {/* 副型 */}
+          {result.secondary && (
+            <Card className="p-6 space-y-4">
+              <h3 className="text-xl font-semibold flex items-center gap-2">🔷 副型分析</h3>
+              <div className="bg-muted/50 p-4 rounded-lg">
+                <h4 className="font-semibold mb-2">{result.secondary.type}型 - {result.secondary.name}</h4>
+                <p className="text-sm text-muted-foreground mb-2">{result.secondary.core}</p>
+                <p className="text-sm text-muted-foreground">特质：{result.secondary.traits}</p>
+              </div>
+            </Card>
+          )}
+
+          {/* 九型得分分布 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">📊 九型得分分布</h3>
+            <div className="grid grid-cols-3 gap-2">
+              {[1,2,3,4,5,6,7,8,9].map(type => (
+                <div key={type} className="text-center p-2 rounded bg-card border">
+                  <div className="font-bold text-primary">{type}型</div>
+                  <div className="text-sm text-muted-foreground">{result.allScores[type] || 0}分</div>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          {/* 重要提示 */}
+          <Card className="p-6 space-y-4 border-l-4 border-l-primary">
+            <h3 className="text-xl font-semibold flex items-center gap-2">⚠️ 重要提示</h3>
+            <div className="space-y-2 text-muted-foreground text-sm">
+              <p>• 九型人格是一种深度的自我认识工具，每种类型都有其独特的智慧和价值</p>
+              <p>• 没有任何一型比另一型更好，关键是认识和接纳真实的自己</p>
+              <p>• 了解你的成长方向可以帮助你成为更好的自己</p>
+              <p>• 压力方向的特征在你承受巨大压力时可能会显现</p>
+              <p>• 本测试仅供参考，建议结合专业指导进行深入探索</p>
+            </div>
+          </Card>
+
+          <div className="flex gap-3">
+            <Button onClick={() => navigate("/tests")} variant="outline" className="flex-1">
+              <RotateCcw className="mr-2 h-4 w-4" />
+              返回测试中心
+            </Button>
+            <Button onClick={() => navigate("/")} className="flex-1">
+              <Home className="mr-2 h-4 w-4" />
+              返回首页
+            </Button>
+          </div>
         </div>
       </div>
     );

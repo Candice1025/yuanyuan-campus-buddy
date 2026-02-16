@@ -31,37 +31,61 @@ export default function HollandTest() {
       name: "实际型 (Realistic)", 
       desc: "喜欢动手操作，偏好技术性和机械性工作",
       traits: "务实、稳重、坦诚、谦逊",
-      careers: "工程师、技工、农业工作者、飞行员、运动员"
+      careers: "工程师、技工、农业工作者、飞行员、运动员",
+      environment: "户外工作、实验室、工厂、农场",
+      values: "实用性、技术能力、独立工作",
+      strengths: ["动手能力强", "机械感知敏锐", "体力充沛", "解决实际问题能力强"],
+      tips: "发挥你的动手能力，选择能看到实际成果的工作。可以多学习技术技能，考取相关证书。"
     },
     I: { 
       name: "研究型 (Investigative)", 
       desc: "喜欢思考和分析，偏好科学和研究工作",
       traits: "理性、精确、好奇、独立",
-      careers: "科学家、医生、程序员、研究员、分析师"
+      careers: "科学家、医生、程序员、研究员、分析师",
+      environment: "实验室、研究所、大学、科技公司",
+      values: "知识探索、逻辑分析、独立研究",
+      strengths: ["逻辑思维能力强", "善于发现规律", "注重数据和证据", "独立研究能力突出"],
+      tips: "培养你的研究能力，选择有深度的专业方向。参加科研项目和学术竞赛，积累研究经验。"
     },
     A: { 
       name: "艺术型 (Artistic)", 
       desc: "富有创造力，偏好艺术和创意工作",
       traits: "想象力丰富、情感丰富、独立、创新",
-      careers: "设计师、艺术家、作家、音乐家、演员"
+      careers: "设计师、艺术家、作家、音乐家、演员",
+      environment: "工作室、剧场、媒体公司、设计工作室",
+      values: "创造力、自我表达、审美追求",
+      strengths: ["创造力突出", "审美感觉敏锐", "表达能力强", "想象力丰富"],
+      tips: "大胆追求你的创意梦想，多参加艺术实践活动。可以建立作品集，参加比赛展示才华。"
     },
     S: { 
       name: "社会型 (Social)", 
       desc: "善于与人交往，偏好帮助和教育他人的工作",
       traits: "友善、热情、善解人意、有责任感",
-      careers: "教师、咨询师、社工、护士、人力资源"
+      careers: "教师、咨询师、社工、护士、人力资源",
+      environment: "学校、医院、社区中心、培训机构",
+      values: "帮助他人、社会贡献、人际连接",
+      strengths: ["极强的同理心", "出色的沟通能力", "善于团队合作", "乐于奉献精神"],
+      tips: "发挥你的人际交往优势，考虑教育或服务类职业。多参加志愿服务活动，积累实践经验。"
     },
     E: { 
       name: "企业型 (Enterprising)", 
       desc: "有领导力和说服力，偏好管理和商业工作",
       traits: "自信、进取、外向、有野心",
-      careers: "销售经理、企业家、律师、政治家、市场营销"
+      careers: "销售经理、企业家、律师、政治家、市场营销",
+      environment: "企业、政府机关、商业中心、创业公司",
+      values: "领导力、影响力、成就感",
+      strengths: ["天生的领导力", "出色的说服能力", "善于把握机会", "决策果断"],
+      tips: "培养你的领导力和商业敏感度。可以参加学生会、创业竞赛等活动锻炼管理能力。"
     },
     C: { 
       name: "常规型 (Conventional)", 
       desc: "喜欢有序和规范，偏好数据和细节工作",
       traits: "细心、有条理、高效、保守",
-      careers: "会计师、审计师、行政助理、图书管理员、数据分析"
+      careers: "会计师、审计师、行政助理、图书管理员、数据分析",
+      environment: "办公室、金融机构、政府部门、企业后台",
+      values: "秩序、精确、稳定性",
+      strengths: ["注重细节和精确", "出色的组织能力", "善于处理数据", "责任心强"],
+      tips: "发挥你的组织和管理才能，考虑金融、行政等领域。考取专业资格证书将为你的职业发展加分。"
     },
   };
 
@@ -338,70 +362,132 @@ export default function HollandTest() {
               <div className="text-5xl font-bold tracking-wider">{result.code}</div>
             </div>
 
-            <div className="space-y-4">
-              <div className="p-4 rounded-lg border bg-card">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-2xl font-bold text-primary">{result.primary.type}</span>
-                  <h3 className="font-bold text-lg">{result.primary.name}</h3>
-                </div>
-                <p className="text-muted-foreground mb-2">{result.primary.desc}</p>
-                <p className="text-sm mb-2"><span className="font-semibold">特质：</span>{result.primary.traits}</p>
-                <p className="text-sm"><span className="font-semibold">适合职业：</span>{result.primary.careers}</p>
-              </div>
+          {/* 主要类型详情 */}
+          <Card className="p-6 space-y-6">
+            <div className="text-center space-y-4">
+              <Briefcase className="h-16 w-16 mx-auto text-primary" />
+              <h2 className="text-3xl font-bold text-primary">你的霍兰德代码</h2>
+              <div className="text-5xl font-bold tracking-wider">{result.code}</div>
+            </div>
+          </Card>
 
+          {/* 首要类型 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">🥇 首要类型</h3>
+            <div className="p-4 rounded-lg border bg-card">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-2xl font-bold text-primary">{result.primary.type}</span>
+                <h4 className="font-bold text-lg">{result.primary.name}</h4>
+              </div>
+              <p className="text-muted-foreground mb-3">{result.primary.desc}</p>
+              <p className="text-sm mb-2"><span className="font-semibold">特质：</span>{result.primary.traits}</p>
+              <p className="text-sm"><span className="font-semibold">适合职业：</span>{result.primary.careers}</p>
+            </div>
+          </Card>
+
+          {/* 核心优势 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">💪 核心优势</h3>
+            <div className="space-y-2">
+              {result.primary.strengths?.map((s: string, i: number) => (
+                <div key={i} className="flex items-start gap-2 text-muted-foreground">
+                  <span className="text-primary mt-1">✓</span>
+                  <span>{s}</span>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          {/* 工作环境与价值观 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">🏢 理想工作环境</h3>
+            <p className="text-muted-foreground">{result.primary.environment}</p>
+            <h4 className="font-semibold mt-4">核心价值观</h4>
+            <p className="text-muted-foreground">{result.primary.values}</p>
+          </Card>
+
+          {/* 发展建议 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">🌱 发展建议</h3>
+            <p className="text-muted-foreground leading-relaxed">{result.primary.tips}</p>
+          </Card>
+
+          {/* 次要和第三类型 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">🔷 辅助类型</h3>
+            <div className="space-y-3">
               <div className="p-4 rounded-lg border bg-card">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-xl font-bold text-primary">{result.secondary.type}</span>
-                  <h3 className="font-semibold">{result.secondary.name}</h3>
+                  <h4 className="font-semibold">{result.secondary.name}</h4>
                 </div>
                 <p className="text-sm text-muted-foreground mb-2">{result.secondary.desc}</p>
                 <p className="text-sm"><span className="font-semibold">适合职业：</span>{result.secondary.careers}</p>
               </div>
-
               <div className="p-4 rounded-lg border bg-card">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-xl font-bold text-primary">{result.tertiary.type}</span>
-                  <h3 className="font-semibold">{result.tertiary.name}</h3>
+                  <h4 className="font-semibold">{result.tertiary.name}</h4>
                 </div>
                 <p className="text-sm text-muted-foreground mb-2">{result.tertiary.desc}</p>
                 <p className="text-sm"><span className="font-semibold">适合职业：</span>{result.tertiary.careers}</p>
               </div>
+            </div>
+          </Card>
 
-              <div className="bg-muted/50 p-4 rounded-lg">
-                <h3 className="font-semibold mb-3">六维度得分</h3>
-                <div className="space-y-2">
-                  {Object.entries(result.allScores).map(([type, score]) => (
-                    <div key={type} className="flex items-center gap-3">
-                      <span className="text-sm font-bold min-w-8">{type}</span>
-                      <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-primary transition-all"
-                          style={{ width: `${(score / 15) * 100}%` }}
-                        />
-                      </div>
-                      <span className="text-sm text-muted-foreground min-w-8">{score}</span>
-                    </div>
-                  ))}
+          {/* 六维度得分 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">📊 六维度得分</h3>
+            <div className="space-y-2">
+              {Object.entries(result.allScores).map(([type, score]) => (
+                <div key={type} className="flex items-center gap-3">
+                  <span className="text-sm font-bold min-w-8">{type}</span>
+                  <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-primary transition-all"
+                      style={{ width: `${(score as number / 15) * 100}%` }}
+                    />
+                  </div>
+                  <span className="text-sm text-muted-foreground min-w-8">{score as number}</span>
                 </div>
-              </div>
-
-              <div className="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-lg">
-                <p className="text-sm text-muted-foreground">
-                  💡 霍兰德职业兴趣理论将人的职业兴趣分为6种类型（RIASEC），通过了解你的兴趣类型组合，可以帮助你找到更适合的职业方向和发展路径。
-                </p>
-              </div>
+              ))}
             </div>
+          </Card>
 
-            <div className="flex gap-3">
-              <Button onClick={() => navigate("/tests")} variant="outline" className="flex-1">
-                <RotateCcw className="mr-2 h-4 w-4" />
-                返回测试中心
-              </Button>
-              <Button onClick={() => navigate("/")} className="flex-1">
-                <Home className="mr-2 h-4 w-4" />
-                返回首页
-              </Button>
+          {/* 职业规划建议 */}
+          <Card className="p-6 space-y-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">📋 职业规划建议</h3>
+            <div className="space-y-3 text-muted-foreground text-sm">
+              <p>🎯 你的霍兰德代码 <strong>{result.code}</strong> 反映了你的核心职业兴趣组合</p>
+              <p>📖 在选择专业和职业时，优先考虑与你首要类型匹配的方向</p>
+              <p>🔄 辅助类型可以拓宽你的发展路径，提供更多可能性</p>
+              <p>💡 结合三种类型的特点，寻找交叉领域的独特机会</p>
+              <p>🌟 兴趣是最好的老师，选择你热爱的方向更容易获得成功</p>
             </div>
+          </Card>
+
+          {/* 重要提示 */}
+          <Card className="p-6 space-y-4 border-l-4 border-l-primary">
+            <h3 className="text-xl font-semibold flex items-center gap-2">⚠️ 重要提示</h3>
+            <div className="space-y-2 text-muted-foreground text-sm">
+              <p>• 霍兰德职业兴趣理论将人的职业兴趣分为6种类型（RIASEC）</p>
+              <p>• 通过了解你的兴趣类型组合，可以帮助你找到更适合的职业方向</p>
+              <p>• 兴趣会随着经验和成长而变化，建议定期重新评估</p>
+              <p>• 本测试仅供参考，实际选择还需要结合能力、价值观等多方面因素</p>
+              <p>• 建议与职业规划老师或导师沟通，获得个性化建议</p>
+            </div>
+          </Card>
+
+          <div className="flex gap-3">
+            <Button onClick={() => navigate("/tests")} variant="outline" className="flex-1">
+              <RotateCcw className="mr-2 h-4 w-4" />
+              返回测试中心
+            </Button>
+            <Button onClick={() => navigate("/")} className="flex-1">
+              <Home className="mr-2 h-4 w-4" />
+              返回首页
+            </Button>
+          </div>
           </Card>
         </div>
       </div>
