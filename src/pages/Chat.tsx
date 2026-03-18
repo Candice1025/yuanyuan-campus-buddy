@@ -54,13 +54,13 @@ const Chat = () => {
             if (a.sender === 'assistant' && b.sender === 'user') return 1;
             return 0;
           });
-          const historicalMessages = sortedHistory.map(msg => ({
+          const historicalMessages = sortedHistory.map((msg) => ({
             id: msg.id,
             content: msg.content,
             sender: msg.sender as "user" | "assistant",
             timestamp: new Date(msg.created_at)
           }));
-          setMessages(prev => [...prev, ...historicalMessages]);
+          setMessages((prev) => [...prev, ...historicalMessages]);
         }
       }
     });
@@ -94,7 +94,7 @@ const Chat = () => {
       sender: "user",
       timestamp: new Date()
     };
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsTyping(true);
     try {
@@ -103,11 +103,11 @@ const Chat = () => {
       // 只发送最近的对话历史（最多10条消息），排除第一条欢迎消息
       // 确保消息按时间排序并且user/assistant交替正确
       const allMessagesExceptWelcome = [...messages.slice(1), userMessage];
-      const sortedMessages = allMessagesExceptWelcome.sort((a, b) => 
-        a.timestamp.getTime() - b.timestamp.getTime()
+      const sortedMessages = allMessagesExceptWelcome.sort((a, b) =>
+      a.timestamp.getTime() - b.timestamp.getTime()
       );
       const recentMessages = sortedMessages.slice(-10);
-      const chatMessages = recentMessages.map(msg => ({
+      const chatMessages = recentMessages.map((msg) => ({
         role: msg.sender === "user" ? "user" : "assistant",
         content: msg.content
       }));
@@ -171,10 +171,10 @@ const Chat = () => {
             const content = parsed.choices?.[0]?.delta?.content as string | undefined;
             if (content) {
               assistantContent += content;
-              setMessages(prev => {
+              setMessages((prev) => {
                 const last = prev[prev.length - 1];
                 if (last?.sender === "assistant" && last?.id === assistantMessageId) {
-                  return prev.map(m => m.id === assistantMessageId ? {
+                  return prev.map((m) => m.id === assistantMessageId ? {
                     ...m,
                     content: assistantContent
                   } : m);
@@ -226,7 +226,7 @@ const Chat = () => {
   const handleDeleteMessage = async (messageId: string) => {
     try {
       // 从UI中删除消息
-      setMessages(prev => prev.filter(msg => msg.id !== messageId));
+      setMessages((prev) => prev.filter((msg) => msg.id !== messageId));
 
       // 从数据库中删除消息
       if (user) {
@@ -299,7 +299,7 @@ const Chat = () => {
       {/* Messages */}
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
-          {messages.map(message => <div key={message.id} className={`flex gap-3 animate-slide-up group ${message.sender === "user" ? "flex-row-reverse" : ""}`}>
+          {messages.map((message) => <div key={message.id} className={`flex gap-3 animate-slide-up group ${message.sender === "user" ? "flex-row-reverse" : ""}`}>
               {message.sender === "assistant" && <img alt="守伴者" className="w-10 h-10 rounded-full flex-shrink-0" src="/lovable-uploads/e035ddcd-361c-4660-902b-430c11c07636.png" />}
               {message.sender === "user" && <div className="w-10 h-10 rounded-full bg-gradient-primary flex items-center justify-center text-white font-semibold flex-shrink-0">
                   我
@@ -348,20 +348,20 @@ const Chat = () => {
         <div className="max-w-4xl mx-auto px-4 py-3">
           <div className="flex gap-2 overflow-x-auto pb-2">
             {quickActions.map((action, index) => {
-              const Icon = action.icon;
-              return (
-                <Button
-                  key={index}
-                  variant="outline"
-                  size="sm"
-                  className="flex-shrink-0 gap-2"
-                  onClick={() => setInput(action.text)}
-                >
+            const Icon = action.icon;
+            return (
+              <Button
+                key={index}
+                variant="outline"
+                size="sm"
+                className="flex-shrink-0 gap-2"
+                onClick={() => setInput(action.text)}>
+                
                   <Icon className="w-4 h-4" />
                   {action.text}
-                </Button>
-              );
-            })}
+                </Button>);
+
+          })}
           </div>
         </div>
       </div>
@@ -370,13 +370,13 @@ const Chat = () => {
       <div className="border-t border-border bg-card">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex gap-2">
-            <Input placeholder="输入消息... (按Enter发送)" value={input} onChange={e => setInput(e.target.value)} onKeyPress={handleKeyPress} className="flex-1" />
+            <Input placeholder="输入消息... (按Enter发送)" value={input} onChange={(e) => setInput(e.target.value)} onKeyPress={handleKeyPress} className="flex-1" />
             <Button onClick={handleSend} disabled={!input.trim()} className="bg-gradient-primary hover:opacity-90">
               <Send className="w-5 h-5" />
             </Button>
           </div>
           <p className="text-xs text-muted-foreground mt-2 text-center">
-            💡 守伴者会引导你思考，但不会直接给出作业答案哦
+            💡 守伴者会引导你思考事情的全貌
           </p>
         </div>
       </div>
