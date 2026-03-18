@@ -375,9 +375,6 @@ const Chat = () => {
               <Send className="w-5 h-5" />
             </Button>
           </div>
-          <p className="text-xs text-muted-foreground mt-2 text-center">
-            💡 守伴者会引导你思考事情的全貌
-          </p>
         </div>
       </div>
     </div>;
